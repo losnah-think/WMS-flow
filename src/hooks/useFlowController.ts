@@ -22,7 +22,7 @@ export const useFlowController = (initialFlowType: FlowType = 'inbound') => {
           }
           return prev + 1;
         });
-      }, 2500);
+      }, 1500);
       return () => clearInterval(timer);
     }
   }, [isPlaying, currentFlow.steps.length]);

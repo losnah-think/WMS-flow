@@ -13,6 +13,33 @@ interface FlowDiagramProps {
 export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getActorPosition }) => {
   return (
     <div className="overflow-x-auto border-2 border-gray-200 rounded-lg bg-white">
+      <style>{`
+        @keyframes dashFlow {
+          0% {
+            stroke-dashoffset: 0;
+          }
+          100% {
+            stroke-dashoffset: -24;
+          }
+        }
+        
+        @keyframes pulseGlow {
+          0%, 100% {
+            filter: drop-shadow(0 0 2px rgba(59, 130, 246, 0.5));
+          }
+          50% {
+            filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.8));
+          }
+        }
+        
+        .flow-line-active {
+          animation: dashFlow 0.5s linear infinite;
+        }
+        
+        .step-circle-active {
+          animation: pulseGlow 1.5s ease-in-out infinite;
+        }
+      `}</style>
       <svg
         width="100%"
         height={flow.steps.length * 80 + 200}
@@ -96,7 +123,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
           
           return (
             <g key={idx}>
-              {/* 화살표 선 */}
+              {/* 화살표 선 - 활성화된 경우 애니메이션 적용 */}
               <line
                 x1={fromX}
                 y1={y}
@@ -105,21 +132,12 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 stroke={isActive ? '#3b82f6' : isPassed ? '#94a3b8' : '#cbd5e1'}
                 strokeWidth={isActive ? 4 : 2}
                 markerEnd={`url(#arrow-${isActive ? 'active' : isPassed ? 'passed' : 'default'})`}
+                strokeDasharray={isActive ? '12 12' : 'none'}
+                className={isActive ? 'flow-line-active' : ''}
                 style={{
-                  strokeDasharray: isActive ? '8 4' : 'none',
-                  transition: 'all 0.3s'
+                  transition: 'stroke 0.3s, stroke-width 0.3s',
                 }}
-              >
-                {isActive && (
-                  <animate
-                    attributeName="stroke-dashoffset"
-                    from="0"
-                    to="-12"
-                    dur="1s"
-                    repeatCount="indefinite"
-                  />
-                )}
-              </line>
+              />
               
               {/* 단계 번호 */}
               <circle
@@ -129,6 +147,10 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 fill={isActive ? '#3b82f6' : isPassed ? '#94a3b8' : '#e2e8f0'}
                 stroke={isActive ? '#1e40af' : '#94a3b8'}
                 strokeWidth="2"
+                className={isActive ? 'step-circle-active' : ''}
+                style={{
+                  transition: 'fill 0.3s, stroke 0.3s',
+                }}
               />
               <text
                 x={fromX}
@@ -150,6 +172,9 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 fill={isActive ? '#3b82f6' : isPassed ? '#e2e8f0' : '#fff'}
                 stroke={isActive ? '#1e40af' : '#cbd5e1'}
                 strokeWidth="1"
+                style={{
+                  transition: 'fill 0.3s, stroke 0.3s',
+                }}
               />
               <text
                 x={labelX}
