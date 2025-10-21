@@ -8,7 +8,7 @@ export default createMiddleware({
 
 export const config = {
   matcher: [
-    // Match all request paths except static files and APIs
-    '/((?!_next|_vercel|api|favicon.ico|robots.txt|sitemap.xml).*)',
+    // Match all paths except static files, APIs, and Vercel internals
+    '/((?!_next/static|_next/image|api|favicon.ico|robots.txt|sitemap.xml|__nextjs).*)',
   ],
 };
