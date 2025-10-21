@@ -10,6 +10,7 @@ import { ActorLegend } from '@/components/ActorLegend';
 import { FlowDiagram } from '@/components/FlowDiagram';
 import { ProgressStatus } from '@/components/ProgressStatus';
 import { StepDetails } from '@/components/StepDetails';
+import { StepDetailsModal } from '@/components/StepDetailsModal';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
 export default function Home() {
@@ -26,10 +27,13 @@ export default function Home() {
     activeStep,
     showInfo,
     currentFlow,
+    selectedStepIndex,
     handleFlowTypeChange,
     handlePlayPause,
     handleReset,
     toggleInfo,
+    handleStepSelect,
+    handleCloseModal,
     getActorPosition,
   } = useFlowController();
 
@@ -88,11 +92,25 @@ export default function Home() {
           {/* 우측: 단계별 상세 설명 (1/3 너비, 스크롤 가능) */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-xl shadow-2xl p-6 h-full sticky top-4 overflow-y-auto max-h-[calc(100vh-2rem)]">
-              <StepDetails flow={currentFlow} activeStep={activeStep} />
+              <StepDetails 
+                flow={currentFlow} 
+                activeStep={activeStep}
+                onStepClick={handleStepSelect}
+              />
             </div>
           </div>
         </div>
       </div>
+
+      {/* 단계 상세 모달 */}
+      {selectedStepIndex !== null && (
+        <StepDetailsModal
+          flow={currentFlow}
+          step={currentFlow.steps[selectedStepIndex]}
+          stepIndex={selectedStepIndex}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 }

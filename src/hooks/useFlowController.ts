@@ -1,6 +1,3 @@
-// src/hooks/useFlowController.ts
-'use client';
-
 import { useState, useEffect } from 'react';
 import { FlowType } from '@/models/types';
 import { flowData } from '@/models/flowData';
@@ -10,6 +7,7 @@ export const useFlowController = (initialFlowType: FlowType = 'inbound') => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [activeStep, setActiveStep] = useState(-1);
   const [showInfo, setShowInfo] = useState(true);
+  const [selectedStepIndex, setSelectedStepIndex] = useState<number | null>(null);
 
   const currentFlow = flowData[flowType];
 
@@ -46,6 +44,16 @@ export const useFlowController = (initialFlowType: FlowType = 'inbound') => {
     setShowInfo(!showInfo);
   };
 
+  const handleStepSelect = (stepIndex: number) => {
+    setSelectedStepIndex(stepIndex);
+    setActiveStep(stepIndex);
+    setIsPlaying(false);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedStepIndex(null);
+  };
+
   const getActorPosition = (actorId: string): number => {
     const index = currentFlow.actors.findIndex(a => a.id === actorId);
     return index * 150 + 100;
@@ -57,10 +65,13 @@ export const useFlowController = (initialFlowType: FlowType = 'inbound') => {
     activeStep,
     showInfo,
     currentFlow,
+    selectedStepIndex,
     handleFlowTypeChange,
     handlePlayPause,
     handleReset,
     toggleInfo,
+    handleStepSelect,
+    handleCloseModal,
     getActorPosition,
   };
 };
