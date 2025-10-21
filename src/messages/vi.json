@@ -1,73 +1,145 @@
 {
   "common": {
     "flowTypes": {
-      "inbound": "Quy trình Nhập kho",
-      "outbound": "Quy trình Xuất kho",
-      "return": "Quy trình Trả hàng",
-      "storage": "Quản lý Kho & Hàng tồn kho"
+      "inbound": "Quy trình nhập hàng",
+      "outbound": "Quy trình xuất hàng",
+      "return": "Quy trình trả hàng",
+      "storage": "Bảo quản & Quản lý hàng tồn kho"
     },
     "buttons": {
       "play": "Phát",
       "pause": "Tạm dừng",
       "reset": "Đặt lại",
-      "hierarchyView": "Xem Cấu trúc"
+      "hierarchyView": "Xem cấu trúc"
     }
   },
   "flows": {
     "inbound": {
-      "title": "Quy trình Nhập kho",
-      "description": "Quy trình toàn bộ trong đó những người bán hàng đăng ký kế hoạch nhập kho với FULGO WMS, các công ty logistics phê duyệt và nhận sản phẩm thực tế, và lưu trữ chúng trong kho. Nền tảng FULGO theo dõi và quản lý tất cả tiến độ trong thời gian thực.",
-      "hierarchy": "Fulgo(Nền tảng) → Logistics(Quản lý Kho) → Người bán hàng(Khách hàng)",
+      "title": "Quy trình nhập hàng (Inbound)",
+      "description": "Quy trình hoàn chỉnh trong đó nhà cung cấp đăng ký kế hoạch nhập hàng trong FULGO WMS, công ty hậu cần nhận và lưu trữ sản phẩm trong kho. Nền tảng FULGO theo dõi và quản lý toàn bộ tiến trình theo thời gian thực.",
+      "hierarchy": "Fulgo(Nền tảng) → Công ty hậu cần(Người quản lý kho) → Nhà cung cấp(Khách hàng)",
       "layers": {
         "layer1": "Lớp 1: Tiếp nhận",
         "layer2": "Lớp 2: Kiểm tra",
-        "layer3": "Lớp 3: Sắp xếp"
-      }
+        "layer3": "Lớp 3: Bảo quản"
+      },
+      "steps": [
+        { "label": "Đăng ký lịch nhập hàng", "desc": "Đăng ký sản phẩm nào sẽ đến và khi nào", "detail": "Nhà cung cấp đăng ký trước thông tin sản phẩm (tên sản phẩm, số lượng, ngày dự kiến đến) trong hệ thống FULGO.", "actor": "Nhà cung cấp", "term": "" },
+        { "label": "Gửi thông tin nhập hàng", "desc": "Thông báo cho công ty hậu cần về kế hoạch nhập", "detail": "FULGO thông báo cho công ty hậu cần trước: 'Những sản phẩm này sẽ sớm đến' và yêu cầu phê duyệt.", "actor": "FULGO", "term": "ASN (Thông báo tàu sắp cập)" },
+        { "label": "Phê duyệt lịch nhập hàng", "desc": "Xác nhận không gian kho và lịch trình", "detail": "Công ty hậu cần xem xét các điều kiện kho và xác nhận 'Chúng tôi có thể nhận vào ngày này.' Vị trí làm hàng cũng được chỉ định.", "actor": "Công ty hậu cần", "term": "Phân bổ bến cảng" },
+        { "label": "Giao nhiệm vụ nhập hàng", "desc": "Giao nhiệm vụ cho nhân viên chịu trách nhiệm", "detail": "Trưởng phòng công ty hậu cần giao cho công nhân kho: 'Vui lòng xử lý nhập hàng sản phẩm này hôm nay.'", "actor": "Công ty hậu cần", "term": "" },
+        { "label": "Xác nhận sự đến của sản phẩm", "desc": "Xe tải đến, bắt đầu dỡ hàng", "detail": "Khi xe tải chở hàng đến, công nhân đăng ký trong hệ thống 'Sản phẩm đã đến.'", "actor": "Công nhân", "term": "" },
+        { "label": "Xử lý nhập hàng tạm thời", "desc": "Bảo quản tạm thời trước kiểm tra", "detail": "Sản phẩm được đặt tạm thời trong kho mà không kiểm tra và được đánh dấu là 'Đang chờ kiểm tra.'", "actor": "Công nhân", "term": "Nhập hàng tạm thời" },
+        { "label": "Hoàn tất kiểm tra sản phẩm", "desc": "Quét mã vạch và kiểm tra chất lượng", "detail": "Công nhân quét từng mã vạch cẩn thận và kiểm tra 'Số lượng có đúng không? Sản phẩm còn nguyên vẹn không? Có hư hỏng không?'", "actor": "Công nhân", "term": "Kiểm tra" },
+        { "label": "Báo cáo kết quả kiểm tra", "desc": "Báo cáo tình trạng bình thường/hỏng hóc", "detail": "Công ty hậu cần báo cáo kết quả kiểm tra cho FULGO. Nếu có lỗi hoặc chênh lệch số lượng, nhà cung cấp sẽ được thông báo tự động.", "actor": "Công ty hậu cần", "term": "" },
+        { "label": "Phát hành nhãn sản phẩm", "desc": "In nhãn dán mã vạch", "detail": "Hệ thống FULGO tự động tạo nhãn mã vạch cho từng sản phẩm, công nhân in và dán chúng.", "actor": "FULGO", "term": "" },
+        { "label": "Sắp xếp vị trí bảo quản", "desc": "Sắp xếp sản phẩm trên kệ được chỉ định", "detail": "Công nhân đi đến vị trí bảo quản (ví dụ: Khu vực A-Kệ 3-Bin 5) mà hệ thống chỉ định và sắp xếp sản phẩm.", "actor": "Công nhân", "term": "Đặt hàng" },
+        { "label": "Báo cáo hoàn tất nhập hàng", "desc": "Hoàn thành tất cả công việc", "detail": "Công ty hậu cần báo cáo cho FULGO 'Bây giờ tất cả sản phẩm đã vào kho và sẵn sàng bán.'", "actor": "Công ty hậu cần", "term": "" },
+        { "label": "Tăng số lượng hàng tồn kho", "desc": "Thêm hàng tồn kho có sẵn để bán", "detail": "Hệ thống hàng tồn kho FULGO tăng số lượng hàng tồn kho cho sản phẩm. Bây giờ nó sẵn sàng để bán.", "actor": "FULGO", "term": "" },
+        { "label": "Gửi thông báo hoàn tất nhập hàng", "desc": "Thông báo cho nhà cung cấp về hoàn tất", "detail": "FULGO thông báo cho nhà cung cấp 'Nhập hàng hoàn tất. Bây giờ bạn có thể kiểm tra hàng tồn kho.'", "actor": "FULGO", "term": "" }
+      ]
     },
     "outbound": {
-      "title": "Quy trình Xuất kho",
-      "description": "Quy trình toàn bộ trong đó khi các đơn đặt hàng đến từ các kênh bán hàng bên ngoài (Coupang, Naver Shopping, v.v.), FULGO thu thập chúng và chuyển giao cho các công ty logistics để đóng gói và vận chuyển cho khách hàng.",
-      "hierarchy": "Fulgo(Nền tảng) → Logistics(Quản lý Kho) → Người bán hàng(Khách hàng)",
+      "title": "Quy trình xuất hàng (Outbound)",
+      "description": "Quy trình hoàn chỉnh trong đó các kênh bán hàng bên ngoài (Shopee, Lazada, v.v.) nhận đơn hàng, FULGO thu thập và chuyển tiếp cho công ty hậu cần, những người đóng gói và giao sản phẩm cho khách hàng.",
+      "hierarchy": "Fulgo(Nền tảng) → Công ty hậu cần(Người quản lý kho) → Nhà cung cấp(Khách hàng)",
       "layers": {
         "layer1": "Lớp 1: Chọn hàng",
         "layer2": "Lớp 2: Đóng gói",
         "layer3": "Lớp 3: Vận chuyển"
-      }
+      },
+      "steps": [
+        { "label": "Khách hàng đặt hàng", "desc": "Khách hàng nhấp nút mua", "detail": "Khách hàng đặt hàng từ các kênh bán hàng bên ngoài như Shopee hoặc Lazada.", "actor": "Khách hàng", "term": "" },
+        { "label": "Tiếp nhận đơn hàng", "desc": "Kênh bán hàng tạo thông tin đơn hàng", "detail": "Hệ thống kênh bán hàng tạo thông tin đơn hàng (số đơn hàng, sản phẩm, số lượng, địa chỉ giao) và thông báo cho nhà cung cấp.", "actor": "Kênh bán", "term": "" },
+        { "label": "Gửi yêu cầu xuất hàng", "desc": "Nhà cung cấp hướng dẫn FULGO vận chuyển", "detail": "Nhà cung cấp gửi yêu cầu xuất hàng đến hệ thống FULGO 'Vui lòng vận chuyển đơn hàng này.'", "actor": "Nhà cung cấp", "term": "" },
+        { "label": "Xác minh hàng tồn kho", "desc": "Xác minh sản phẩm có trong kho", "detail": "Hệ thống hàng tồn kho FULGO kiểm tra 'Sản phẩm được yêu cầu có trong kho không? Bao nhiêu cái?' và dự trữ số lượng đơn hàng.", "actor": "FULGO", "term": "Dự trữ hàng tồn kho" },
+        { "label": "Gửi hướng dẫn xuất hàng", "desc": "Yêu cầu nhiệm vụ từ công ty hậu cần", "detail": "FULGO hướng dẫn công ty hậu cần 'Vui lòng lấy sản phẩm này, đóng gói và giao vận chuyển.'", "actor": "FULGO", "term": "" },
+        { "label": "Giao nhiệm vụ", "desc": "Nhóm nhiều đơn hàng để giao", "detail": "Công ty hậu cần hiệu quả nhóm các đơn hàng đến cùng lúc và giao chúng cho công nhân cùng một lúc.", "actor": "Công ty hậu cần", "term": "Chọn lọc theo sóng" },
+        { "label": "Hoàn tất tìm kiếm sản phẩm", "desc": "Lấy sản phẩm từ kệ", "detail": "Công nhân đi qua các kệ kho, tìm kiếm sản phẩm được đặt hàng một cái, quét mã vạch và thu thập chúng.", "actor": "Công nhân", "term": "Chọn hàng" },
+        { "label": "Hoàn tất đóng gói", "desc": "Đóng gói trong hộp và dán nhãn vận chuyển", "detail": "Công nhân đóng gói sản phẩm vào hộp và in dán số theo dõi của công ty vận chuyển.", "actor": "Công nhân", "term": "Đóng gói" },
+        { "label": "Báo cáo hoàn tất xuất hàng", "desc": "Gửi kèm số theo dõi", "detail": "Công ty hậu cần báo cáo cho FULGO 'Đóng gói xong và số theo dõi là 123456.'", "actor": "Công ty hậu cần", "term": "" },
+        { "label": "Giảm hàng tồn kho", "desc": "Giảm hàng tồn kho có sẵn", "detail": "Hệ thống hàng tồn kho FULGO giảm số lượng hàng tồn kho theo số lượng được giao.", "actor": "FULGO", "term": "" },
+        { "label": "Gửi thông báo hoàn tất xuất hàng", "desc": "Trả lời bằng số theo dõi", "detail": "FULGO thông báo cho nhà cung cấp 'Xuất hàng hoàn tất và số theo dõi như sau.'", "actor": "FULGO", "term": "" },
+        { "label": "Cập nhật thông tin vận chuyển", "desc": "Gửi theo dõi đến kênh bán", "detail": "Nhà cung cấp gửi số theo dõi đến hệ thống kênh bán để khách hàng có thể theo dõi giao hàng.", "actor": "Nhà cung cấp", "term": "" },
+        { "label": "Yêu cầu lấy hàng", "desc": "Yêu cầu lấy từ công ty vận chuyển", "detail": "Công ty hậu cần yêu cầu công ty vận chuyển 'Vui lòng lấy các mặt hàng đã đóng gói.'", "actor": "Công ty hậu cần", "term": "" },
+        { "label": "Gửi trạng thái vận chuyển", "desc": "Theo dõi vị trí theo thời gian thực", "detail": "Công ty vận chuyển gửi cập nhật tiến trình vận chuyển 'Lấy xong', 'Đang vận chuyển', 'Đã giao' theo thời gian thực cho FULGO.", "actor": "Công ty vận chuyển", "term": "" }
+      ]
     },
     "return": {
-      "title": "Quy trình Trả hàng",
-      "description": "Quy trình toàn bộ trong đó nếu khách hàng yêu cầu trả hàng do có vấn đề với sản phẩm, công ty logistics nhận lại sản phẩm, kiểm tra nó, và khôi phục hàng tồn kho hoặc loại bỏ nó.",
-      "hierarchy": "Fulgo(Nền tảng) → Logistics(Quản lý Kho) → Người bán hàng(Khách hàng)",
+      "title": "Quy trình trả hàng (Return)",
+      "description": "Quy trình hoàn chỉnh trong đó khách hàng yêu cầu trả lại do sản phẩm có vấn đề, công ty hậu cần nhận và kiểm tra sản phẩm, sau đó hoặc trả lại hàng tồn kho hoặc loại bỏ.",
+      "hierarchy": "Fulgo(Nền tảng) → Công ty hậu cần(Người quản lý kho) → Nhà cung cấp(Khách hàng)",
       "layers": {
         "layer1": "Lớp 1: Tiếp nhận",
         "layer2": "Lớp 2: Kiểm tra",
         "layer3": "Lớp 3: Phân loại"
-      }
+      },
+      "steps": [
+        { "label": "Yêu cầu trả hàng", "desc": "Khách hàng yêu cầu trả hàng", "detail": "Khách hàng liên hệ dịch vụ khách hàng của nhà cung cấp 'Sản phẩm có vấn đề và tôi muốn trả lại.'", "actor": "Khách hàng", "term": "" },
+        { "label": "Phê duyệt trả hàng", "desc": "Xem xét lý do và phê duyệt", "detail": "Nhà cung cấp xem xét lý do trả hàng, phê duyệt 'Chúng tôi sẽ nhận lại trả hàng,' và đăng ký nó trong FULGO bằng số trả hàng.", "actor": "Nhà cung cấp", "term": "Số phê duyệt trả hàng" },
+        { "label": "Phân bổ nhập hàng trả lại", "desc": "Thông báo cho công ty hậu cần về trả lại dự kiến", "detail": "FULGO thông báo cho công ty hậu cần trước 'Sản phẩm này sẽ sớm được trả lại' và phối hợp lịch trình.", "actor": "FULGO", "term": "" },
+        { "label": "Phê duyệt tiếp nhận trả hàng", "desc": "Xác nhận kho sẵn sàng nhận", "detail": "Công ty hậu cần xác nhận 'Chúng tôi có thể nhận trả hàng vào ngày này' và chỉ định nhân viên chịu trách nhiệm.", "actor": "Công ty hậu cần", "term": "" },
+        { "label": "Gửi sản phẩm trả hàng", "desc": "Khách hàng gửi lại qua công ty vận chuyển", "detail": "Khách hàng đóng gói lại sản phẩm và gửi đến địa chỉ kho qua công ty vận chuyển.", "actor": "Khách hàng", "term": "" },
+        { "label": "Xác nhận sự đến của trả hàng", "desc": "Công ty vận chuyển đến kho", "detail": "Công nhân xác nhận sản phẩm trả hàng đã đến và đăng ký 'Sản phẩm trả lại đã nhận.'", "actor": "Công nhân", "term": "" },
+        { "label": "Kiểm tra sản phẩm trả hàng", "desc": "Kiểm tra kỹ lưỡng tình trạng", "detail": "Công nhân mở sản phẩm trả hàng và xác định 'Có thể bán lại được không? Có cần sửa chữa không? Có nên loại bỏ không?'", "actor": "Công nhân", "term": "Kiểm tra trả hàng" },
+        { "label": "Báo cáo kết quả kiểm tra", "desc": "Gửi phân loại tình trạng sản phẩm", "detail": "Công ty hậu cần báo cáo kết quả kiểm tra cho FULGO. Phân loại: '10 đơn vị có thể bán lại, 2 cần sửa chữa, 1 sẽ bị loại bỏ.'", "actor": "Công ty hậu cần", "term": "" },
+        { "label": "Xử lý hàng tồn kho", "desc": "Thêm lại hoặc giảm hàng tồn kho", "detail": "FULGO thêm sản phẩm có thể bán lại vào hàng tồn kho và loại bỏ các mặt hàng sẽ bị loại bỏ.", "actor": "FULGO", "term": "" },
+        { "label": "Sắp xếp lại sản phẩm", "desc": "Sắp xếp lại trên kệ hoặc loại bỏ", "detail": "Sản phẩm có thể bán lại được sắp xếp lại trên các kệ kho, và các mặt hàng sẽ bị loại bỏ được xử lý riêng.", "actor": "Công nhân", "term": "" },
+        { "label": "Gửi thông báo hoàn tất trả hàng", "desc": "Thông báo kết quả xử lý", "detail": "FULGO thông báo cho nhà cung cấp 'Xử lý trả hàng hoàn tất và hàng tồn kho đã thay đổi như sau.'", "actor": "FULGO", "term": "" },
+        { "label": "Xử lý hoàn tiền", "desc": "Trả tiền cho khách hàng", "detail": "Nhà cung cấp xử lý hoàn tiền cho khách hàng.", "actor": "Nhà cung cấp", "term": "" }
+      ]
     },
     "storage": {
-      "title": "Quản lý Kho & Hàng tồn kho",
-      "description": "Quy trình hoạt động hàng ngày trong đó các công ty logistics quản lý hiệu quả không gian kho, và FULGO theo dõi chính xác tình trạng hàng tồn kho theo người bán hàng.",
-      "hierarchy": "Fulgo(Nền tảng) → Logistics(Quản lý Kho) → Người bán hàng(Khách hàng)",
+      "title": "Bảo quản & Quản lý hàng tồn kho (Storage)",
+      "description": "Hoạt động hàng ngày trong đó công ty hậu cần quản lý hiệu quả không gian kho, FULGO theo dõi chính xác trạng thái hàng tồn kho theo nhà cung cấp.",
+      "hierarchy": "Fulgo(Nền tảng) → Công ty hậu cần(Người quản lý kho) → Nhà cung cấp(Khách hàng)",
       "layers": {
-        "layer1": "Lớp 1: Nhập kho",
+        "layer1": "Lớp 1: Nhập hàng",
         "layer2": "Lớp 2: Sắp xếp",
         "layer3": "Lớp 3: Giám sát"
-      }
+      },
+      "steps": [
+        { "label": "Thiết lập cấu trúc kho", "desc": "Xác định cấu trúc khu vực-kệ-bin", "detail": "Hệ thống FULGO đăng ký có hệ thống cấu trúc kho cho mỗi công ty hậu cần chia thành các khu vực, kệ và bin.", "actor": "FULGO", "term": "Hệ thống vị trí" },
+        { "label": "Đăng ký vị trí bảo quản", "desc": "Phân bổ mã vạch cho từng vị trí", "detail": "Công ty hậu cần nhập thông tin vị trí trên các kệ kho thực tế và dán nhãn mã vạch. Ví dụ: 'Khu vực A-Kệ 3-Bin 5'", "actor": "Công ty hậu cần", "term": "" },
+        { "label": "Di chuyển vị trí sản phẩm", "desc": "Di chuyển sang kệ khác", "detail": "Công nhân di chuyển sản phẩm đến vị trí dễ lấy hơn và quét mã vạch.", "actor": "Công nhân", "term": "" },
+        { "label": "Gửi lịch sử di chuyển", "desc": "Ghi lại thay đổi vị trí", "detail": "Công ty hậu cần báo cáo cho FULGO 'Chúng tôi đã di chuyển sản phẩm từ A-3-5 đến B-2-1.'", "actor": "Công ty hậu cần", "term": "" },
+        { "label": "Cập nhật vị trí hàng tồn kho", "desc": "Phản ánh vị trí theo thời gian thực", "detail": "Hệ thống hàng tồn kho FULGO cập nhật ngay vị trí mới của sản phẩm.", "actor": "FULGO", "term": "" },
+        { "label": "Chỉ dẫn kiểm kho vật lý", "desc": "Xác minh số lượng thực tế", "detail": "Công ty hậu cần thường xuyên hoặc khi cần yêu cầu công nhân 'Hãy đếm bao nhiêu sản phẩm thực sự có trên kệ này.'", "actor": "Công ty hậu cần", "term": "Kiểm kho định kỳ" },
+        { "label": "Tiến hành kiểm kho vật lý", "desc": "Đếm và ghi lại trực tiếp", "detail": "Công nhân đi qua kho, đếm sản phẩm trên mỗi kệ, quét mã vạch và ghi lại số lượng thực tế.", "actor": "Công nhân", "term": "" },
+        { "label": "Gửi kết quả kiểm kho", "desc": "Báo cáo số lượng thực tế và chênh lệch", "detail": "Công ty hậu cần báo cáo 'Hệ thống hiển thị 100 đơn vị nhưng thực tế chỉ có 98.'", "actor": "Công ty hậu cần", "term": "" },
+        { "label": "Điều chỉnh số lượng hàng tồn kho", "desc": "Sửa lại số lượng hệ thống", "detail": "FULGO sửa lại hàng tồn kho hệ thống từ 100 thành 98 dựa trên số lượng thực tế.", "actor": "FULGO", "term": "" },
+        { "label": "Cung cấp trạng thái hàng tồn kho", "desc": "Kiểm tra hàng tồn kho theo thời gian thực khả dụng", "detail": "FULGO cung cấp cho nhà cung cấp 'Hàng tồn kho hiện tại: X đơn vị, được lưu trữ tại vị trí này.'", "actor": "FULGO", "term": "" },
+        { "label": "Kiểm tra phân tích hàng tồn kho", "desc": "Xem xét báo cáo luân phiên sản phẩm", "detail": "Nhà cung cấp kiểm tra bảng điều khiển FULGO 'Sản phẩm nào bán chạy, hàng tồn kho tồn tại bao lâu' v.v.", "actor": "Nhà cung cấp", "term": "" }
+      ]
     }
   },
   "actors": {
-    "system": "Hệ thống",
-    "warehouse": "Kho",
+    "shipper": "Nhà cung cấp",
+    "fulgo": "FULGO",
+    "logistics": "Công ty hậu cần",
+    "worker": "Công nhân",
+    "inventory": "Hệ thống hàng tồn kho",
     "customer": "Khách hàng",
-    "carrier": "Nhà cung cấp vận chuyển"
+    "channel": "Kênh bán",
+    "carrier": "Công ty vận chuyển"
+  },
+  "actorDescriptions": {
+    "shipper": "Chủ sản phẩm",
+    "fulgo": "Hệ thống nền tảng",
+    "logistics": "Công ty quản lý kho",
+    "worker": "Nhân viên kho",
+    "inventory": "Công cụ quản lý hàng tồn kho",
+    "customer": "Người mua sản phẩm",
+    "channel": "Shopee, Lazada, v.v.",
+    "carrier": "Viettel Post, GHN, v.v."
   },
   "status": {
-    "completed": "Hoàn thành",
+    "completed": "Hoàn tất",
     "inProgress": "Đang tiến hành",
     "pending": "Đang chờ"
   },
   "hierarchyInfo": {
-    "title": "Cấu trúc Phân cấp",
+    "title": "Cấu trúc phân cấp",
     "description": "Quy trình này bao gồm 3 lớp chính:",
     "close": "Đóng"
   },
@@ -75,10 +147,14 @@
     "title": "Chi tiết từng bước"
   },
   "components": {
-    "legend": "Các thành phần Hệ thống",
+    "legend": "Thành phần hệ thống",
     "currentStep": "Bước hiện tại:",
-    "responsible": "Chịu trách nhiệm:",
+    "responsible": "Người chịu trách nhiệm:",
     "term": "Thuật ngữ:",
     "step": "Bước"
+  },
+  "zones": {
+    "oms": "OMS",
+    "wms": "WMS"
   }
 }

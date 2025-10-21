@@ -94,6 +94,7 @@ export default function Home() {
               flow={currentFlow}
               activeStep={activeStep}
               getActorPosition={getActorPosition}
+              flowType={flowType}
             />
 
             {/* 진행 상태 */}
@@ -107,6 +108,7 @@ export default function Home() {
                 flow={currentFlow} 
                 activeStep={activeStep}
                 onStepClick={handleStepSelect}
+                flowType={flowType}
               />
             </div>
           </div>

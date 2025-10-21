@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 import { Flow } from '@/models/types';
 
 interface MiniTimelineProps {
@@ -14,9 +15,11 @@ export const MiniTimeline: React.FC<MiniTimelineProps> = ({
   activeStep,
   onStepClick,
 }) => {
+  const t = useTranslations();
+
   return (
     <div className="bg-white rounded-xl shadow-lg p-4 mb-4">
-      <h3 className="text-xs font-bold text-gray-600 uppercase mb-3">프로세스 타임라인</h3>
+      <h3 className="text-xs font-bold text-gray-600 uppercase mb-3">{t('components.currentStep')}</h3>
       <div className="space-y-2">
         {flow.steps.map((step, idx) => {
           const isActive = activeStep === idx;

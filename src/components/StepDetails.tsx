@@ -9,10 +9,30 @@ interface StepDetailsProps {
   flow: Flow;
   activeStep: number;
   onStepClick: (stepIndex: number) => void;
+  flowType: string;
 }
 
-export const StepDetails: React.FC<StepDetailsProps> = ({ flow, activeStep, onStepClick }) => {
+export const StepDetails: React.FC<StepDetailsProps> = ({ flow, activeStep, onStepClick, flowType }) => {
   const t = useTranslations();
+
+  const getStepTranslation = (stepIndex: number, key: 'label' | 'desc' | 'detail' | 'actor' | 'term') => {
+    try {
+      return t(`flows.${flowType}.steps.${stepIndex}.${key}`);
+    } catch {
+      // Fallback to original data if translation key doesn't exist
+      const step = flow.steps[stepIndex];
+      if (key === 'label') return step.label;
+      if (key === 'desc') return step.desc;
+      if (key === 'detail') return step.detail;
+      if (key === 'actor') return step.actor;
+      if (key === 'term') return step.term;
+      return '';
+    }
+  };
+
+  const getActorName = (actorId: string) => {
+    return t(`actors.${actorId}`) || flow.actors.find(a => a.id === actorId)?.name || '';
+  };
 
   return (
     <div>
@@ -45,7 +65,7 @@ export const StepDetails: React.FC<StepDetailsProps> = ({ flow, activeStep, onSt
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2">
                   <h3 className="font-semibold text-sm text-gray-900 break-words">
-                    {step.label}
+                    {getStepTranslation(idx, 'label')}
                   </h3>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="flex-shrink-0 mt-0.5 text-gray-400">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -53,22 +73,22 @@ export const StepDetails: React.FC<StepDetailsProps> = ({ flow, activeStep, onSt
                 </div>
                 <div className="space-y-1 mt-1">
                   <div className="text-xs text-gray-500">
-                    {flow.actors.find(a => a.id === step.from)?.name} 
+                    {getActorName(step.from)} 
                     <span className="text-gray-400 mx-1">→</span>
-                    {flow.actors.find(a => a.id === step.to)?.name}
+                    {getActorName(step.to)}
                   </div>
                   <div className="flex flex-wrap gap-1">
                     <span className="text-xs text-blue-700 bg-blue-100 px-1.5 py-0.5 rounded font-semibold whitespace-nowrap">
-                      {step.actor}
+                      {getStepTranslation(idx, 'actor')}
                     </span>
-                    {step.term && (
+                    {getStepTranslation(idx, 'term') && (
                       <span className="text-xs text-purple-700 bg-purple-100 px-1.5 py-0.5 rounded whitespace-nowrap">
-                        {step.term}
+                        {getStepTranslation(idx, 'term')}
                       </span>
                     )}
                   </div>
                   <p className="text-xs text-gray-700 mt-1 break-words leading-snug line-clamp-2">
-                    {step.desc}
+                    {getStepTranslation(idx, 'desc')}
                   </p>
                 </div>
               </div>

@@ -23,11 +23,23 @@ export const ActorLegend: React.FC<ActorLegendProps> = ({ flow }) => {
   const layerColors: Record<string, { bg: string; text: string; border: string }> = {
     'OMS': { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-300' },
     'WMS': { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-300' },
+    '1계층': { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-300' },
+    '2계층': { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-300' },
+    '3계층': { bg: 'bg-pink-50', text: 'text-pink-700', border: 'border-pink-300' },
+    'Layer 1': { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-300' },
+    'Layer 2': { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-300' },
+    'Layer 3': { bg: 'bg-pink-50', text: 'text-pink-700', border: 'border-pink-300' },
+    'Lớp 1': { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-300' },
+    'Lớp 2': { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-300' },
+    'Lớp 3': { bg: 'bg-pink-50', text: 'text-pink-700', border: 'border-pink-300' },
+    '외부': { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-300' },
+    'External': { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-300' },
+    'Bên ngoài': { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-300' },
   };
 
   return (
     <div className="mb-6 space-y-4">
-      <h3 className="text-sm font-bold text-gray-800">시스템 구성 요소</h3>
+      <h3 className="text-sm font-bold text-gray-800">{t('components.legend')}</h3>
       
       {Object.entries(layerGroups).map(([layer, actors]) => {
         const colors = layerColors[layer] || { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-300' };
@@ -49,10 +61,10 @@ export const ActorLegend: React.FC<ActorLegendProps> = ({ flow }) => {
                       className="text-xs font-bold text-center mb-1"
                       style={{ color: actor.color }}
                     >
-                      {actor.name}
+                      {t(`actors.${actor.id}`) || actor.name}
                     </div>
                     <div className="text-xs text-gray-600 text-center">
-                      {actor.desc}
+                      {t(`actorDescriptions.${actor.id}`) || actor.desc}
                     </div>
                   </div>
                 ))}

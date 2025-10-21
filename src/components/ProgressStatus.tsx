@@ -30,7 +30,7 @@ export const ProgressStatus: React.FC<ProgressStatusProps> = ({ flow, activeStep
               {activeStep + 1}
             </div>
             <div>
-              <p className="text-xs text-blue-600 font-semibold uppercase">현재 단계</p>
+              <p className="text-xs text-blue-600 font-semibold uppercase">{t('status.inProgress')}</p>
               <p className="text-sm font-bold text-gray-900">{currentStep.label}</p>
             </div>
           </div>

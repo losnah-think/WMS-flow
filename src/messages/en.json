@@ -10,56 +10,128 @@
       "play": "Play",
       "pause": "Pause",
       "reset": "Reset",
-      "hierarchyView": "View Hierarchy"
+      "hierarchyView": "Hierarchy View"
     }
   },
   "flows": {
     "inbound": {
-      "title": "Inbound Process",
-      "description": "The entire process where shippers register inbound plans to FULGO WMS, logistics companies approve and receive actual products, and store them in the warehouse. The FULGO platform tracks and manages all progress in real-time.",
-      "hierarchy": "Fulgo(Platform) → Logistics(Warehouse Operator) → Shipper(Customer)",
+      "title": "Inbound Process (Inbound)",
+      "description": "The complete process where a shipper registers an inbound plan in the FULGO WMS, and the logistics company receives and stores the products in the warehouse. The FULGO platform tracks and manages all progress in real-time.",
+      "hierarchy": "Fulgo(Platform) → Logistics Company(Warehouse Operator) → Shipper(Customer)",
       "layers": {
         "layer1": "Layer 1: Receipt",
         "layer2": "Layer 2: Inspection",
-        "layer3": "Layer 3: Placement"
-      }
+        "layer3": "Layer 3: Storage"
+      },
+      "steps": [
+        { "label": "Register Inbound Schedule", "desc": "Register what products will arrive and when", "detail": "The shipper pre-registers product information (product name, quantity, expected arrival date) in the FULGO system.", "actor": "Shipper", "term": "" },
+        { "label": "Send Inbound Information", "desc": "Notify logistics company of inbound plan", "detail": "FULGO notifies the logistics company in advance: 'These products will arrive soon' and requests approval.", "actor": "FULGO", "term": "ASN (Advance Shipment Notification)" },
+        { "label": "Approve Inbound Schedule", "desc": "Confirm warehouse space and schedule", "detail": "The logistics company reviews warehouse conditions and confirms 'We can receive on this date.' Dock location is also assigned.", "actor": "Logistics", "term": "Dock Assignment" },
+        { "label": "Assign Inbound Task", "desc": "Assign task to responsible staff", "detail": "The logistics manager assigns to warehouse workers: 'Please process this product inbound today.'", "actor": "Logistics", "term": "" },
+        { "label": "Confirm Product Arrival", "desc": "Truck arrives, unloading begins", "detail": "When the truck arrives with the products, the worker registers in the system 'Products have arrived.'", "actor": "Worker", "term": "" },
+        { "label": "Process Temporary Inbound", "desc": "Temporary storage before inspection", "detail": "Products are temporarily placed in the warehouse without inspection yet and marked as 'Awaiting Inspection.'", "actor": "Worker", "term": "Temporary Inbound" },
+        { "label": "Complete Product Inspection", "desc": "Barcode scanning and quality check", "detail": "The worker carefully scans barcodes and checks 'Is the quantity correct? Is the product intact? Any damage?'", "actor": "Worker", "term": "Inspection" },
+        { "label": "Report Inspection Results", "desc": "Report normal/defective status", "detail": "The logistics company reports inspection results to FULGO. If there are defective items or quantity discrepancies, the shipper is automatically notified.", "actor": "Logistics", "term": "" },
+        { "label": "Issue Product Labels", "desc": "Print barcode stickers", "detail": "FULGO system automatically generates barcode labels for each product, and the worker prints and attaches them.", "actor": "FULGO", "term": "" },
+        { "label": "Arrange Storage Location", "desc": "Organize products on designated shelves", "detail": "The worker goes to the storage location (e.g., Area A-Shelf 3-Bin 5) that the system specifies and arranges the products.", "actor": "Worker", "term": "Placement" },
+        { "label": "Report Inbound Completion", "desc": "All work completed", "detail": "The logistics company reports to FULGO 'All products are now in the warehouse and ready for sale.'", "actor": "Logistics", "term": "" },
+        { "label": "Increase Inventory Quantity", "desc": "Add inventory available for sale", "detail": "FULGO inventory system increases the inventory count for the product. Now it's ready for sale.", "actor": "FULGO", "term": "" },
+        { "label": "Send Inbound Completion Notice", "desc": "Notify shipper of completion", "detail": "FULGO notifies the shipper 'Inbound is complete. You can now check inventory.'", "actor": "FULGO", "term": "" }
+      ]
     },
     "outbound": {
-      "title": "Outbound Process",
-      "description": "The entire process where when orders come from external sales channels (Coupang, Naver Shopping, etc.), FULGO collects them and delivers them to logistics companies to pack and ship to customers.",
-      "hierarchy": "Fulgo(Platform) → Logistics(Warehouse Operator) → Shipper(Customer)",
+      "title": "Outbound Process (Outbound)",
+      "description": "The complete process where external sales channels (Coupang, Naver Shopping, etc.) receive orders, FULGO collects them and forwards to the logistics company, which packages and ships products to customers.",
+      "hierarchy": "Fulgo(Platform) → Logistics Company(Warehouse Operator) → Shipper(Customer)",
       "layers": {
         "layer1": "Layer 1: Picking",
         "layer2": "Layer 2: Packing",
         "layer3": "Layer 3: Shipping"
-      }
+      },
+      "steps": [
+        { "label": "Customer Orders Product", "desc": "Customer clicks purchase button", "detail": "Customer orders a product from external sales channels like Coupang or Naver Smart Store.", "actor": "Customer", "term": "" },
+        { "label": "Receive Order", "desc": "Sales channel creates order information", "detail": "The sales channel system creates order information (order number, product, quantity, delivery address) and notifies the shipper.", "actor": "Channel", "term": "" },
+        { "label": "Send Outbound Request", "desc": "Shipper instructs FULGO to ship", "detail": "The shipper sends an outbound request to FULGO system 'Please ship this order.'", "actor": "Shipper", "term": "" },
+        { "label": "Verify Inventory", "desc": "Verify product is in warehouse", "detail": "FULGO inventory system checks 'Is the requested product in the warehouse? How many?' and reserves the order quantity.", "actor": "FULGO", "term": "Inventory Reserve" },
+        { "label": "Send Outbound Instruction", "desc": "Request task from logistics company", "detail": "FULGO instructs the logistics company 'Please pick this product, pack it, and ship it.'", "actor": "FULGO", "term": "" },
+        { "label": "Assign Task", "desc": "Group multiple orders for assignment", "detail": "The logistics company efficiently bundles orders that arrived around the same time and assigns them to workers at once.", "actor": "Logistics", "term": "Wave Picking" },
+        { "label": "Complete Product Search", "desc": "Pick product from shelf", "detail": "The worker goes through warehouse shelves, finds ordered products one by one, scans barcodes, and collects them.", "actor": "Worker", "term": "Picking" },
+        { "label": "Complete Packaging", "desc": "Pack in box and attach shipping label", "detail": "The worker packs the products in a box and prints and attaches the courier tracking number.", "actor": "Worker", "term": "Packing" },
+        { "label": "Report Outbound Completion", "desc": "Send with tracking number", "detail": "The logistics company reports to FULGO 'Packing complete and tracking number is 123456.'", "actor": "Logistics", "term": "" },
+        { "label": "Reduce Inventory", "desc": "Decrease available inventory", "detail": "FULGO inventory system reduces inventory quantity by the shipped amount.", "actor": "FULGO", "term": "" },
+        { "label": "Send Outbound Completion Notice", "desc": "Reply with tracking number", "detail": "FULGO notifies the shipper 'Outbound complete and tracking number is here.'", "actor": "FULGO", "term": "" },
+        { "label": "Update Shipping Information", "desc": "Send tracking to sales channel", "detail": "The shipper sends the tracking number to the sales channel system so customers can track delivery.", "actor": "Shipper", "term": "" },
+        { "label": "Request Pickup", "desc": "Request pickup from courier", "detail": "The logistics company requests pickup from the courier 'Please pick up the packed items.'", "actor": "Logistics", "term": "" },
+        { "label": "Send Shipping Status", "desc": "Real-time location tracking", "detail": "The courier sends shipping progress updates 'Pickup complete', 'In transit', 'Delivered' in real-time to FULGO.", "actor": "Carrier", "term": "" }
+      ]
     },
     "return": {
-      "title": "Return Process",
-      "description": "The entire process where if a customer requests a return due to product issues, the logistics company receives the product again, inspects it, and either restocks or discards it.",
-      "hierarchy": "Fulgo(Platform) → Logistics(Warehouse Operator) → Shipper(Customer)",
+      "title": "Return Process (Return)",
+      "description": "The complete process where a customer requests a return due to a product issue, the logistics company receives and inspects the product, and either returns it to inventory or disposes of it.",
+      "hierarchy": "Fulgo(Platform) → Logistics Company(Warehouse Operator) → Shipper(Customer)",
       "layers": {
         "layer1": "Layer 1: Receipt",
         "layer2": "Layer 2: Inspection",
         "layer3": "Layer 3: Classification"
-      }
+      },
+      "steps": [
+        { "label": "Request Return", "desc": "Customer requests return", "detail": "The customer contacts the shipper's customer service 'There's a problem with the product and I want to return it.'", "actor": "Customer", "term": "" },
+        { "label": "Approve Return", "desc": "Review reason and approve", "detail": "The shipper reviews the return reason, approves 'We'll accept the return,' and registers it in FULGO with a return number.", "actor": "Shipper", "term": "Return Approval Number" },
+        { "label": "Assign Inbound Return", "desc": "Notify logistics of expected return", "detail": "FULGO notifies the logistics company in advance 'This product will be returned soon' and coordinates the schedule.", "actor": "FULGO", "term": "" },
+        { "label": "Approve Return Receipt", "desc": "Confirm warehouse ready to receive", "detail": "The logistics company confirms 'We can receive the return on this date' and assigns responsible staff.", "actor": "Logistics", "term": "" },
+        { "label": "Send Return Product", "desc": "Customer ships back via courier", "detail": "The customer repackages the product and sends it to the warehouse address via courier.", "actor": "Customer", "term": "" },
+        { "label": "Confirm Return Arrival", "desc": "Courier arrives at warehouse", "detail": "The worker confirms the return product has arrived and registers 'Return product received.'", "actor": "Worker", "term": "" },
+        { "label": "Inspect Returned Product", "desc": "Carefully check condition", "detail": "The worker opens the returned product and determines 'Can it be resold? Does it need repair? Should it be discarded?'", "actor": "Worker", "term": "Return Inspection" },
+        { "label": "Report Inspection Results", "desc": "Send product condition classification", "detail": "The logistics company reports inspection results to FULGO. Classification: '10 units resaleable, 2 need repair, 1 to be discarded.'", "actor": "Logistics", "term": "" },
+        { "label": "Process Inventory", "desc": "Add back or reduce inventory", "detail": "FULGO adds resaleable products to inventory and removes items to be discarded.", "actor": "FULGO", "term": "" },
+        { "label": "Reposition Products", "desc": "Reorganize on shelf or dispose", "detail": "Resaleable products are reorganized on warehouse shelves, and discardable items are separately processed.", "actor": "Worker", "term": "" },
+        { "label": "Send Return Completion Notice", "desc": "Notify of processing results", "detail": "FULGO notifies the shipper 'Return processing complete and inventory has changed as follows.'", "actor": "FULGO", "term": "" },
+        { "label": "Process Refund", "desc": "Return money to customer", "detail": "The shipper processes refund to the customer.", "actor": "Shipper", "term": "" }
+      ]
     },
     "storage": {
-      "title": "Storage & Inventory Management",
-      "description": "The daily operational process where logistics companies efficiently manage warehouse space, and FULGO accurately tracks inventory status by shipper.",
-      "hierarchy": "Fulgo(Platform) → Logistics(Warehouse Operator) → Shipper(Customer)",
+      "title": "Storage & Inventory Management (Storage)",
+      "description": "The daily operations where the logistics company efficiently manages warehouse space, and FULGO accurately tracks inventory status by shipper.",
+      "hierarchy": "Fulgo(Platform) → Logistics Company(Warehouse Operator) → Shipper(Customer)",
       "layers": {
         "layer1": "Layer 1: Inbound",
         "layer2": "Layer 2: Sorting",
         "layer3": "Layer 3: Monitoring"
-      }
+      },
+      "steps": [
+        { "label": "Set Warehouse Structure", "desc": "Define zone-rack-bin structure", "detail": "FULGO system systematically registers the warehouse structure for each logistics company divided into zones, racks, and bins.", "actor": "FULGO", "term": "Location System" },
+        { "label": "Register Storage Location", "desc": "Assign barcode to each location", "detail": "The logistics company enters location information on actual warehouse shelves and attaches barcode stickers. Example: 'Zone A-Shelf 3-Bin 5'", "actor": "Logistics", "term": "" },
+        { "label": "Move Product Location", "desc": "Move to different shelf", "detail": "The worker moves a product to an easier-to-access location and scans the barcode.", "actor": "Worker", "term": "" },
+        { "label": "Send Movement History", "desc": "Record location change", "detail": "The logistics company reports to FULGO 'We moved the product from A-3-5 to B-2-1.'", "actor": "Logistics", "term": "" },
+        { "label": "Update Inventory Location", "desc": "Reflect real-time location", "detail": "FULGO inventory system immediately updates the product's new location.", "actor": "FULGO", "term": "" },
+        { "label": "Direct Physical Inventory", "desc": "Verify actual quantity", "detail": "The logistics company regularly or when needed instructs workers 'Count how many products are actually on this shelf.'", "actor": "Logistics", "term": "Periodic Inventory" },
+        { "label": "Perform Physical Inventory", "desc": "Count and record directly", "detail": "The worker walks through the warehouse, counts products on each shelf, scans barcodes, and records actual quantities.", "actor": "Worker", "term": "" },
+        { "label": "Send Inventory Results", "desc": "Report actual quantity and discrepancy", "detail": "The logistics company reports 'System shows 100 units but only 98 are actually present.'", "actor": "Logistics", "term": "" },
+        { "label": "Adjust Inventory Quantity", "desc": "Correct system quantity", "detail": "FULGO corrects system inventory from 100 to 98 based on actual count.", "actor": "FULGO", "term": "" },
+        { "label": "Provide Inventory Status", "desc": "Real-time inventory check available", "detail": "FULGO provides shippers with 'Current inventory: X units, stored at this location.'", "actor": "FULGO", "term": "" },
+        { "label": "Check Inventory Analysis", "desc": "Review product turnover reports", "detail": "The shipper checks FULGO dashboard 'Which products sell well, how long inventory sits' etc.", "actor": "Shipper", "term": "" }
+      ]
     }
   },
   "actors": {
-    "system": "System",
-    "warehouse": "Warehouse",
+    "shipper": "Shipper",
+    "fulgo": "FULGO",
+    "logistics": "Logistics",
+    "worker": "Worker",
+    "inventory": "Inventory System",
     "customer": "Customer",
+    "channel": "Channel",
     "carrier": "Carrier"
+  },
+  "actorDescriptions": {
+    "shipper": "Product Owner",
+    "fulgo": "Platform System",
+    "logistics": "Warehouse Operating Company",
+    "worker": "Warehouse Staff",
+    "inventory": "Inventory Management Engine",
+    "customer": "Product Buyer",
+    "channel": "Coupang, Naver, etc.",
+    "carrier": "CJ Logistics, etc."
   },
   "status": {
     "completed": "Completed",
@@ -68,11 +140,11 @@
   },
   "hierarchyInfo": {
     "title": "Hierarchy Structure",
-    "description": "This process consists of 3 main layers:",
+    "description": "This process consists of 3 major layers:",
     "close": "Close"
   },
   "stepDetails": {
-    "title": "Step Details"
+    "title": "Step-by-Step Details"
   },
   "components": {
     "legend": "System Components",
@@ -80,5 +152,9 @@
     "responsible": "Responsible:",
     "term": "Term:",
     "step": "Step"
+  },
+  "zones": {
+    "oms": "OMS",
+    "wms": "WMS"
   }
 }

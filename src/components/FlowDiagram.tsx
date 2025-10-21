@@ -2,15 +2,19 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 import { Flow } from '@/models/types';
 
 interface FlowDiagramProps {
   flow: Flow;
   activeStep: number;
   getActorPosition: (actorId: string) => number;
+  flowType: string;
 }
 
-export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getActorPosition }) => {
+export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getActorPosition, flowType }) => {
+  const t = useTranslations();
+  
   // OMS와 WMS 그룹 분류
   const omsActors = flow.actors.filter(a => a.layer === 'OMS');
   const wmsActors = flow.actors.filter(a => a.layer === 'WMS');
@@ -20,6 +24,30 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
   const omsMaxX = omsActors.length > 0 ? (omsActors.length * 150) : null;
   const wmsMinX = omsActors.length > 0 ? (omsActors.length * 150) : null;
   const wmsMaxX = wmsMinX !== null ? wmsMinX + (wmsActors.length * 150) : null;
+
+  const getActorName = (actorId: string) => {
+    return t(`actors.${actorId}`) || flow.actors.find(a => a.id === actorId)?.name || '';
+  };
+
+  const getActorDescription = (actorId: string) => {
+    return t(`actorDescriptions.${actorId}`) || flow.actors.find(a => a.id === actorId)?.desc || '';
+  };
+
+  const getStepLabel = (stepIndex: number) => {
+    try {
+      return t(`flows.${flowType}.steps.${stepIndex}.label`);
+    } catch {
+      return flow.steps[stepIndex]?.label || '';
+    }
+  };
+
+  const getStepDesc = (stepIndex: number) => {
+    try {
+      return t(`flows.${flowType}.steps.${stepIndex}.desc`);
+    } catch {
+      return flow.steps[stepIndex]?.desc || '';
+    }
+  };
 
   return (
     <div className="overflow-x-auto border-2 border-gray-200 rounded-lg bg-white">
@@ -103,7 +131,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
               fontSize="16"
               fontWeight="bold"
             >
-              OMS
+              {t('zones.oms')}
             </text>
           </>
         )}
@@ -148,7 +176,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
               fontSize="16"
               fontWeight="bold"
             >
-              WMS
+              {t('zones.wms')}
             </text>
           </>
         )}
@@ -190,7 +218,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 className="text-sm font-bold"
                 fill={actor.color}
               >
-                {actor.name}
+                {getActorName(actor.id)}
               </text>
               
               {/* 설명 */}
@@ -201,7 +229,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 className="text-xs"
                 fill="#6b7280"
               >
-                {actor.desc}
+                {getActorDescription(actor.id)}
               </text>
               
               {/* 계층 */}
@@ -290,7 +318,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 className="text-xs font-semibold"
                 fill={isActive ? '#0c4a6e' : '#374151'}
               >
-                {step.label}
+                {getStepLabel(idx)}
               </text>
               
               {/* 설명 (하단) */}
@@ -302,7 +330,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 fill={isActive ? '#0c4a6e' : '#6b7280'}
                 fontWeight={isActive ? '600' : '400'}
               >
-                {step.desc}
+                {getStepDesc(idx)}
               </text>
             </g>
           );
