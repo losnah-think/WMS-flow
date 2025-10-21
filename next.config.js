@@ -4,6 +4,8 @@ const withNextIntl = require('next-intl/plugin')(
 );
 
 const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
   async rewrites() {
     return {
       beforeFiles: [
@@ -13,6 +15,9 @@ const nextConfig = {
         },
       ],
     };
+  },
+  experimental: {
+    appDir: true,
   },
 };
 

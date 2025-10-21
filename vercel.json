@@ -2,5 +2,14 @@
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "installCommand": "npm ci",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "headers": [
+    {
+      "source": "/",
+      "headers": [
+        { "key": "x-middleware-preflight", "value": "true" }
+      ]
+    }
+  ]
 }
+
