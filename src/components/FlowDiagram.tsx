@@ -50,8 +50,9 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
   };
 
   return (
-    <div className="overflow-x-auto border-2 border-gray-200 rounded-lg bg-white">
-      <style>{`
+    <div className="w-full overflow-x-auto border-2 border-gray-200 rounded-lg bg-white flex justify-center">
+      <div className="w-[90%] py-2 md:py-3">
+        <style>{`
         @keyframes dashFlow {
           0% {
             stroke-dashoffset: 0;
@@ -89,7 +90,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
         width="100%"
         height={flow.steps.length * 80 + 200}
         viewBox={`0 0 ${flow.actors.length * 150 + 100} ${flow.steps.length * 80 + 200}`}
-        className="min-w-[800px]"
+        className="w-full h-auto"
       >
         {/* OMS 배경 영역 - 강조 */}
         {omsMinX !== null && omsMaxX !== null && (
@@ -258,7 +259,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
           
           return (
             <g key={idx}>
-              {/* 화살표 선 - 강조 낮춤 */}
+              {/* 화살표 선 - 항상 애니메이션 */}
               <line
                 x1={fromX}
                 y1={y}
@@ -267,8 +268,8 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 stroke={isActive ? '#60a5fa' : isPassed ? '#cbd5e1' : '#e5e7eb'}
                 strokeWidth={isActive ? 3 : 1.5}
                 markerEnd={`url(#arrow-${isActive ? 'active' : isPassed ? 'passed' : 'default'})`}
-                strokeDasharray={isActive ? '12 12' : 'none'}
-                className={isActive ? 'flow-line-active' : ''}
+                strokeDasharray="12 12"
+                className="flow-line-active"
                 style={{
                   transition: 'stroke 0.3s, stroke-width 0.3s',
                 }}
@@ -349,6 +350,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
           </marker>
         </defs>
       </svg>
+      </div>
     </div>
   );
 };

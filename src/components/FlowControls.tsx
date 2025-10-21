@@ -41,26 +41,39 @@ export const FlowControls: React.FC<FlowControlsProps> = ({
   onReset,
 }) => {
   const t = useTranslations();
+  
+  const flowTypes: FlowType[] = ['inbound', 'outbound', 'return', 'storage'];
 
   return (
-    <div className="flex flex-wrap gap-3 items-center">
-      <select
-        value={flowType}
-        onChange={(e) => onFlowTypeChange(e.target.value as FlowType)}
-        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-sm font-medium cursor-pointer"
-      >
-        <option value="inbound">{t('common.flowTypes.inbound')}</option>
-        <option value="outbound">{t('common.flowTypes.outbound')}</option>
-        <option value="return">{t('common.flowTypes.return')}</option>
-        <option value="storage">{t('common.flowTypes.storage')}</option>
-      </select>
-      <button
-        onClick={onReset}
-        className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition flex items-center gap-2 text-sm font-medium whitespace-nowrap"
-      >
-        <ResetIcon />
-        {t('common.buttons.reset')}
-      </button>
+    <div className="flex flex-col gap-2 w-full">
+      {/* 탭 버튼 그룹 + Reset 버튼 */}
+      <div className="flex flex-wrap gap-1 bg-gray-200 p-1 rounded-lg items-center justify-between">
+        <div className="flex flex-wrap gap-1">
+          {flowTypes.map((type) => (
+            <button
+              key={type}
+              onClick={() => onFlowTypeChange(type)}
+              className={`px-3 py-1.5 rounded text-xs md:text-sm font-medium transition whitespace-nowrap ${
+                flowType === type
+                  ? 'bg-blue-500 text-white shadow-md'
+                  : 'bg-white text-gray-700 hover:bg-gray-100'
+              }`}
+            >
+              {t(`common.flowTypes.${type}`)}
+            </button>
+          ))}
+        </div>
+        
+        {/* Reset 버튼 - 우측 */}
+        <button
+          onClick={onReset}
+          className="px-2 py-1 bg-gray-500 text-white rounded text-xs hover:bg-gray-600 transition flex items-center gap-1 font-medium"
+          title={t('common.buttons.reset')}
+        >
+          <ResetIcon />
+          <span className="hidden md:inline">{t('common.buttons.reset')}</span>
+        </button>
+      </div>
     </div>
   );
 };

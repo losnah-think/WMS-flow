@@ -15,6 +15,7 @@ export interface Step {
   detail: string;
   actor: string;
   term?: string;
+  features?: string[];
 }
 
 export interface Flow {

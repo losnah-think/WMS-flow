@@ -1,12 +1,14 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 import { Flow } from '@/models/types';
 
 interface StepDetailsModalProps {
   flow: Flow;
   step: Flow['steps'][0];
   stepIndex: number;
+  flowType: string;
   onClose: () => void;
 }
 
@@ -14,8 +16,10 @@ export const StepDetailsModal: React.FC<StepDetailsModalProps> = ({
   flow,
   step,
   stepIndex,
+  flowType,
   onClose,
 }) => {
+  const t = useTranslations();
   const fromActor = flow.actors.find(a => a.id === step.from);
   const toActor = flow.actors.find(a => a.id === step.to);
 
@@ -57,10 +61,10 @@ export const StepDetailsModal: React.FC<StepDetailsModalProps> = ({
         <div className="p-6 space-y-6">
           {/* 기본 정보 */}
           <section>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">프로세스 정보</h3>
+            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">{t('status.processInfo')}</h3>
             <div className="bg-gray-50 rounded-lg p-4 space-y-3">
               <div>
-                <p className="text-xs text-gray-500 mb-1">프로세스 흐름</p>
+                <p className="text-xs text-gray-500 mb-1">{t('status.processFlow')}</p>
                 <div className="flex items-center gap-2 text-sm">
                   <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-semibold">
                     {fromActor?.name}
@@ -74,12 +78,12 @@ export const StepDetailsModal: React.FC<StepDetailsModalProps> = ({
                 </div>
               </div>
               <div>
-                <p className="text-xs text-gray-500 mb-1">담당자</p>
+                <p className="text-xs text-gray-500 mb-1">{t('components.description')}</p>
                 <p className="font-semibold text-gray-900">{step.actor}</p>
               </div>
               {step.term && (
                 <div>
-                  <p className="text-xs text-gray-500 mb-1">용어</p>
+                  <p className="text-xs text-gray-500 mb-1">{t('components.term')}</p>
                   <p className="font-semibold text-gray-900">{step.term}</p>
                 </div>
               )}
@@ -88,7 +92,7 @@ export const StepDetailsModal: React.FC<StepDetailsModalProps> = ({
 
           {/* 설명 */}
           <section>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">설명</h3>
+            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">{t('status.description')}</h3>
             <p className="text-sm text-gray-700 leading-relaxed bg-gray-50 rounded-lg p-4">
               {step.desc}
             </p>
@@ -96,7 +100,7 @@ export const StepDetailsModal: React.FC<StepDetailsModalProps> = ({
 
           {/* 상세 내용 */}
           <section>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">상세 내용</h3>
+            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">{t('status.detail')}</h3>
             <p className="text-sm text-gray-700 leading-relaxed bg-gray-50 rounded-lg p-4">
               {step.detail}
             </p>
@@ -118,6 +122,34 @@ export const StepDetailsModal: React.FC<StepDetailsModalProps> = ({
               </div>
             </div>
           </section>
+
+          {/* WMS 기능 */}
+          {step.features && step.features.length > 0 && (
+            <section>
+              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">관련 WMS 기능</h3>
+              <div className="space-y-2">
+                {step.features.map((featureId) => {
+                  return (
+                    <div key={featureId} className="border-l-4 border-green-500 bg-green-50 rounded-lg p-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1">
+                          <p className="font-semibold text-gray-900 text-sm">
+                            {featureId}
+                          </p>
+                          <p className="text-xs text-gray-600 mt-1">
+                            {t(`features.${featureId}-desc`) || '기능 설명 없음'}
+                          </p>
+                        </div>
+                        <span className="text-xs font-bold text-green-700 bg-green-200 px-2 py-1 rounded whitespace-nowrap">
+                          {t(`features.${featureId}-importance`) || '중요도 정보 없음'}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          )}
         </div>
 
         {/* 푸터 */}

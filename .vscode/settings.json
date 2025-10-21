@@ -1,0 +1,7 @@
+{
+  "css.lint.compatibleVendorPrefixes": "warning",
+  "css.lint.vendorPrefix": "warning",
+  "css.lint.duplicateProperties": "warning",
+  "stylelint.enable": false
+}
+

@@ -90,6 +90,15 @@ export const StepDetails: React.FC<StepDetailsProps> = ({ flow, activeStep, onSt
                   <p className="text-xs text-gray-700 mt-1 break-words leading-snug line-clamp-2">
                     {getStepTranslation(idx, 'desc')}
                   </p>
+                  {step.features && step.features.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      {step.features.map((featureId) => (
+                        <span key={featureId} className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium whitespace-nowrap">
+                          {featureId}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
