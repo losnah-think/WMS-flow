@@ -7,5 +7,8 @@ export default createMiddleware({
 });
 
 export const config = {
-  matcher: ['/', '/(ko|en|vi)/:path*'],
+  matcher: [
+    // Match all request paths except static files and APIs
+    '/((?!_next|_vercel|api|favicon.ico|robots.txt|sitemap.xml).*)',
+  ],
 };
