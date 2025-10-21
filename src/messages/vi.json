@@ -1,0 +1,84 @@
+{
+  "common": {
+    "flowTypes": {
+      "inbound": "Quy trình Nhập kho",
+      "outbound": "Quy trình Xuất kho",
+      "return": "Quy trình Trả hàng",
+      "storage": "Quản lý Kho & Hàng tồn kho"
+    },
+    "buttons": {
+      "play": "Phát",
+      "pause": "Tạm dừng",
+      "reset": "Đặt lại",
+      "hierarchyView": "Xem Cấu trúc"
+    }
+  },
+  "flows": {
+    "inbound": {
+      "title": "Quy trình Nhập kho",
+      "description": "Quy trình toàn bộ trong đó những người bán hàng đăng ký kế hoạch nhập kho với FULGO WMS, các công ty logistics phê duyệt và nhận sản phẩm thực tế, và lưu trữ chúng trong kho. Nền tảng FULGO theo dõi và quản lý tất cả tiến độ trong thời gian thực.",
+      "hierarchy": "Fulgo(Nền tảng) → Logistics(Quản lý Kho) → Người bán hàng(Khách hàng)",
+      "layers": {
+        "layer1": "Lớp 1: Tiếp nhận",
+        "layer2": "Lớp 2: Kiểm tra",
+        "layer3": "Lớp 3: Sắp xếp"
+      }
+    },
+    "outbound": {
+      "title": "Quy trình Xuất kho",
+      "description": "Quy trình toàn bộ trong đó khi các đơn đặt hàng đến từ các kênh bán hàng bên ngoài (Coupang, Naver Shopping, v.v.), FULGO thu thập chúng và chuyển giao cho các công ty logistics để đóng gói và vận chuyển cho khách hàng.",
+      "hierarchy": "Fulgo(Nền tảng) → Logistics(Quản lý Kho) → Người bán hàng(Khách hàng)",
+      "layers": {
+        "layer1": "Lớp 1: Chọn hàng",
+        "layer2": "Lớp 2: Đóng gói",
+        "layer3": "Lớp 3: Vận chuyển"
+      }
+    },
+    "return": {
+      "title": "Quy trình Trả hàng",
+      "description": "Quy trình toàn bộ trong đó nếu khách hàng yêu cầu trả hàng do có vấn đề với sản phẩm, công ty logistics nhận lại sản phẩm, kiểm tra nó, và khôi phục hàng tồn kho hoặc loại bỏ nó.",
+      "hierarchy": "Fulgo(Nền tảng) → Logistics(Quản lý Kho) → Người bán hàng(Khách hàng)",
+      "layers": {
+        "layer1": "Lớp 1: Tiếp nhận",
+        "layer2": "Lớp 2: Kiểm tra",
+        "layer3": "Lớp 3: Phân loại"
+      }
+    },
+    "storage": {
+      "title": "Quản lý Kho & Hàng tồn kho",
+      "description": "Quy trình hoạt động hàng ngày trong đó các công ty logistics quản lý hiệu quả không gian kho, và FULGO theo dõi chính xác tình trạng hàng tồn kho theo người bán hàng.",
+      "hierarchy": "Fulgo(Nền tảng) → Logistics(Quản lý Kho) → Người bán hàng(Khách hàng)",
+      "layers": {
+        "layer1": "Lớp 1: Nhập kho",
+        "layer2": "Lớp 2: Sắp xếp",
+        "layer3": "Lớp 3: Giám sát"
+      }
+    }
+  },
+  "actors": {
+    "system": "Hệ thống",
+    "warehouse": "Kho",
+    "customer": "Khách hàng",
+    "carrier": "Nhà cung cấp vận chuyển"
+  },
+  "status": {
+    "completed": "Hoàn thành",
+    "inProgress": "Đang tiến hành",
+    "pending": "Đang chờ"
+  },
+  "hierarchyInfo": {
+    "title": "Cấu trúc Phân cấp",
+    "description": "Quy trình này bao gồm 3 lớp chính:",
+    "close": "Đóng"
+  },
+  "stepDetails": {
+    "title": "Chi tiết từng bước"
+  },
+  "components": {
+    "legend": "Các thành phần Hệ thống",
+    "currentStep": "Bước hiện tại:",
+    "responsible": "Chịu trách nhiệm:",
+    "term": "Thuật ngữ:",
+    "step": "Bước"
+  }
+}

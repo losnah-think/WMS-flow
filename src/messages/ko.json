@@ -1,0 +1,84 @@
+{
+  "common": {
+    "flowTypes": {
+      "inbound": "입고 프로세스",
+      "outbound": "출고 프로세스",
+      "return": "반품 프로세스",
+      "storage": "보관 및 재고 관리"
+    },
+    "buttons": {
+      "play": "재생",
+      "pause": "일시정지",
+      "reset": "초기화",
+      "hierarchyView": "계층 구조 보기"
+    }
+  },
+  "flows": {
+    "inbound": {
+      "title": "입고 프로세스 (Inbound)",
+      "description": "화주사가 FULGO WMS에 입고 계획을 등록하면, 물류사가 이를 승인하고 실제 상품을 받아서 창고에 보관하는 전체 과정입니다. FULGO 플랫폼은 모든 진행 상황을 실시간으로 추적하고 관리합니다.",
+      "hierarchy": "Fulgo(플랫폼) → 물류사(창고 운영자) → 화주사(고객사)",
+      "layers": {
+        "layer1": "1계층: 수령",
+        "layer2": "2계층: 검수",
+        "layer3": "3계층: 적치"
+      }
+    },
+    "outbound": {
+      "title": "출고 프로세스 (Outbound)",
+      "description": "외부 판매처(쿠팡, 네이버 쇼핑 등)에서 주문이 들어오면, FULGO가 이를 수집하고 물류사에 전달하여 상품을 포장해서 고객에게 배송하는 전체 과정입니다.",
+      "hierarchy": "Fulgo(플랫폼) → 물류사(창고 운영자) → 화주사(고객사)",
+      "layers": {
+        "layer1": "1계층: 피킹",
+        "layer2": "2계층: 패킹",
+        "layer3": "3계층: 배송"
+      }
+    },
+    "return": {
+      "title": "반품 프로세스 (Return)",
+      "description": "고객이 상품에 문제가 있어서 반품을 요청하면, 물류사가 상품을 다시 받아서 검사하고 재고로 돌려놓거나 폐기하는 전체 과정입니다.",
+      "hierarchy": "Fulgo(플랫폼) → 물류사(창고 운영자) → 화주사(고객사)",
+      "layers": {
+        "layer1": "1계층: 수령",
+        "layer2": "2계층: 검사",
+        "layer3": "3계층: 분류"
+      }
+    },
+    "storage": {
+      "title": "보관 및 재고 관리 (Storage)",
+      "description": "물류사가 창고 공간을 효율적으로 관리하고, FULGO가 화주사별로 재고 현황을 정확하게 추적하는 일상 운영 과정입니다.",
+      "hierarchy": "Fulgo(플랫폼) → 물류사(창고 운영자) → 화주사(고객사)",
+      "layers": {
+        "layer1": "1계층: 입고",
+        "layer2": "2계층: 정렬",
+        "layer3": "3계층: 모니터링"
+      }
+    }
+  },
+  "actors": {
+    "system": "시스템",
+    "warehouse": "창고",
+    "customer": "고객",
+    "carrier": "배송업체"
+  },
+  "status": {
+    "completed": "완료",
+    "inProgress": "진행 중",
+    "pending": "대기 중"
+  },
+  "hierarchyInfo": {
+    "title": "계층 구조",
+    "description": "이 프로세스는 3개의 주요 계층으로 구성되어 있습니다:",
+    "close": "닫기"
+  },
+  "stepDetails": {
+    "title": "단계별 상세 설명"
+  },
+  "components": {
+    "legend": "시스템 구성 요소",
+    "currentStep": "현재 단계:",
+    "responsible": "담당:",
+    "term": "용어:",
+    "step": "단계"
+  }
+}

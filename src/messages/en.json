@@ -1,0 +1,84 @@
+{
+  "common": {
+    "flowTypes": {
+      "inbound": "Inbound Process",
+      "outbound": "Outbound Process",
+      "return": "Return Process",
+      "storage": "Storage & Inventory Management"
+    },
+    "buttons": {
+      "play": "Play",
+      "pause": "Pause",
+      "reset": "Reset",
+      "hierarchyView": "View Hierarchy"
+    }
+  },
+  "flows": {
+    "inbound": {
+      "title": "Inbound Process",
+      "description": "The entire process where shippers register inbound plans to FULGO WMS, logistics companies approve and receive actual products, and store them in the warehouse. The FULGO platform tracks and manages all progress in real-time.",
+      "hierarchy": "Fulgo(Platform) → Logistics(Warehouse Operator) → Shipper(Customer)",
+      "layers": {
+        "layer1": "Layer 1: Receipt",
+        "layer2": "Layer 2: Inspection",
+        "layer3": "Layer 3: Placement"
+      }
+    },
+    "outbound": {
+      "title": "Outbound Process",
+      "description": "The entire process where when orders come from external sales channels (Coupang, Naver Shopping, etc.), FULGO collects them and delivers them to logistics companies to pack and ship to customers.",
+      "hierarchy": "Fulgo(Platform) → Logistics(Warehouse Operator) → Shipper(Customer)",
+      "layers": {
+        "layer1": "Layer 1: Picking",
+        "layer2": "Layer 2: Packing",
+        "layer3": "Layer 3: Shipping"
+      }
+    },
+    "return": {
+      "title": "Return Process",
+      "description": "The entire process where if a customer requests a return due to product issues, the logistics company receives the product again, inspects it, and either restocks or discards it.",
+      "hierarchy": "Fulgo(Platform) → Logistics(Warehouse Operator) → Shipper(Customer)",
+      "layers": {
+        "layer1": "Layer 1: Receipt",
+        "layer2": "Layer 2: Inspection",
+        "layer3": "Layer 3: Classification"
+      }
+    },
+    "storage": {
+      "title": "Storage & Inventory Management",
+      "description": "The daily operational process where logistics companies efficiently manage warehouse space, and FULGO accurately tracks inventory status by shipper.",
+      "hierarchy": "Fulgo(Platform) → Logistics(Warehouse Operator) → Shipper(Customer)",
+      "layers": {
+        "layer1": "Layer 1: Inbound",
+        "layer2": "Layer 2: Sorting",
+        "layer3": "Layer 3: Monitoring"
+      }
+    }
+  },
+  "actors": {
+    "system": "System",
+    "warehouse": "Warehouse",
+    "customer": "Customer",
+    "carrier": "Carrier"
+  },
+  "status": {
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "pending": "Pending"
+  },
+  "hierarchyInfo": {
+    "title": "Hierarchy Structure",
+    "description": "This process consists of 3 main layers:",
+    "close": "Close"
+  },
+  "stepDetails": {
+    "title": "Step Details"
+  },
+  "components": {
+    "legend": "System Components",
+    "currentStep": "Current Step:",
+    "responsible": "Responsible:",
+    "term": "Term:",
+    "step": "Step"
+  }
+}
