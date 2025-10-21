@@ -1,24 +1,6 @@
 /** @type {import('next').NextConfig} */
-const withNextIntl = require('next-intl/plugin')(
-  () => require.resolve('./src/i18n/request.ts')
-);
+const withNextIntl = require('next-intl/plugin')();
 
-const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
-  async rewrites() {
-    return {
-      beforeFiles: [
-        {
-          source: '/',
-          destination: '/ko',
-        },
-      ],
-    };
-  },
-  experimental: {
-    appDir: true,
-  },
-};
+const nextConfig = {}
 
-module.exports = withNextIntl(nextConfig);
+module.exports = withNextIntl(nextConfig)
