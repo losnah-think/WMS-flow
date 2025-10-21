@@ -7,7 +7,7 @@ import { flowData } from '@/models/flowData';
 
 export const useFlowController = (initialFlowType: FlowType = 'inbound') => {
   const [flowType, setFlowType] = useState<FlowType>(initialFlowType);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [activeStep, setActiveStep] = useState(-1);
   const [showInfo, setShowInfo] = useState(true);
 
@@ -30,7 +30,7 @@ export const useFlowController = (initialFlowType: FlowType = 'inbound') => {
   const handleFlowTypeChange = (newFlowType: FlowType) => {
     setFlowType(newFlowType);
     setActiveStep(-1);
-    setIsPlaying(false);
+    // 플로우 타입 변경 후에도 자동 재생 계속
   };
 
   const handlePlayPause = () => {
@@ -39,7 +39,7 @@ export const useFlowController = (initialFlowType: FlowType = 'inbound') => {
 
   const handleReset = () => {
     setActiveStep(-1);
-    setIsPlaying(false);
+    // 초기화 후에도 자동 재생 계속
   };
 
   const toggleInfo = () => {

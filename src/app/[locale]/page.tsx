@@ -41,50 +41,57 @@ export default function Home() {
           <HierarchyInfo flow={currentFlow} onClose={toggleInfo} />
         )}
 
-        <div className="bg-white rounded-xl shadow-2xl p-6">
-          {/* 헤더 */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-800">
-                {currentFlow.title}
-              </h1>
-              {!showInfo && (
-                <button
-                  onClick={toggleInfo}
-                  className="text-sm text-red-600 hover:text-red-700 mt-1"
-                >
-                  {t('hierarchyInfo.title')}
-                </button>
-              )}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* 좌측: 다이어그램 영역 (2/3 너비) */}
+          <div className="lg:col-span-2 bg-white rounded-xl shadow-2xl p-6">
+            {/* 헤더 */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-800">
+                  {currentFlow.title}
+                </h1>
+                {!showInfo && (
+                  <button
+                    onClick={toggleInfo}
+                    className="text-sm text-red-600 hover:text-red-700 mt-1"
+                  >
+                    {t('hierarchyInfo.title')}
+                  </button>
+                )}
+              </div>
+              <div className="flex flex-col gap-4 items-end">
+                <LanguageSwitcher />
+                <FlowControls
+                  flowType={flowType}
+                  isPlaying={isPlaying}
+                  onFlowTypeChange={handleFlowTypeChange}
+                  onPlayPause={handlePlayPause}
+                  onReset={handleReset}
+                />
+              </div>
             </div>
-            <div className="flex flex-col gap-4 items-end">
-              <LanguageSwitcher />
-              <FlowControls
-                flowType={flowType}
-                isPlaying={isPlaying}
-                onFlowTypeChange={handleFlowTypeChange}
-                onPlayPause={handlePlayPause}
-                onReset={handleReset}
-              />
-            </div>
+
+            {/* 범례 */}
+            <ActorLegend flow={currentFlow} />
+
+            {/* SVG 다이어그램 */}
+            <FlowDiagram
+              flow={currentFlow}
+              activeStep={activeStep}
+              getActorPosition={getActorPosition}
+            />
+
+            {/* 진행 상태 */}
+            <ProgressStatus flow={currentFlow} activeStep={activeStep} />
           </div>
 
-          {/* 범례 */}
-          <ActorLegend flow={currentFlow} />
-
-          {/* SVG 다이어그램 */}
-          <FlowDiagram
-            flow={currentFlow}
-            activeStep={activeStep}
-            getActorPosition={getActorPosition}
-          />
-
-          {/* 진행 상태 */}
-          <ProgressStatus flow={currentFlow} activeStep={activeStep} />
+          {/* 우측: 단계별 상세 설명 (1/3 너비, 스크롤 가능) */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-xl shadow-2xl p-6 h-full sticky top-4 overflow-y-auto max-h-[calc(100vh-2rem)]">
+              <StepDetails flow={currentFlow} activeStep={activeStep} />
+            </div>
+          </div>
         </div>
-
-        {/* 단계별 상세 설명 */}
-        <StepDetails flow={currentFlow} activeStep={activeStep} />
       </div>
     </div>
   );

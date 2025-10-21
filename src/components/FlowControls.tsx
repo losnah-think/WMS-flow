@@ -43,7 +43,7 @@ export const FlowControls: React.FC<FlowControlsProps> = ({
   const t = useTranslations();
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-3 items-center">
       <select
         value={flowType}
         onChange={(e) => onFlowTypeChange(e.target.value as FlowType)}
@@ -55,15 +55,8 @@ export const FlowControls: React.FC<FlowControlsProps> = ({
         <option value="storage">{t('common.flowTypes.storage')}</option>
       </select>
       <button
-        onClick={onPlayPause}
-        className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition flex items-center gap-2 text-sm font-medium"
-      >
-        {isPlaying ? <PauseIcon /> : <PlayIcon />}
-        {isPlaying ? t('common.buttons.pause') : t('common.buttons.play')}
-      </button>
-      <button
         onClick={onReset}
-        className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition flex items-center gap-2 text-sm font-medium"
+        className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition flex items-center gap-2 text-sm font-medium whitespace-nowrap"
       >
         <ResetIcon />
         {t('common.buttons.reset')}
