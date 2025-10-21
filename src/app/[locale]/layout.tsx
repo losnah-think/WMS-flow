@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getRequestConfig } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import './globals.css';
@@ -33,6 +34,7 @@ export default async function RootLayout({
   try {
     messages = (await import(`../../messages/${locale}.json`)).default;
   } catch (error) {
+    console.error('Failed to load messages:', error);
     notFound();
   }
 

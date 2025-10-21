@@ -1,0 +1,23 @@
+
+> fulgo-wms-nextjs@1.0.0 dev
+> next dev
+
+ ⚠ Port 3000 is in use, trying 3001 instead.
+   ▲ Next.js 14.1.0
+   - Local:        http://localhost:3001
+
+ ✓ Ready in 759ms
+ ✓ Compiled /src/middleware in 71ms (93 modules)
+ ○ Compiling /[locale] ...
+ ✓ Compiled /[locale] in 961ms (581 modules)
+ ✓ Compiled in 50ms (322 modules)
+ ✓ Compiled in 52ms (322 modules)
+ ✓ Compiled in 34ms (322 modules)
+ ⨯ Error: Cannot find module './undefined.json'
+    at /Users/sotatekthor/Desktop/fulgo-wms-nextjs/.next/server/app/[locale]/page.js:38:12
+    at async eval (./src/i18n/request.ts:9:20)
+ ⨯ Error: Cannot find module './undefined.json'
+    at /Users/sotatekthor/Desktop/fulgo-wms-nextjs/.next/server/app/[locale]/page.js:38:12
+    at async eval (./src/i18n/request.ts:9:20)
+digest: "1301670068"
+[?25h

@@ -1,4 +1,4 @@
-// src/app/page.tsx
+// src/app/[locale]/page.tsx
 'use client';
 
 import React from 'react';
@@ -13,7 +13,13 @@ import { StepDetails } from '@/components/StepDetails';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
 export default function Home() {
-  const t = useTranslations();
+  let t;
+  try {
+    t = useTranslations();
+  } catch (error) {
+    t = (key: string) => key;
+  }
+
   const {
     flowType,
     isPlaying,
