@@ -14,6 +14,12 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
   // OMS와 WMS 그룹 분류
   const omsActors = flow.actors.filter(a => a.layer === 'OMS');
   const wmsActors = flow.actors.filter(a => a.layer === 'WMS');
+  
+  // 액터의 X 위치 범위 계산
+  const omsMinX = omsActors.length > 0 ? 0 : null;
+  const omsMaxX = omsActors.length > 0 ? (omsActors.length * 150) : null;
+  const wmsMinX = omsActors.length > 0 ? (omsActors.length * 150) : null;
+  const wmsMaxX = wmsMinX !== null ? wmsMinX + (wmsActors.length * 150) : null;
 
   return (
     <div className="overflow-x-auto border-2 border-gray-200 rounded-lg bg-white">
@@ -57,50 +63,94 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
         viewBox={`0 0 ${flow.actors.length * 150 + 100} ${flow.steps.length * 80 + 200}`}
         className="min-w-[800px]"
       >
-        {/* OMS/WMS 배경 */}
-        {omsActors.length > 0 && (
-          <rect
-            x="0"
-            y="70"
-            width={(omsActors.length * 150 + 50)}
-            height={flow.steps.length * 80 + 130}
-            fill="#f0f9ff"
-            opacity="0.3"
-          />
-        )}
-        {wmsActors.length > 0 && (
-          <rect
-            x={omsActors.length * 150 + 50}
-            y="70"
-            width={wmsActors.length * 150 + 50}
-            height={flow.steps.length * 80 + 130}
-            fill="#f5f3ff"
-            opacity="0.3"
-          />
+        {/* OMS 배경 영역 - 강조 */}
+        {omsMinX !== null && omsMaxX !== null && (
+          <>
+            {/* 배경 채우기 */}
+            <rect
+              x={omsMinX - 20}
+              y="60"
+              width={omsMaxX - omsMinX + 40}
+              height={flow.steps.length * 80 + 140}
+              fill="#e0f2fe"
+              opacity="0.5"
+            />
+            {/* 테두리 */}
+            <rect
+              x={omsMinX - 20}
+              y="60"
+              width={omsMaxX - omsMinX + 40}
+              height={flow.steps.length * 80 + 140}
+              fill="none"
+              stroke="#0284c7"
+              strokeWidth="4"
+              opacity="0.7"
+            />
+            {/* 상단 라벨 */}
+            <rect
+              x={omsMinX + (omsMaxX - omsMinX) / 2 - 40}
+              y="35"
+              width="80"
+              height="30"
+              fill="#0284c7"
+              rx="6"
+            />
+            <text
+              x={omsMinX + (omsMaxX - omsMinX) / 2}
+              y="56"
+              textAnchor="middle"
+              fill="white"
+              fontSize="16"
+              fontWeight="bold"
+            >
+              OMS
+            </text>
+          </>
         )}
 
-        {/* OMS/WMS 라벨 */}
-        {omsActors.length > 0 && (
-          <text
-            x={omsActors.length * 75 + 20}
-            y="90"
-            className="text-sm font-bold"
-            fill="#0369a1"
-            opacity="0.5"
-          >
-            OMS
-          </text>
-        )}
-        {wmsActors.length > 0 && (
-          <text
-            x={omsActors.length * 150 + 60}
-            y="90"
-            className="text-sm font-bold"
-            fill="#7c3aed"
-            opacity="0.5"
-          >
-            WMS
-          </text>
+        {/* WMS 배경 영역 - 강조 */}
+        {wmsMinX !== null && wmsMaxX !== null && (
+          <>
+            {/* 배경 채우기 */}
+            <rect
+              x={wmsMinX - 20}
+              y="60"
+              width={wmsMaxX - wmsMinX + 40}
+              height={flow.steps.length * 80 + 140}
+              fill="#faf5ff"
+              opacity="0.5"
+            />
+            {/* 테두리 */}
+            <rect
+              x={wmsMinX - 20}
+              y="60"
+              width={wmsMaxX - wmsMinX + 40}
+              height={flow.steps.length * 80 + 140}
+              fill="none"
+              stroke="#a855f7"
+              strokeWidth="4"
+              opacity="0.7"
+            />
+            {/* 상단 라벨 */}
+            <rect
+              x={wmsMinX + (wmsMaxX - wmsMinX) / 2 - 40}
+              y="35"
+              width="80"
+              height="30"
+              fill="#a855f7"
+              rx="6"
+            />
+            <text
+              x={wmsMinX + (wmsMaxX - wmsMinX) / 2}
+              y="56"
+              textAnchor="middle"
+              fill="white"
+              fontSize="16"
+              fontWeight="bold"
+            >
+              WMS
+            </text>
+          </>
         )}
 
         {/* 액터 헤더 */}
