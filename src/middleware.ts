@@ -7,5 +7,5 @@ export default createMiddleware({
 });
 
 export const config = {
-  matcher: ['/((?!_next|api|favicon).*)'],
+  matcher: ['/', '/(ko|en|vi)/:path*'],
 };
