@@ -11,7 +11,10 @@
       "play": "재생",
       "pause": "일시정지",
       "reset": "초기화",
-      "hierarchyView": "계층 구조 보기"
+      "hierarchyView": "계층 구조 보기",
+      "downloadPNG": "PNG 다운로드",
+      "downloadSVG": "SVG 다운로드",
+      "download": "다운로드"
     }
   },
   "flows": {

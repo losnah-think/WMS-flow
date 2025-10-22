@@ -11,7 +11,10 @@
       "play": "Phát",
       "pause": "Tạm dừng",
       "reset": "Đặt lại",
-      "hierarchyView": "Xem cấu trúc"
+      "hierarchyView": "Xem cấu trúc",
+      "downloadPNG": "Tải PNG",
+      "downloadSVG": "Tải SVG",
+      "download": "Tải xuống"
     }
   },
   "flows": {

@@ -11,7 +11,10 @@
       "play": "Play",
       "pause": "Pause",
       "reset": "Reset",
-      "hierarchyView": "Hierarchy View"
+      "hierarchyView": "Hierarchy View",
+      "downloadPNG": "Download PNG",
+      "downloadSVG": "Download SVG",
+      "download": "Download"
     }
   },
   "flows": {

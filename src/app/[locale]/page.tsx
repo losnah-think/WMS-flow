@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useFlowController } from '@/hooks/useFlowController';
+import { useDownloadDiagram } from '@/hooks/useDownloadDiagram';
 import { FlowControls } from '@/components/FlowControls';
 import { HierarchyInfo } from '@/components/HierarchyInfo';
 import { ActorLegend } from '@/components/ActorLegend';
@@ -41,6 +42,19 @@ export default function Home() {
     handleCloseModal,
     getActorPosition,
   } = useFlowController();
+
+  const {
+    downloadDiagramAsPNG,
+    downloadDiagramAsSVG,
+  } = useDownloadDiagram();
+
+  const handleDownloadPNG = () => {
+    downloadDiagramAsPNG(`wms-flow-${flowType}`);
+  };
+
+  const handleDownloadSVG = () => {
+    downloadDiagramAsSVG(`wms-flow-${flowType}`);
+  };
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -93,6 +107,8 @@ export default function Home() {
               onFlowTypeChange={handleFlowTypeChange}
               onPlayPause={handlePlayPause}
               onReset={handleReset}
+              onDownloadPNG={handleDownloadPNG}
+              onDownloadSVG={handleDownloadSVG}
             />
           </div>
 
