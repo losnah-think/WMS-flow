@@ -150,27 +150,27 @@ export default function FeatureList() {
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-100 border-b-2 border-gray-200">
+            <thead className="bg-gray-100 border-b-2 border-gray-200 sticky top-0">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase">
+                <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase whitespace-nowrap w-16">
                   {t('features.table.id')}
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase">
+                <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase whitespace-nowrap w-24">
                   {t('features.table.name')}
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase">
+                <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase whitespace-nowrap w-32">
                   {t('features.table.description')}
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase">
+                <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase whitespace-nowrap w-20">
                   {t('features.table.category')}
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase">
+                <th className="px-3 py-3 text-center text-xs font-bold text-gray-700 uppercase whitespace-nowrap w-16">
                   {t('features.table.priority')}
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase">
+                <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase whitespace-nowrap flex-1">
                   {t('features.table.input')}
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase">
+                <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase whitespace-nowrap flex-1">
                   {t('features.table.output')}
                 </th>
               </tr>
@@ -180,27 +180,27 @@ export default function FeatureList() {
                 const colors = getCategoryColor(feature.category);
                 return (
                   <tr key={feature.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-4 py-3 text-sm font-mono font-semibold text-gray-900">
+                    <td className="px-3 py-3 text-xs font-mono font-semibold text-gray-900 whitespace-nowrap">
                       {feature.id}
                     </td>
-                    <td className="px-4 py-3 text-sm font-semibold text-gray-900">
+                    <td className="px-3 py-3 text-xs font-semibold text-gray-900 whitespace-nowrap">
                       {t(`features.${feature.id}-name`)}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-700">
+                    <td className="px-3 py-3 text-xs text-gray-700">
                       {t(`features.${feature.id}-desc`)}
                     </td>
-                    <td className="px-4 py-3">
-                      <span className={`inline-block px-2 py-1 text-xs font-semibold ${colors.bg} ${colors.text} rounded`}>
+                    <td className="px-3 py-3">
+                      <span className={`inline-block px-2 py-1 text-xs font-semibold ${colors.bg} ${colors.text} rounded whitespace-nowrap`}>
                         {t(`features.categories.${feature.category}`)}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-center text-sm">
+                    <td className="px-3 py-3 text-center text-xs whitespace-nowrap">
                       {getPriorityIcon(feature.priority)}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
+                    <td className="px-3 py-3 text-xs text-gray-600 max-h-16 overflow-y-auto">
                       {t(`features.${feature.id}-input`)}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
+                    <td className="px-3 py-3 text-xs text-gray-600 max-h-16 overflow-y-auto">
                       {t(`features.${feature.id}-output`)}
                     </td>
                   </tr>

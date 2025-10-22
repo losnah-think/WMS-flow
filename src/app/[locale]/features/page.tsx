@@ -15,7 +15,7 @@ export default function FeaturesPage() {
     <div className="min-h-screen bg-gray-50">
       {/* 고정 헤더 */}
       <header className="sticky top-0 bg-white shadow-md z-50">
-        <div className="container mx-auto px-4 py-3">
+        <div className="w-full px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link href={`/${locale}`}>
@@ -46,8 +46,8 @@ export default function FeaturesPage() {
         </div>
       </header>
 
-      {/* 메인 콘텐츠 */}
-      <div className="container mx-auto px-4 py-6">
+      {/* 메인 콘텐츠 - 가로 100% 사용 */}
+      <div className="w-full px-4 py-6">
         <FeatureList />
       </div>
     </div>
