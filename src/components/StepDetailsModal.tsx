@@ -3,6 +3,7 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { Flow } from '@/models/types';
+import { features } from '@/models/featureData';
 
 interface StepDetailsModalProps {
   flow: Flow;
@@ -32,7 +33,7 @@ export const StepDetailsModal: React.FC<StepDetailsModalProps> = ({
       />
 
       {/* 모달 */}
-      <div className="fixed inset-4 md:inset-auto md:left-1/2 md:top-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 md:w-[500px] max-h-[90vh] bg-white rounded-xl shadow-2xl z-50 overflow-y-auto">
+      <div className="fixed inset-4 md:inset-auto md:left-1/2 md:top-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 md:w-[900px] md:max-w-[90vw] max-h-[90vh] bg-white rounded-xl shadow-2xl z-50 overflow-y-auto">
         {/* 헤더 */}
         <div className="sticky top-0 bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 flex justify-between items-start gap-4 shadow-md">
           <div className="flex-1">
@@ -127,22 +128,91 @@ export const StepDetailsModal: React.FC<StepDetailsModalProps> = ({
           {step.features && step.features.length > 0 && (
             <section>
               <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">관련 WMS 기능</h3>
-              <div className="space-y-2">
+              <div className="space-y-6">
                 {step.features.map((featureId) => {
+                  const featureData = features.find(f => f.id === featureId);
+                  const priorityColors = {
+                    high: 'bg-red-100 text-red-700 border-red-300',
+                    medium: 'bg-yellow-100 text-yellow-700 border-yellow-300',
+                    low: 'bg-green-100 text-green-700 border-green-300',
+                  };
+                  const priorityLabels = {
+                    high: t('features.priorities.required'),
+                    medium: t('features.priorities.recommended'),
+                    low: t('features.priorities.optional'),
+                  };
+                  
                   return (
-                    <div key={featureId} className="border-l-4 border-green-500 bg-green-50 rounded-lg p-3">
-                      <div className="flex items-start justify-between gap-2">
+                    <div key={featureId} className="border-2 border-blue-200 bg-blue-50 rounded-xl p-5 space-y-4">
+                      {/* 기능 헤더 */}
+                      <div className="flex items-start justify-between gap-3 pb-3 border-b border-blue-200">
                         <div className="flex-1">
-                          <p className="font-semibold text-gray-900 text-sm">
-                            {featureId}
-                          </p>
-                          <p className="text-xs text-gray-600 mt-1">
-                            {t(`features.${featureId}-desc`) || '기능 설명 없음'}
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full">
+                              {featureId}
+                            </span>
+                            {featureData && (
+                              <span className={`px-2 py-1 text-xs font-semibold rounded border ${priorityColors[featureData.priority]}`}>
+                                {priorityLabels[featureData.priority]}
+                              </span>
+                            )}
+                          </div>
+                          <h4 className="text-lg font-bold text-gray-900">
+                            {t(`features.${featureId}-name`)}
+                          </h4>
+                          <p className="text-sm text-gray-700 mt-1">
+                            {t(`features.${featureId}-desc`)}
                           </p>
                         </div>
-                        <span className="text-xs font-bold text-green-700 bg-green-200 px-2 py-1 rounded whitespace-nowrap">
-                          {t(`features.${featureId}-importance`) || '중요도 정보 없음'}
-                        </span>
+                      </div>
+
+                      {/* 입력/출력 필드 */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* 입력 필드 */}
+                        <div className="bg-white rounded-lg p-4 border border-gray-200">
+                          <h5 className="text-xs font-bold text-gray-500 uppercase mb-2 flex items-center gap-1">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                            📥 {t('features.inputFields')}
+                          </h5>
+                          <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
+                            {t(`features.${featureId}-input`)}
+                          </div>
+                        </div>
+
+                        {/* 출력 필드 */}
+                        <div className="bg-white rounded-lg p-4 border border-gray-200">
+                          <h5 className="text-xs font-bold text-gray-500 uppercase mb-2 flex items-center gap-1">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                            </svg>
+                            📤 {t('features.outputFields')}
+                          </h5>
+                          <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
+                            {t(`features.${featureId}-output`)}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 프로세스 흐름 */}
+                      <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-200">
+                        <h5 className="text-xs font-bold text-purple-700 uppercase mb-3 flex items-center gap-1">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                          🔄 {t('features.processFlow')}
+                        </h5>
+                        <div className="text-sm text-gray-800 space-y-2">
+                          {t(`features.${featureId}-process`).split('\n').filter(line => line.trim()).map((line, idx) => (
+                            <div key={idx} className="flex items-start gap-2">
+                              <span className="flex-shrink-0 w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
+                                {idx + 1}
+                              </span>
+                              <span className="flex-1 pt-0.5">{line.replace(/^\d+\.\s*/, '')}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   );
