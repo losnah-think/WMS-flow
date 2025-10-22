@@ -158,7 +158,7 @@ export default function FeatureList() {
                 <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase whitespace-nowrap w-24">
                   {t('features.table.name')}
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase whitespace-nowrap w-32">
+                <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase whitespace-nowrap flex-1 min-w-96">
                   {t('features.table.description')}
                 </th>
                 <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase whitespace-nowrap w-20">
@@ -186,7 +186,7 @@ export default function FeatureList() {
                     <td className="px-3 py-3 text-xs font-semibold text-gray-900 whitespace-nowrap">
                       {t(`features.${feature.id}-name`)}
                     </td>
-                    <td className="px-3 py-3 text-xs text-gray-700">
+                    <td className="px-3 py-3 text-xs text-gray-700 whitespace-normal break-words">
                       {t(`features.${feature.id}-desc`)}
                     </td>
                     <td className="px-3 py-3">
