@@ -338,80 +338,101 @@
       },
       "steps": [
         {
-          "label": "Set Warehouse Structure",
-          "desc": "Define zone-rack-bin structure",
-          "detail": "FULGO system systematically registers the warehouse structure for each logistics company divided into zones, racks, and bins.",
-          "actor": "FULGO",
-          "term": "Location System"
-        },
-        {
-          "label": "Register Storage Location",
-          "desc": "Assign barcode to each location",
-          "detail": "The logistics company enters location information on actual warehouse shelves and attaches barcode stickers. Example: 'Zone A-Shelf 3-Bin 5'",
-          "actor": "Logistics",
+          "label": "Classify & Track Inventory Status",
+          "desc": "Distinguish and auto-track available/reserved/hold/defective status",
+          "detail": "FULGO WMS internal inventory engine automatically tracks inventory status in real-time.",
+          "actor": "FULGO WMS",
           "term": ""
         },
         {
-          "label": "Move Product Location",
-          "desc": "Move to different shelf",
-          "detail": "The worker moves a product to an easier-to-access location and scans the barcode.",
+          "label": "Real-time Inventory Quantity Management",
+          "desc": "Manage 4-level inventory: physical/available/reserved/safety stock",
+          "detail": "FULGO WMS internally manages 4 types of inventory quantities in real-time.",
+          "actor": "FULGO WMS",
+          "term": ""
+        },
+        {
+          "label": "Set Warehouse Structure",
+          "desc": "Define zone-location system and register in FULGO",
+          "detail": "Warehouse manager registers warehouse basic structure in FULGO: zone definition, FIFO/FEFO policy settings.",
+          "actor": "Warehouse Manager",
+          "term": ""
+        },
+        {
+          "label": "Register Storage Locations",
+          "desc": "Register detailed information for physical locations",
+          "detail": "Warehouse manager registers detailed storage location information in FULGO: location mapping, characteristics, storage fees.",
+          "actor": "Warehouse Manager",
+          "term": ""
+        },
+        {
+          "label": "Assign Location & Issue Placement Instructions",
+          "desc": "Auto-assign locations based on product attributes and instruct workers",
+          "detail": "FULGO automatically assigns locations for inbound products and instructs workers.",
+          "actor": "FULGO WMS",
+          "term": ""
+        },
+        {
+          "label": "Report Placement & Movement Completion",
+          "desc": "Report completion of placement/movement work and record history",
+          "detail": "Workers report placement/movement completion to FULGO after work completion.",
           "actor": "Worker",
           "term": ""
         },
         {
-          "label": "Send Movement History",
-          "desc": "Record location change",
-          "detail": "The logistics company reports to FULGO 'We moved the product from A-3-5 to B-2-1.'",
-          "actor": "Logistics",
-          "term": ""
-        },
-        {
-          "label": "Update Inventory Location",
-          "desc": "Reflect real-time location",
-          "detail": "FULGO inventory system immediately updates the product's new location.",
-          "actor": "FULGO",
+          "label": "Set Inventory Operation Policy",
+          "desc": "Manage inventory operation policy by shipper/product",
+          "detail": "Warehouse manager sets inventory operation policies in FULGO: safety stock, FIFO/FEFO policy, holding cost settings.",
+          "actor": "Warehouse Manager",
           "term": ""
         },
         {
           "label": "Direct Physical Inventory",
-          "desc": "Verify actual quantity",
-          "detail": "The logistics company regularly or when needed instructs workers 'Count how many products are actually on this shelf.'",
-          "actor": "Logistics",
-          "term": "Periodic Inventory"
+          "desc": "Warehouse manager instructs workers to conduct physical inventory",
+          "detail": "Warehouse manager issues physical inventory instructions periodically or as needed: target range, period, assigned staff.",
+          "actor": "Warehouse Manager",
+          "term": ""
         },
         {
           "label": "Perform Physical Inventory",
-          "desc": "Count and record directly",
-          "detail": "The worker walks through the warehouse, counts products on each shelf, scans barcodes, and records actual quantities.",
+          "desc": "Workers conduct physical inventory in the field",
+          "detail": "Workers perform physical inventory: barcode scanning, quantity verification, damage inspection.",
           "actor": "Worker",
           "term": ""
         },
         {
-          "label": "Send Inventory Results",
-          "desc": "Report actual quantity and discrepancy",
-          "detail": "The logistics company reports 'System shows 100 units but only 98 are actually present.'",
-          "actor": "Logistics",
+          "label": "Report Physical Inventory Results & Analysis",
+          "desc": "Compare results with WMS inventory and report to shipper",
+          "detail": "FULGO WMS automatically analyzes physical inventory results and reports to shipper: discrepancy rate analysis, anomalies list.",
+          "actor": "FULGO WMS",
           "term": ""
         },
         {
           "label": "Adjust Inventory Quantity",
-          "desc": "Correct system quantity",
-          "detail": "FULGO corrects system inventory from 100 to 98 based on actual count.",
-          "actor": "FULGO",
+          "desc": "Execute quantity adjustment based on physical inventory results",
+          "detail": "Workers execute quantity adjustments based on results: process increases, decreases, and relocations.",
+          "actor": "Worker",
           "term": ""
         },
         {
-          "label": "Provide Inventory Status",
-          "desc": "Real-time inventory check available",
-          "detail": "FULGO provides shippers with 'Current inventory: X units, stored at this location.'",
-          "actor": "FULGO",
+          "label": "Confirm Adjustment & Synchronize with OMS",
+          "desc": "Finalize adjustment results and synchronize with OMS",
+          "detail": "FULGO WMS finalizes quantity adjustment processing and synchronizes with OMS.",
+          "actor": "FULGO WMS",
           "term": ""
         },
         {
-          "label": "Check Inventory Analysis",
-          "desc": "Review product turnover reports",
-          "detail": "The shipper checks FULGO dashboard 'Which products sell well, how long inventory sits' etc.",
+          "label": "Real-time Inventory Monitoring Dashboard",
+          "desc": "Provide real-time inventory status to shipper",
+          "detail": "FULGO dashboard provides real-time inventory status to shippers.",
           "actor": "Shipper",
+          "term": ""
+        },
+        {
+          "label": "Inventory KPI Reporting",
+          "desc": "Auto-generate and provide daily/weekly/monthly KPIs",
+          "detail": "FULGO auto-generates: inventory accuracy, turnover rate, average holding period, zone utilization rate, loss analysis.",
+          "actor": "FULGO WMS",
           "term": ""
         }
       ]

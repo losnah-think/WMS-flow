@@ -338,80 +338,101 @@
       },
       "steps": [
         {
-          "label": "Thiết lập cấu trúc kho",
-          "desc": "Xác định cấu trúc khu vực-kệ-bin",
-          "detail": "Hệ thống FULGO đăng ký có hệ thống cấu trúc kho cho mỗi công ty hậu cần chia thành các khu vực, kệ và bin.",
-          "actor": "FULGO",
-          "term": "Hệ thống vị trí"
-        },
-        {
-          "label": "Đăng ký vị trí bảo quản",
-          "desc": "Phân bổ mã vạch cho từng vị trí",
-          "detail": "Công ty hậu cần nhập thông tin vị trí trên các kệ kho thực tế và dán nhãn mã vạch. Ví dụ: 'Khu vực A-Kệ 3-Bin 5'",
-          "actor": "Công ty hậu cần",
+          "label": "Phân loại & Theo dõi trạng thái hàng tồn kho",
+          "desc": "Phân biệt và tự động theo dõi trạng thái có sẵn/dự trữ/tạm giữ/khiếm khuyết",
+          "detail": "Động cơ hàng tồn kho nội bộ FULGO WMS tự động theo dõi trạng thái hàng tồn kho theo thời gian thực.",
+          "actor": "FULGO WMS",
           "term": ""
         },
         {
-          "label": "Di chuyển vị trí sản phẩm",
-          "desc": "Di chuyển sang kệ khác",
-          "detail": "Công nhân di chuyển sản phẩm đến vị trí dễ lấy hơn và quét mã vạch.",
+          "label": "Quản lý số lượng hàng tồn kho theo thời gian thực",
+          "desc": "Quản lý 4 cấp độ hàng tồn kho: vật lý/có sẵn/dự trữ/dự phòng",
+          "detail": "FULGO WMS quản lý nội bộ 4 loại số lượng hàng tồn kho theo thời gian thực.",
+          "actor": "FULGO WMS",
+          "term": ""
+        },
+        {
+          "label": "Thiết lập cấu trúc kho",
+          "desc": "Xác định hệ thống khu vực-vị trí và đăng ký vào FULGO",
+          "detail": "Quản lý kho đăng ký cấu trúc cơ bản của kho vào FULGO: định nghĩa khu vực, cài đặt chính sách FIFO/FEFO.",
+          "actor": "Quản lý kho",
+          "term": ""
+        },
+        {
+          "label": "Đăng ký vị trí bảo quản",
+          "desc": "Đăng ký thông tin chi tiết cho các vị trí vật lý",
+          "detail": "Quản lý kho đăng ký thông tin chi tiết vị trí bảo quản vào FULGO: ánh xạ vị trí, đặc điểm, phí bảo quản.",
+          "actor": "Quản lý kho",
+          "term": ""
+        },
+        {
+          "label": "Phân bổ vị trí & Phát hành hướng dẫn đặt vị trí",
+          "desc": "Tự động phân bổ vị trí dựa trên thuộc tính sản phẩm và hướng dẫn công nhân",
+          "detail": "FULGO tự động phân bổ vị trí cho sản phẩm nhập kho và hướng dẫn công nhân.",
+          "actor": "FULGO WMS",
+          "term": ""
+        },
+        {
+          "label": "Báo cáo hoàn thành đặt vị trí & di chuyển",
+          "desc": "Báo cáo hoàn thành công việc đặt vị trí/di chuyển và ghi lại lịch sử",
+          "detail": "Công nhân báo cáo hoàn thành công việc đặt vị trí/di chuyển cho FULGO.",
           "actor": "Công nhân",
           "term": ""
         },
         {
-          "label": "Gửi lịch sử di chuyển",
-          "desc": "Ghi lại thay đổi vị trí",
-          "detail": "Công ty hậu cần báo cáo cho FULGO 'Chúng tôi đã di chuyển sản phẩm từ A-3-5 đến B-2-1.'",
-          "actor": "Công ty hậu cần",
-          "term": ""
-        },
-        {
-          "label": "Cập nhật vị trí hàng tồn kho",
-          "desc": "Phản ánh vị trí theo thời gian thực",
-          "detail": "Hệ thống hàng tồn kho FULGO cập nhật ngay vị trí mới của sản phẩm.",
-          "actor": "FULGO",
+          "label": "Thiết lập chính sách vận hành hàng tồn kho",
+          "desc": "Quản lý chính sách vận hành hàng tồn kho theo nhà cung cấp/sản phẩm",
+          "detail": "Quản lý kho cài đặt chính sách vận hành hàng tồn kho trong FULGO: dự phòng, chính sách FIFO/FEFO, cài đặt chi phí giữ.",
+          "actor": "Quản lý kho",
           "term": ""
         },
         {
           "label": "Chỉ dẫn kiểm kho vật lý",
-          "desc": "Xác minh số lượng thực tế",
-          "detail": "Công ty hậu cần thường xuyên hoặc khi cần yêu cầu công nhân 'Hãy đếm bao nhiêu sản phẩm thực sự có trên kệ này.'",
-          "actor": "Công ty hậu cần",
-          "term": "Kiểm kho định kỳ"
+          "desc": "Quản lý kho hướng dẫn công nhân tiến hành kiểm kho vật lý",
+          "detail": "Quản lý kho phát hành hướng dẫn kiểm kho vật lý định kỳ hoặc khi cần: phạm vi mục tiêu, thời kỳ, nhân viên được chỉ định.",
+          "actor": "Quản lý kho",
+          "term": ""
         },
         {
           "label": "Tiến hành kiểm kho vật lý",
-          "desc": "Đếm và ghi lại trực tiếp",
-          "detail": "Công nhân đi qua kho, đếm sản phẩm trên mỗi kệ, quét mã vạch và ghi lại số lượng thực tế.",
+          "desc": "Công nhân tiến hành kiểm kho vật lý tại hiện trường",
+          "detail": "Công nhân tiến hành kiểm kho vật lý: quét mã vạch, xác minh số lượng, kiểm tra hư hỏng.",
           "actor": "Công nhân",
           "term": ""
         },
         {
-          "label": "Gửi kết quả kiểm kho",
-          "desc": "Báo cáo số lượng thực tế và chênh lệch",
-          "detail": "Công ty hậu cần báo cáo 'Hệ thống hiển thị 100 đơn vị nhưng thực tế chỉ có 98.'",
-          "actor": "Công ty hậu cần",
+          "label": "Báo cáo & Phân tích kết quả kiểm kho vật lý",
+          "desc": "So sánh kết quả với hàng tồn kho WMS và báo cáo cho nhà cung cấp",
+          "detail": "FULGO WMS tự động phân tích kết quả kiểm kho vật lý và báo cáo cho nhà cung cấp: phân tích tỷ lệ chênh lệch, danh sách bất thường.",
+          "actor": "FULGO WMS",
           "term": ""
         },
         {
           "label": "Điều chỉnh số lượng hàng tồn kho",
-          "desc": "Sửa lại số lượng hệ thống",
-          "detail": "FULGO sửa lại hàng tồn kho hệ thống từ 100 thành 98 dựa trên số lượng thực tế.",
-          "actor": "FULGO",
+          "desc": "Thực hiện điều chỉnh số lượng dựa trên kết quả kiểm kho vật lý",
+          "detail": "Công nhân thực hiện điều chỉnh số lượng dựa trên kết quả: xử lý tăng, giảm và chuyển vị trí.",
+          "actor": "Công nhân",
           "term": ""
         },
         {
-          "label": "Cung cấp trạng thái hàng tồn kho",
-          "desc": "Kiểm tra hàng tồn kho theo thời gian thực khả dụng",
-          "detail": "FULGO cung cấp cho nhà cung cấp 'Hàng tồn kho hiện tại: X đơn vị, được lưu trữ tại vị trí này.'",
-          "actor": "FULGO",
+          "label": "Xác nhận điều chỉnh & Đồng bộ hóa với OMS",
+          "desc": "Hoàn thành kết quả điều chỉnh và đồng bộ hóa với OMS",
+          "detail": "FULGO WMS hoàn thành xử lý điều chỉnh số lượng và đồng bộ hóa với OMS.",
+          "actor": "FULGO WMS",
           "term": ""
         },
         {
-          "label": "Kiểm tra phân tích hàng tồn kho",
-          "desc": "Xem xét báo cáo luân phiên sản phẩm",
-          "detail": "Nhà cung cấp kiểm tra bảng điều khiển FULGO 'Sản phẩm nào bán chạy, hàng tồn kho tồn tại bao lâu' v.v.",
+          "label": "Bảng điều khiển giám sát hàng tồn kho theo thời gian thực",
+          "desc": "Cung cấp trạng thái hàng tồn kho theo thời gian thực cho nhà cung cấp",
+          "detail": "Bảng điều khiển FULGO cung cấp trạng thái hàng tồn kho theo thời gian thực cho nhà cung cấp.",
           "actor": "Nhà cung cấp",
+          "term": ""
+        },
+        {
+          "label": "Báo cáo KPI hàng tồn kho",
+          "desc": "Tự động tạo và cung cấp KPI hàng ngày/hàng tuần/hàng tháng",
+          "detail": "FULGO tự động tạo: độ chính xác hàng tồn kho, tỷ lệ luân phiên, thời gian giữ trung bình, tỷ lệ sử dụng khu vực, phân tích tổn thất.",
+          "actor": "FULGO WMS",
           "term": ""
         }
       ]
