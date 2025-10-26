@@ -132,70 +132,70 @@
       },
       "steps": [
         {
-          "label": "[1] Tiếp nhận đơn hàng",
+          "label": "Tiếp nhận đơn hàng",
           "desc": "Kênh bán hàng nhận và tạo đơn hàng",
           "detail": "Kênh bán hàng tạo thông tin đơn hàng: ① Tạo số đơn hàng, nội dung đơn hàng (danh sách sản phẩm, số lượng), địa chỉ giao ② Đăng ký thông tin đơn hàng trong hệ thống kênh ③ Gửi đơn hàng đến hệ thống nhà cung cấp. Hệ thống kênh tạo dữ liệu đơn hàng. Trạng thái: ORDER_RECEIVED",
           "actor": "Kênh bán",
           "term": "Đơn hàng nhận"
         },
         {
-          "label": "[2] OMS Tiếp nhận & Xử lý đơn hàng",
+          "label": "OMS Tiếp nhận & Xử lý đơn hàng",
           "desc": "OMS nhận và xử lý đơn hàng",
           "detail": "FULGO OMS nhận đơn hàng từ kênh: ① Nhận thông tin đơn hàng từ kênh ② Xác minh nội dung đơn hàng (tồn tại sản phẩm, kiểm tra số lượng) ③ Xác nhận trạng thái thanh toán ④ Gán nhà cung cấp. OMS đăng ký dữ liệu đơn hàng và tạo nhiệm vụ xuất hàng. Trạng thái: ORDER_CONFIRMED",
           "actor": "FULGO OMS",
           "term": "Đơn hàng xác nhận"
         },
         {
-          "label": "[3] Truyền đạt yêu cầu xuất & Phân bổ hàng tồn kho",
+          "label": "Truyền đạt yêu cầu xuất & Phân bổ hàng tồn kho",
           "desc": "WMS nhận yêu cầu xuất và phân bổ hàng tồn kho",
           "detail": "FULGO WMS nhận yêu cầu xuất: ① Nhận chi tiết đơn hàng từ OMS ② Xác minh tính khả dụng hàng tồn kho theo SKU ③ Phân bổ số lượng hàng tồn kho cần thiết ④ Dự trữ hàng tồn kho cho đơn hàng này ⑤ Tạo nhiệm vụ xuất hàng. Trạng thái: INVENTORY_ALLOCATED",
           "actor": "FULGO WMS",
           "term": "Phân bổ hoàn tất"
         },
         {
-          "label": "[4] Phát hành hướng dẫn xuất hàng",
+          "label": "Phát hành hướng dẫn xuất hàng",
           "desc": "WMS phát hành hướng dẫn chọn hàng và đóng gói",
           "detail": "FULGO WMS phát hành hướng dẫn xuất hàng chi tiết: ① Gán vị trí chọn hàng (vùng-vị trí) ② Nhóm đơn hàng để chọn hiệu quả (gán sóng) ③ Tạo danh sách chọn với mã vạch ④ Tạo phiếu đóng gói với thông tin theo dõi ⑤ Gửi hướng dẫn đến công nhân kho. Trạng thái: INSTRUCTION_ISSUED",
           "actor": "FULGO WMS",
           "term": "Phát hành hướng dẫn"
         },
         {
-          "label": "[5] Chọn hàng",
+          "label": "Chọn hàng",
           "desc": "Công nhân chọn sản phẩm từ kệ",
           "detail": "Công nhân kho thực hiện chọn hàng: ① Nhận hướng dẫn chọn hàng từ WMS ② Điều hướng đến vị trí được chỉ định ③ Quét mã vạch sản phẩm ④ Xác minh số lượng phù hợp với đơn hàng ⑤ Thu thập sản phẩm vào khu vực thu thập chỉ định. Trạng thái: PICKING_COMPLETE",
           "actor": "Công nhân",
           "term": "Chọn hàng hoàn tất"
         },
         {
-          "label": "[6] Kiểm tra",
+          "label": "Kiểm tra",
           "desc": "Kiểm tra chất lượng trước khi đóng gói",
           "detail": "Công nhân thực hiện kiểm tra chất lượng: ① Xác minh sản phẩm được chọn phù hợp với danh sách đơn hàng ② Kiểm tra hư hỏng hoặc lỗi ③ Xác minh tình trạng sản phẩm và ngày hết hạn ④ Xác nhận độ chính xác về số lượng. Nếu phát hiện vấn đề, báo cáo ngoại lệ cho giám sát viên. Trạng thái: INSPECTION_COMPLETE",
           "actor": "Công nhân",
           "term": "Kiểm tra hoàn tất"
         },
         {
-          "label": "[7] Đóng gói",
+          "label": "Đóng gói",
           "desc": "Đóng gói sản phẩm và dán nhãn vận chuyển",
           "detail": "Công nhân chuẩn bị vận chuyển: ① Nhận hướng dẫn đóng gói với số theo dõi ② Đóng gói sản phẩm vào hộp sử dụng danh sách đóng gói ③ Thêm vật liệu đóng gói để bảo vệ ④ In và dán nhãn vận chuyển với số theo dõi ⑤ Cân trọng lượng gói hàng và xác minh kích thước. Trạng thái: PACKING_COMPLETE",
           "actor": "Công nhân",
           "term": "Đóng gói hoàn tất"
         },
         {
-          "label": "[8] Báo cáo hoàn tất vận chuyển",
+          "label": "Báo cáo hoàn tất vận chuyển",
           "desc": "Báo cáo vận chuyển sẵn sàng để lấy",
           "detail": "Nhóm kho báo cáo cho WMS: ① Xác nhận tất cả đơn hàng đã đóng gói và sẵn sàng ② Báo cáo số theo dõi cho mỗi vận chuyển ③ Di chuyển gói hàng đến bãi tải ④ Cập nhật trạng thái vận chuyển trong WMS ⑤ Thông báo cho nhà cung cấp rằng vận chuyển sẵn sàng. Trạng thái: READY_FOR_PICKUP",
           "actor": "Công nhân",
           "term": "Xuất hàng hoàn tất"
         },
         {
-          "label": "[9] Tích hợp API theo dõi vận chuyển",
+          "label": "Tích hợp API theo dõi vận chuyển",
           "desc": "Theo dõi vận chuyển theo thời gian thực",
           "detail": "FULGO WMS tích hợp với các nhà cung cấp vận chuyển: ① Nhà cung cấp lấy gói hàng từ kho ② Nhà cung cấp cập nhật trạng thái theo dõi theo thời gian thực ③ WMS nhận cập nhật theo dõi (lấy xong, đang vận chuyển, chuẩn bị giao, đã giao) ④ Đồng bộ hóa dữ liệu theo dõi với OMS ⑤ Cung cấp theo dõi theo thời gian thực cho khách hàng. Trạng thái: IN_TRANSIT / DELIVERED",
           "actor": "FULGO WMS",
           "term": "Theo dõi hoạt động"
         },
         {
-          "label": "[10] Xuất hàng hoàn tất & Đồng bộ hóa OMS",
+          "label": "Xuất hàng hoàn tất & Đồng bộ hóa OMS",
           "desc": "Xác nhận cuối cùng và đồng bộ hóa dữ liệu",
           "detail": "FULGO hoàn thành quy trình xuất hàng: ① Xác nhận trạng thái giao hàng cuối cùng từ nhà cung cấp ② Giảm vĩnh viễn hàng tồn kho dự trữ ③ Cập nhật số liệu hiệu suất bán hàng ④ Đồng bộ hóa trạng thái đơn hàng đã hoàn tất với OMS ⑤ Tạo báo cáo KPI (thời gian giao hàng, tỷ lệ chính xác). Trạng thái: ORDER_DELIVERED / ORDER_COMPLETED",
           "actor": "FULGO WMS",
@@ -214,56 +214,56 @@
       },
       "steps": [
         {
-          "label": "[1] Yêu cầu trả hàng",
+          "label": "Yêu cầu trả hàng",
           "desc": "Khách hàng bắt đầu yêu cầu trả hàng",
           "detail": "Khách hàng yêu cầu trả hàng thông qua dịch vụ khách hàng của nhà cung cấp: ① Liên hệ dịch vụ khách hàng ② Báo cáo vấn đề sản phẩm (hư hỏng, khiếm khuyết, sản phẩm sai) ③ Yêu cầu ủy quyền trả hàng ④ Cung cấp số đơn hàng và lý do trả hàng. Trạng thái: RETURN_REQUESTED",
           "actor": "Khách hàng",
           "term": "Yêu cầu nhận"
         },
         {
-          "label": "[2] OMS Tiếp nhận & Xác thực chính sách trả hàng",
+          "label": "OMS Tiếp nhận & Xác thực chính sách trả hàng",
           "desc": "OMS nhận và xác thực yêu cầu trả hàng",
           "detail": "FULGO OMS nhận yêu cầu trả hàng: ① Xác thực yêu cầu trả hàng với thông tin đơn hàng ② Kiểm tra chính sách trả hàng (tính cấp bách, cửa sổ trả hàng, điều kiện) ③ Xác minh trạng thái sản phẩm và bảo hành ④ Tạo mã ủy quyền trả hàng ⑤ Đăng ký yêu cầu trả hàng trong hệ thống. Trạng thái: RETURN_AUTHORIZED",
           "actor": "FULGO OMS",
           "term": "Cấp ủy quyền"
         },
         {
-          "label": "[3] WMS Hướng dẫn nhập hàng trả lại",
+          "label": "WMS Hướng dẫn nhập hàng trả lại",
           "desc": "WMS phát hành hướng dẫn nhập hàng trả lại",
           "detail": "FULGO WMS nhận yêu cầu trả hàng từ OMS: ① Gán vị trí nhập trả hàng trong kho ② Lên lịch thời gian/ngày nhập hàng ③ Tạo nhãn trả hàng với mã ủy quyền trả hàng ④ Tạo hướng dẫn tiếp nhận ⑤ Thông báo cho nhóm kho về trả hàng dự kiến. Trạng thái: RETURN_LOCATION_ASSIGNED",
           "actor": "FULGO OMS",
           "term": "Phát hành hướng dẫn"
         },
         {
-          "label": "[4] Tiếp nhận sản phẩm trả hàng",
+          "label": "Tiếp nhận sản phẩm trả hàng",
           "desc": "Kho nhận sản phẩm trả hàng",
           "detail": "Công nhân nhận vận chuyển trả hàng: ① Nhận gói hàng từ nhà cung cấp tại kho ② Quét mã vạch ủy quyền trả hàng ③ Xác minh chi tiết sản phẩm phù hợp với ủy quyền ④ Xác nhận tình trạng gói hàng ⑤ Đăng ký tiếp nhận trong WMS. Trạng thái: RETURN_RECEIVED",
           "actor": "Công nhân",
           "term": "Tiếp nhận hoàn tất"
         },
         {
-          "label": "[5] Kiểm tra trả hàng",
+          "label": "Kiểm tra trả hàng",
           "desc": "Kiểm tra tình trạng sản phẩm trả lại",
           "detail": "Công nhân kiểm tra sản phẩm trả lại: ① Mở và kiểm tra tình trạng sản phẩm ② Kiểm tra hư hỏng, khiếm khuyết, bộ phận bị thiếu ③ Xác minh sản phẩm là mặt hàng gốc ④ Ghi lại tình trạng bằng ảnh nếu cần ⑤ Phân loại sản phẩm thành các cấp (A/B/C). Trạng thái: INSPECTION_COMPLETE",
           "actor": "Công nhân",
           "term": "Kiểm tra hoàn tất"
         },
         {
-          "label": "[6] Thực hiện đường xử lý",
+          "label": "Thực hiện đường xử lý",
           "desc": "Thực hiện xử lý dựa trên cấp sản phẩm",
           "detail": "Công nhân thực hiện xử lý dựa trên cấp: Cấp A (Có thể bán lại) - ① Làm sạch nếu cần ② Đóng gói lại ③ Áp dụng nhãn mới; Cấp B (Cần sửa chữa) - ① Gửi đến trạm sửa chữa ② Xử lý sửa chữa; Cấp C (Thanh lý) - ① Tách các mặt hàng bị hỏng ② Gửi đến khu vực thanh lý. Trạng thái: PROCESSING_COMPLETE",
           "actor": "Công nhân",
           "term": "Xử lý hoàn tất"
         },
         {
-          "label": "[7] Phê duyệt tái đăng ký/Thanh lý cuối cùng",
+          "label": "Phê duyệt tái đăng ký/Thanh lý cuối cùng",
           "desc": "WMS phê duyệt định hướng hàng tồn kho cuối cùng",
           "detail": "FULGO WMS hoàn tất xử lý hàng tồn kho: ① Xem xét kết quả xử lý từ kho ② Cấp A: Phê duyệt tái đăng ký vào hàng tồn kho ③ Cấp B: Định tuyến đến sửa chữa hoặc thanh lý ④ Cấp C: Phê duyệt thanh lý ⑤ Cập nhật bản ghi hàng tồn kho WMS cho phù hợp. Trạng thái: APPROVAL_COMPLETE",
           "actor": "FULGO WMS",
           "term": "Phê duyệt hoàn tất"
         },
         {
-          "label": "[8] Quyết toán trả hàng cuối cùng & Hoàn tất",
+          "label": "Quyết toán trả hàng cuối cùng & Hoàn tất",
           "desc": "Hoàn tất quy trình trả hàng và quyết toán",
           "detail": "FULGO hoàn tất trả hàng: ① Đồng bộ hóa trạng thái hàng tồn kho cuối cùng với OMS ② Tính toán số tiền hoàn lại dựa trên tình trạng sản phẩm ③ Xử lý hoàn lại cho khách hàng ④ Gửi thông báo hoàn tất trả hàng cho nhà cung cấp ⑤ Tạo báo cáo KPI trả hàng (độ chính xác kiểm tra, thời gian xử lý). Trạng thái: RETURN_COMPLETED",
           "actor": "FULGO WMS",
@@ -282,98 +282,98 @@
       },
       "steps": [
         {
-          "label": "[1] Phân loại & Theo dõi trạng thái hàng tồn kho",
+          "label": "Phân loại & Theo dõi trạng thái hàng tồn kho",
           "desc": "Phân biệt và tự động theo dõi trạng thái có sẵn/dự trữ/tạm giữ/khiếm khuyết",
           "detail": "Động cơ hàng tồn kho nội bộ FULGO WMS tự động theo dõi trạng thái hàng tồn kho theo vòng đời theo thời gian thực: ① Có sẵn - hàng tồn kho bình thường có thể bán ② Dự trữ - hàng tồn kho được phân bổ bởi lệnh xuất hàng trước khi chọn ③ Chọn - hàng tồn kho đang được chọn ④ Tạm giữ - hàng tồn kho chờ kiểm tra hoặc không thể bán do sự cố ⑤ Khiếm khuyết - sản phẩm khiếm khuyết không thể bán ⑥ Chuẩn bị thanh lý - hàng tồn kho chờ phê duyệt thanh lý. Tất cả các thay đổi trạng thái được ghi lại tự động.",
           "actor": "FULGO WMS",
           "term": "Theo dõi trạng thái"
         },
         {
-          "label": "[2] Quản lý số lượng hàng tồn kho theo thời gian thực",
+          "label": "Quản lý số lượng hàng tồn kho theo thời gian thực",
           "desc": "Quản lý 4 cấp độ hàng tồn kho: vật lý/có sẵn/dự trữ/dự phòng",
           "detail": "FULGO WMS quản lý nội bộ 4 loại số lượng hàng tồn kho theo thời gian thực: ① Hàng tồn kho vật lý - số lượng sản phẩm thực tế trong kho ② Hàng tồn kho có sẵn - số lượng có thể bán (=vật lý-dự trữ-tạm giữ) ③ Hàng tồn kho dự trữ - số lượng được phân bổ bởi lệnh xuất hàng ④ Hàng tồn kho dự phòng - số lượng tối thiểu duy trì theo chính sách của nhà cung cấp. Được cập nhật tự động tại nhập hàng/xuất hàng/điều chỉnh/trả hàng.",
           "actor": "FULGO WMS",
           "term": "Quản lý số lượng"
         },
         {
-          "label": "[3] Thiết lập cấu trúc kho",
+          "label": "Thiết lập cấu trúc kho",
           "desc": "Xác định hệ thống khu vực-vị trí và đăng ký vào FULGO",
           "detail": "Quản lý kho đăng ký cấu trúc cơ bản của kho vào FULGO: Khu vực - xác định các khu vực chính (khu vực quần áo/khu vực phụ kiện/khu vực giày/khu vực tạm giữ/khu vực khiếm khuyết/khu vực thanh lý). Đặt công suất, đặc điểm và chính sách quản lý cho từng khu vực. Vị trí - thiết lập hệ thống mã vị trí chi tiết (định dạng A-01-01: khu vực-hàng-cột). Đặt và áp dụng chính sách FIFO/FEFO trong FULGO.",
           "actor": "Quản lý kho",
           "term": "Thiết lập hoàn tất"
         },
         {
-          "label": "[4] Đăng ký vị trí bảo quản",
+          "label": "Đăng ký vị trí bảo quản",
           "desc": "Đăng ký thông tin chi tiết cho các vị trí vật lý",
           "detail": "Quản lý kho đăng ký thông tin chi tiết vị trí bảo quản vào FULGO: ① Ánh xạ khu vực-vị trí (đăng ký các vị trí vật lý A-01-01~A-05-10 trong khu vực A) ② Nhập đặc điểm vị trí (kích thước/chiều cao/giới hạn trọng lượng/yêu cầu kiểm soát độ ẩm/danh mục sản phẩm) ③ Đặt sự thân hợp giữa sản phẩm-vị trí (quần áo→kiểm soát độ ẩm, điện tử→khu vực bảo vệ ESD, v.v.) ④ Đặt tỷ lệ bảo quản (tỷ lệ theo kích thước/ngày/tháng). Hoàn thành đăng ký tất cả các vị trí kho trong FULGO.",
           "actor": "Quản lý kho",
           "term": "Đăng ký hoàn tất"
         },
         {
-          "label": "[5] Phân bổ vị trí & Phát hành hướng dẫn đặt vị trí",
+          "label": "Phân bổ vị trí & Phát hành hướng dẫn đặt vị trí",
           "desc": "Tự động phân bổ vị trí dựa trên thuộc tính sản phẩm và hướng dẫn công nhân",
           "detail": "FULGO tự động phân bổ vị trí cho sản phẩm nhập kho và hướng dẫn công nhân: ① Xác minh thuộc tính sản phẩm (danh mục/kích thước/số lượng) ② Chọn khu vực thích hợp ③ Tìm kiếm tự động vị trí trống ④ Hoàn thành phân bổ vị trí ⑤ Gửi hướng dẫn đặt vị trí cho công nhân (kèm mã QR/bản đồ vị trí). Thông báo và gợi ý phân bổ lại tự động nếu khu vực đầy.",
           "actor": "FULGO WMS",
           "term": "Phát hành hướng dẫn"
         },
         {
-          "label": "[6] Báo cáo hoàn thành đặt vị trí & di chuyển",
+          "label": "Báo cáo hoàn thành đặt vị trí & di chuyển",
           "desc": "Báo cáo hoàn thành công việc đặt vị trí/di chuyển và ghi lại lịch sử",
           "detail": "Công nhân báo cáo hoàn thành công việc đặt vị trí/di chuyển cho FULGO: ① Xác minh hoàn thành công việc (quét mã vạch xác nhận) ② FULGO ghi lại tự động tất cả các chuyển động hàng tồn kho: Nhập kho (OMS→WMS→Vị trí A)→Di chuyển (Vị trí A→B)→Chọn (Vị trí A→khu vực chọn)→Xuất kho (khu vực chọn→Vận chuyển)→Trả hàng (khu vực trả→Vị trí A) ③ Theo dõi theo lô/số sê-ri ④ Lịch sử đầy đủ có sẵn để truy vấn.",
           "actor": "Công nhân",
           "term": "Báo cáo hoàn tất"
         },
         {
-          "label": "[7] Thiết lập chính sách vận hành hàng tồn kho",
+          "label": "Thiết lập chính sách vận hành hàng tồn kho",
           "desc": "Quản lý chính sách vận hành hàng tồn kho theo nhà cung cấp/sản phẩm",
           "detail": "Quản lý kho cài đặt chính sách vận hành hàng tồn kho trong FULGO: ① Chính sách nhà cung cấp - dự phòng (theo sản phẩm), chính sách luân phiên FIFO/FEFO, quản lý lô/hết hạn ② Phân loại hàng tồn kho - phân tích ABC (A: tần suất cao 20%, B: tần suất trung bình 30%, C: tần suất thấp 50%) ③ Chi phí giữ - phí bảo quản (cơ sở ngày/tháng), phí bảo quản dài hạn, tỷ lệ theo khu vực. FULGO áp dụng chính sách để vận hành tự động.",
           "actor": "Quản lý kho",
           "term": "Cài đặt chính sách"
         },
         {
-          "label": "[8] Chỉ dẫn kiểm kho vật lý",
+          "label": "Chỉ dẫn kiểm kho vật lý",
           "desc": "Quản lý kho hướng dẫn công nhân tiến hành kiểm kho vật lý",
           "detail": "Quản lý kho phát hành hướng dẫn kiểm kho vật lý định kỳ (hàng tuần/hàng tháng) hoặc khi cần: ① Quyết định phạm vi kiểm kho vật lý (tất cả/theo khu vực/theo sản phẩm) ② Đặt thời kỳ kiểm kho vật lý ③ Chỉ định nhân viên kiểm kho vật lý ④ Gửi hướng dẫn kiểm kho vật lý cho công nhân (tạo phiếu kiểm kho vật lý). Trạng thái: Chờ kiểm kho vật lý",
           "actor": "Quản lý kho",
           "term": "Phát hành hướng dẫn"
         },
         {
-          "label": "[9] Tiến hành kiểm kho vật lý",
+          "label": "Tiến hành kiểm kho vật lý",
           "desc": "Công nhân tiến hành kiểm kho vật lý tại hiện trường",
           "detail": "Công nhân tiến hành kiểm kho vật lý: ① Di chuyển đến khu vực đích ② Quét mã vạch và xác minh số lượng theo sản phẩm ③ Kiểm tra hư hỏng/biến dạng/mài mòn ④ Nhập tình trạng kiểm kho vật lý theo thời gian thực (thiết bị di động) ⑤ Gửi cho FULGO khi hoàn thành. Trạng thái: Kiểm kho vật lý hoàn tất",
           "actor": "Công nhân",
           "term": "Kiểm kho vật lý hoàn tất"
         },
         {
-          "label": "[10] Báo cáo & Phân tích kết quả kiểm kho vật lý",
+          "label": "Báo cáo & Phân tích kết quả kiểm kho vật lý",
           "desc": "So sánh kết quả với hàng tồn kho WMS và báo cáo cho nhà cung cấp",
           "detail": "FULGO WMS phân tích tự động kết quả kiểm kho vật lý: ① So sánh số lượng kiểm kho vật lý vs số lượng WMS ② Phân tích mẫu chênh lệch (tăng/giảm/tổn thất) ③ Tạo danh sách bất thường (nghi ngờ đánh cắp/lỗi/hư hỏng) ④ Tạo báo cáo kiểm kho vật lý ⑤ Báo cáo kết quả cho nhà cung cấp (tỷ lệ chênh lệch %, mục có vấn đề, khuyến nghị). Trạng thái: Chờ xác nhận",
           "actor": "FULGO WMS",
           "term": "Báo cáo hoàn tất"
         },
         {
-          "label": "[11] Điều chỉnh số lượng hàng tồn kho",
+          "label": "Điều chỉnh số lượng hàng tồn kho",
           "desc": "Thực hiện điều chỉnh số lượng dựa trên kết quả kiểm kho vật lý",
           "detail": "Công nhân thực hiện điều chỉnh số lượng theo phê duyệt của quản lý kho dựa trên kết quả: ① Tăng (từ nhập kho bị bỏ sót, v.v.)→nhập trong hệ thống (xử lý như nhập kho) ② Giảm (từ đánh cắp/hư hỏng, v.v.)→nhập trong hệ thống (xử lý như thanh lý/khấu trừ) ③ Chuyển vị trí nếu cần→sắp xếp lại các vị trí ④ Xác minh hoàn thành bằng quét mã vạch ⑤ Báo cáo hoàn thành điều chỉnh cho FULGO. Trạng thái: Điều chỉnh hoàn tất",
           "actor": "Công nhân",
           "term": "Điều chỉnh hoàn tất"
         },
         {
-          "label": "[12] Xác nhận điều chỉnh & Đồng bộ hóa với OMS",
+          "label": "Xác nhận điều chỉnh & Đồng bộ hóa với OMS",
           "desc": "Hoàn thành kết quả điều chỉnh và đồng bộ hóa với OMS",
           "detail": "FULGO WMS hoàn thành điều chỉnh số lượng: ① Xác thực nội dung điều chỉnh (xác minh lại số tiền tăng/giảm) ② Thay đổi trạng thái hàng tồn kho cuối cùng (=xác nhận như số lượng kiểm kho vật lý) ③ Ghi lại nhật ký điều chỉnh (ngày giờ/xử lý/lý do/thay đổi số lượng) ④ Gửi đồng bộ hóa cuối cùng cho OMS (hàng tồn kho WMS = hàng tồn kho OMS) ⑤ Xác thực lại tính nhất quán. Trạng thái: Điều chỉnh được xác nhận",
           "actor": "FULGO WMS",
           "term": "Đồng bộ hóa hoàn tất"
         },
         {
-          "label": "[13] Bảng điều khiển giám sát hàng tồn kho theo thời gian thực",
+          "label": "Bảng điều khiển giám sát hàng tồn kho theo thời gian thực",
           "desc": "Cung cấp trạng thái hàng tồn kho theo thời gian thực cho nhà cung cấp",
           "detail": "Bảng điều khiển FULGO cung cấp trạng thái hàng tồn kho theo thời gian thực cho nhà cung cấp: ① Tình trạng hàng tồn kho toàn bộ (tỷ lệ có sẵn/dự trữ/tạm giữ/khiếm khuyết) ② Phân bố hàng tồn kho theo khu vực và tỷ lệ sử dụng ③ Trạng thái hàng tồn kho và xu hướng theo nhà cung cấp ④ Tỷ lệ luân phiên hàng tồn kho ⑤ Kết quả kiểm kho vật lý gần đây (tỷ lệ nhất quán %). Cảnh báo tự động: Dưới dự phòng→cảnh báo, Sản phẩm theo mùa gần hết mùa (30 ngày trước)→cảnh báo, Hàng tồn kho dài hạn (90+ ngày không bán)→cảnh báo",
           "actor": "Nhà cung cấp",
           "term": "Giám sát"
         },
         {
-          "label": "[14] Báo cáo KPI hàng tồn kho",
+          "label": "Báo cáo KPI hàng tồn kho",
           "desc": "Tự động tạo và cung cấp KPI hàng ngày/hàng tuần/hàng tháng",
           "detail": "FULGO tự động tạo báo cáo: ① Độ chính xác hàng tồn kho (%) - tỷ lệ nhất quán từ kiểm kho vật lý ② Tỷ lệ luân phiên hàng tồn kho - tỷ lệ xuất/nhập ③ Thời gian giữ trung bình - ngày từ nhập đến xuất ④ Tỷ lệ sử dụng khu vực (%) - sử dụng vs công suất ⑤ Thay đổi giá trị hàng tồn kho - số lượng × chi phí đơn vị ⑥ Phân tích tổn thất - quy mô hư hỏng/đánh cắp/tổn thất. Bao gồm báo cáo theo nhà cung cấp, phân tích xu hướng và khuyến nghị cải thiện.",
           "actor": "FULGO WMS",
