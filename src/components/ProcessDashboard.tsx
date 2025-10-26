@@ -357,23 +357,103 @@ export const ProcessDashboard: React.FC = () => {
               </div>
             </div>
 
-            {/* 데이터 흐름 */}
+            {/* 상태 흐름도 */}
             <div className="border-t pt-4">
-              <h4 className="text-lg font-bold text-gray-800 mb-3">🔄 데이터 흐름</h4>
-              <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg font-mono text-sm">
-                {getSelectedMetrics()?.name === 'inbound' && (
-                  <div>OMS → WMS입고 → 분류 → 검사 → 승인 → 존할당 → 재고등록 → OMS동기화</div>
-                )}
-                {getSelectedMetrics()?.name === 'inventory' && (
-                  <div>입고/출고 → 수량업데이트 → 경고생성 → 모니터링 → KPI계산 → 정책실행 → OMS/ERP동기화</div>
-                )}
-                {getSelectedMetrics()?.name === 'outbound_request' && (
-                  <div>OMS주문 → 재고할당 → 피킹지시 → 바코드검증 → 검수 → 포장 → 송장생성 → 출고확정 → OMS동기화</div>
-                )}
-                {getSelectedMetrics()?.name === 'return_request' && (
-                  <div>고객반품 → 정책검증 → 승인/거부 → 입고 → 검수등급판정 → 처리결정 → 재입고/폐기 → 환불 → OMS동기화</div>
-                )}
-              </div>
+              <h4 className="text-lg font-bold text-gray-800 mb-3">🔄 상태 흐름도</h4>
+              
+              {getSelectedMetrics()?.name === 'inbound' && (
+                <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg overflow-x-auto">
+                  <div className="flex items-center gap-2 justify-start min-w-max">
+                    <div className="bg-blue-500 text-white px-3 py-2 rounded font-bold text-sm">시작</div>
+                    <div className="text-2xl text-gray-400">→</div>
+                    <div className="bg-purple-400 text-white px-3 py-2 rounded font-bold text-sm">REQUEST_WAITING</div>
+                    <div className="text-2xl text-gray-400">→</div>
+                    <div className="bg-purple-400 text-white px-3 py-2 rounded font-bold text-sm">CLASSIFICATION_PENDING</div>
+                    <div className="text-2xl text-gray-400">→</div>
+                    <div className="bg-purple-400 text-white px-3 py-2 rounded font-bold text-sm">CLASSIFIED</div>
+                    <div className="text-2xl text-gray-400">→</div>
+                    <div className="bg-purple-400 text-white px-3 py-2 rounded font-bold text-sm">INSPECTION_PENDING</div>
+                    <div className="text-2xl text-gray-400">→</div>
+                    <div className="bg-purple-400 text-white px-3 py-2 rounded font-bold text-sm">INSPECTED</div>
+                    <div className="text-2xl text-gray-400">→</div>
+                    <div className="bg-purple-400 text-white px-3 py-2 rounded font-bold text-sm">APPROVAL_PENDING</div>
+                    <div className="text-2xl text-gray-400">→</div>
+                    <div className="bg-purple-400 text-white px-3 py-2 rounded font-bold text-sm">APPROVED</div>
+                    <div className="text-2xl text-gray-400">→</div>
+                    <div className="bg-green-500 text-white px-3 py-2 rounded font-bold text-sm">DONE</div>
+                  </div>
+                  <div className="text-xs text-gray-600 mt-3">9개 상태: 요청 수령 → 분류 → 검사 → 승인 → 완료</div>
+                </div>
+              )}
+
+              {getSelectedMetrics()?.name === 'inventory' && (
+                <div className="p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg overflow-x-auto">
+                  <div className="flex items-center gap-2 justify-start min-w-max">
+                    <div className="bg-green-500 text-white px-3 py-2 rounded font-bold text-sm">AVAILABLE</div>
+                    <div className="text-2xl text-gray-400">↔</div>
+                    <div className="bg-yellow-500 text-white px-3 py-2 rounded font-bold text-sm">RESERVED</div>
+                    <div className="text-2xl text-gray-400">↔</div>
+                    <div className="bg-orange-500 text-white px-3 py-2 rounded font-bold text-sm">HOLD</div>
+                    <div className="text-2xl text-gray-400">→</div>
+                    <div className="bg-red-500 text-white px-3 py-2 rounded font-bold text-sm">DAMAGED</div>
+                    <div className="text-2xl text-gray-400">→</div>
+                    <div className="bg-gray-600 text-white px-3 py-2 rounded font-bold text-sm">DISPOSED</div>
+                  </div>
+                  <div className="text-xs text-gray-600 mt-3">5개 상태: 가용 ↔ 예약 ↔ 보류 → 손상 → 폐기</div>
+                </div>
+              )}
+
+              {getSelectedMetrics()?.name === 'outbound_request' && (
+                <div className="p-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-lg overflow-x-auto">
+                  <div className="flex items-center gap-1 justify-start min-w-max text-xs">
+                    <div className="bg-blue-500 text-white px-2 py-1 rounded font-bold">시작</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-orange-400 text-white px-2 py-1 rounded font-bold">REQUEST</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-orange-400 text-white px-2 py-1 rounded font-bold">ALLOCATION</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-orange-400 text-white px-2 py-1 rounded font-bold">PICKING</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-orange-400 text-white px-2 py-1 rounded font-bold">PICKED</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-orange-400 text-white px-2 py-1 rounded font-bold">INSPECTION</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-orange-400 text-white px-2 py-1 rounded font-bold">PACKING</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-orange-400 text-white px-2 py-1 rounded font-bold">WAYBILL</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-orange-400 text-white px-2 py-1 rounded font-bold">SHIPMENT</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-green-500 text-white px-2 py-1 rounded font-bold">COMPLETED</div>
+                  </div>
+                  <div className="text-xs text-gray-600 mt-3">14개 상태: 주문 → 할당 → 피킹 → 검수 → 포장 → 송장 → 출고 → 완료</div>
+                </div>
+              )}
+
+              {getSelectedMetrics()?.name === 'return_request' && (
+                <div className="p-4 bg-gradient-to-r from-red-50 to-pink-50 rounded-lg overflow-x-auto">
+                  <div className="flex items-center gap-1 justify-start min-w-max text-xs">
+                    <div className="bg-blue-500 text-white px-2 py-1 rounded font-bold">시작</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-red-400 text-white px-2 py-1 rounded font-bold">RECEIVED</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-red-400 text-white px-2 py-1 rounded font-bold">VALIDATION</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-red-400 text-white px-2 py-1 rounded font-bold">APPROVED</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-red-400 text-white px-2 py-1 rounded font-bold">INBOUND</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-red-400 text-white px-2 py-1 rounded font-bold">INSPECTION</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-red-400 text-white px-2 py-1 rounded font-bold">DECISION</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-red-400 text-white px-2 py-1 rounded font-bold">PROCESSING</div>
+                    <div className="text-xl text-gray-400">→</div>
+                    <div className="bg-green-500 text-white px-2 py-1 rounded font-bold">COMPLETED</div>
+                  </div>
+                  <div className="text-xs text-gray-600 mt-3">14개 상태: 접수 → 검증 → 승인 → 입고 → 검수 → 판정 → 처리 → 완료</div>
+                </div>
+              )}
             </div>
 
             {/* 배포 정보 */}
