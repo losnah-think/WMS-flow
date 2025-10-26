@@ -123,7 +123,7 @@
     },
     "outbound": {
       "title": "Quy trình xuất hàng (Outbound)",
-      "description": "Quy trình hoàn chỉnh trong đó các kênh bán hàng bên ngoài (Shopee, Lazada, v.v.) nhận đơn hàng, FULGO thu thập và chuyển tiếp cho công ty hậu cần, những người đóng gói và giao sản phẩm cho khách hàng.",
+      "description": "Quy trình hoàn chỉnh trong đó các đơn hàng được nhận từ các kênh bên ngoài, OMS xử lý chúng, WMS phát hành hướng dẫn xuất hàng, công nhân lấy hàng/kiểm tra/đóng gói/vận chuyển, và cung cấp thông tin theo dõi theo thời gian thực. Bao gồm ưu tiên phân bổ hàng tồn kho, tối ưu hóa lấy hàng, kiểm tra bắt buộc, tạo mã vạch tự động và đồng bộ hóa OMS theo thời gian thực.",
       "hierarchy": "Fulgo(Nền tảng) → Công ty hậu cần(Người quản lý kho) → Nhà cung cấp(Khách hàng)",
       "layers": {
         "layer1": "Lớp 1: Chọn hàng",
@@ -132,108 +132,80 @@
       },
       "steps": [
         {
-          "label": "Khách hàng đặt hàng",
-          "desc": "Khách hàng nhấp nút mua",
-          "detail": "Khách hàng đặt hàng từ các kênh bán hàng bên ngoài như Shopee hoặc Lazada.",
-          "actor": "Khách hàng",
-          "term": ""
-        },
-        {
-          "label": "Tiếp nhận đơn hàng",
-          "desc": "Kênh bán hàng tạo thông tin đơn hàng",
-          "detail": "Hệ thống kênh bán hàng tạo thông tin đơn hàng (số đơn hàng, sản phẩm, số lượng, địa chỉ giao) và thông báo cho nhà cung cấp.",
+          "label": "[1] Tiếp nhận đơn hàng",
+          "desc": "Kênh bán hàng nhận và tạo đơn hàng",
+          "detail": "Kênh bán hàng tạo thông tin đơn hàng: ① Tạo số đơn hàng, nội dung đơn hàng (danh sách sản phẩm, số lượng), địa chỉ giao ② Đăng ký thông tin đơn hàng trong hệ thống kênh ③ Gửi đơn hàng đến hệ thống nhà cung cấp. Hệ thống kênh tạo dữ liệu đơn hàng. Trạng thái: ORDER_RECEIVED",
           "actor": "Kênh bán",
-          "term": ""
+          "term": "Đơn hàng nhận"
         },
         {
-          "label": "Gửi yêu cầu xuất hàng",
-          "desc": "Nhà cung cấp hướng dẫn FULGO vận chuyển",
-          "detail": "Nhà cung cấp gửi yêu cầu xuất hàng đến hệ thống FULGO 'Vui lòng vận chuyển đơn hàng này.'",
-          "actor": "Nhà cung cấp",
-          "term": ""
+          "label": "[2] OMS Tiếp nhận & Xử lý đơn hàng",
+          "desc": "OMS nhận và xử lý đơn hàng",
+          "detail": "FULGO OMS nhận đơn hàng từ kênh: ① Nhận thông tin đơn hàng từ kênh ② Xác minh nội dung đơn hàng (tồn tại sản phẩm, kiểm tra số lượng) ③ Xác nhận trạng thái thanh toán ④ Gán nhà cung cấp. OMS đăng ký dữ liệu đơn hàng và tạo nhiệm vụ xuất hàng. Trạng thái: ORDER_CONFIRMED",
+          "actor": "FULGO OMS",
+          "term": "Đơn hàng xác nhận"
         },
         {
-          "label": "Xác minh hàng tồn kho",
-          "desc": "Xác minh sản phẩm có trong kho",
-          "detail": "Hệ thống hàng tồn kho FULGO kiểm tra 'Sản phẩm được yêu cầu có trong kho không? Bao nhiêu cái?' và dự trữ số lượng đơn hàng.",
-          "actor": "FULGO",
-          "term": "Dự trữ hàng tồn kho"
+          "label": "[3] Truyền đạt yêu cầu xuất & Phân bổ hàng tồn kho",
+          "desc": "WMS nhận yêu cầu xuất và phân bổ hàng tồn kho",
+          "detail": "FULGO WMS nhận yêu cầu xuất: ① Nhận chi tiết đơn hàng từ OMS ② Xác minh tính khả dụng hàng tồn kho theo SKU ③ Phân bổ số lượng hàng tồn kho cần thiết ④ Dự trữ hàng tồn kho cho đơn hàng này ⑤ Tạo nhiệm vụ xuất hàng. Trạng thái: INVENTORY_ALLOCATED",
+          "actor": "FULGO WMS",
+          "term": "Phân bổ hoàn tất"
         },
         {
-          "label": "Gửi hướng dẫn xuất hàng",
-          "desc": "Yêu cầu nhiệm vụ từ công ty hậu cần",
-          "detail": "FULGO hướng dẫn công ty hậu cần 'Vui lòng lấy sản phẩm này, đóng gói và giao vận chuyển.'",
-          "actor": "FULGO",
-          "term": ""
+          "label": "[4] Phát hành hướng dẫn xuất hàng",
+          "desc": "WMS phát hành hướng dẫn chọn hàng và đóng gói",
+          "detail": "FULGO WMS phát hành hướng dẫn xuất hàng chi tiết: ① Gán vị trí chọn hàng (vùng-vị trí) ② Nhóm đơn hàng để chọn hiệu quả (gán sóng) ③ Tạo danh sách chọn với mã vạch ④ Tạo phiếu đóng gói với thông tin theo dõi ⑤ Gửi hướng dẫn đến công nhân kho. Trạng thái: INSTRUCTION_ISSUED",
+          "actor": "FULGO WMS",
+          "term": "Phát hành hướng dẫn"
         },
         {
-          "label": "Giao nhiệm vụ",
-          "desc": "Nhóm nhiều đơn hàng để giao",
-          "detail": "Công ty hậu cần hiệu quả nhóm các đơn hàng đến cùng lúc và giao chúng cho công nhân cùng một lúc.",
-          "actor": "Công ty hậu cần",
-          "term": "Chọn lọc theo sóng"
-        },
-        {
-          "label": "Hoàn tất tìm kiếm sản phẩm",
-          "desc": "Lấy sản phẩm từ kệ",
-          "detail": "Công nhân đi qua các kệ kho, tìm kiếm sản phẩm được đặt hàng một cái, quét mã vạch và thu thập chúng.",
+          "label": "[5] Chọn hàng",
+          "desc": "Công nhân chọn sản phẩm từ kệ",
+          "detail": "Công nhân kho thực hiện chọn hàng: ① Nhận hướng dẫn chọn hàng từ WMS ② Điều hướng đến vị trí được chỉ định ③ Quét mã vạch sản phẩm ④ Xác minh số lượng phù hợp với đơn hàng ⑤ Thu thập sản phẩm vào khu vực thu thập chỉ định. Trạng thái: PICKING_COMPLETE",
           "actor": "Công nhân",
-          "term": "Chọn hàng"
+          "term": "Chọn hàng hoàn tất"
         },
         {
-          "label": "Hoàn tất đóng gói",
-          "desc": "Đóng gói trong hộp và dán nhãn vận chuyển",
-          "detail": "Công nhân đóng gói sản phẩm vào hộp và in dán số theo dõi của công ty vận chuyển.",
+          "label": "[6] Kiểm tra",
+          "desc": "Kiểm tra chất lượng trước khi đóng gói",
+          "detail": "Công nhân thực hiện kiểm tra chất lượng: ① Xác minh sản phẩm được chọn phù hợp với danh sách đơn hàng ② Kiểm tra hư hỏng hoặc lỗi ③ Xác minh tình trạng sản phẩm và ngày hết hạn ④ Xác nhận độ chính xác về số lượng. Nếu phát hiện vấn đề, báo cáo ngoại lệ cho giám sát viên. Trạng thái: INSPECTION_COMPLETE",
           "actor": "Công nhân",
-          "term": "Đóng gói"
+          "term": "Kiểm tra hoàn tất"
         },
         {
-          "label": "Báo cáo hoàn tất xuất hàng",
-          "desc": "Gửi kèm số theo dõi",
-          "detail": "Công ty hậu cần báo cáo cho FULGO 'Đóng gói xong và số theo dõi là 123456.'",
-          "actor": "Công ty hậu cần",
-          "term": ""
+          "label": "[7] Đóng gói",
+          "desc": "Đóng gói sản phẩm và dán nhãn vận chuyển",
+          "detail": "Công nhân chuẩn bị vận chuyển: ① Nhận hướng dẫn đóng gói với số theo dõi ② Đóng gói sản phẩm vào hộp sử dụng danh sách đóng gói ③ Thêm vật liệu đóng gói để bảo vệ ④ In và dán nhãn vận chuyển với số theo dõi ⑤ Cân trọng lượng gói hàng và xác minh kích thước. Trạng thái: PACKING_COMPLETE",
+          "actor": "Công nhân",
+          "term": "Đóng gói hoàn tất"
         },
         {
-          "label": "Giảm hàng tồn kho",
-          "desc": "Giảm hàng tồn kho có sẵn",
-          "detail": "Hệ thống hàng tồn kho FULGO giảm số lượng hàng tồn kho theo số lượng được giao.",
-          "actor": "FULGO",
-          "term": ""
+          "label": "[8] Báo cáo hoàn tất vận chuyển",
+          "desc": "Báo cáo vận chuyển sẵn sàng để lấy",
+          "detail": "Nhóm kho báo cáo cho WMS: ① Xác nhận tất cả đơn hàng đã đóng gói và sẵn sàng ② Báo cáo số theo dõi cho mỗi vận chuyển ③ Di chuyển gói hàng đến bãi tải ④ Cập nhật trạng thái vận chuyển trong WMS ⑤ Thông báo cho nhà cung cấp rằng vận chuyển sẵn sàng. Trạng thái: READY_FOR_PICKUP",
+          "actor": "Công nhân",
+          "term": "Xuất hàng hoàn tất"
         },
         {
-          "label": "Gửi thông báo hoàn tất xuất hàng",
-          "desc": "Trả lời bằng số theo dõi",
-          "detail": "FULGO thông báo cho nhà cung cấp 'Xuất hàng hoàn tất và số theo dõi như sau.'",
-          "actor": "FULGO",
-          "term": ""
+          "label": "[9] Tích hợp API theo dõi vận chuyển",
+          "desc": "Theo dõi vận chuyển theo thời gian thực",
+          "detail": "FULGO WMS tích hợp với các nhà cung cấp vận chuyển: ① Nhà cung cấp lấy gói hàng từ kho ② Nhà cung cấp cập nhật trạng thái theo dõi theo thời gian thực ③ WMS nhận cập nhật theo dõi (lấy xong, đang vận chuyển, chuẩn bị giao, đã giao) ④ Đồng bộ hóa dữ liệu theo dõi với OMS ⑤ Cung cấp theo dõi theo thời gian thực cho khách hàng. Trạng thái: IN_TRANSIT / DELIVERED",
+          "actor": "FULGO WMS",
+          "term": "Theo dõi hoạt động"
         },
         {
-          "label": "Cập nhật thông tin vận chuyển",
-          "desc": "Gửi theo dõi đến kênh bán",
-          "detail": "Nhà cung cấp gửi số theo dõi đến hệ thống kênh bán để khách hàng có thể theo dõi giao hàng.",
-          "actor": "Nhà cung cấp",
-          "term": ""
-        },
-        {
-          "label": "Yêu cầu lấy hàng",
-          "desc": "Yêu cầu lấy từ công ty vận chuyển",
-          "detail": "Công ty hậu cần yêu cầu công ty vận chuyển 'Vui lòng lấy các mặt hàng đã đóng gói.'",
-          "actor": "Công ty hậu cần",
-          "term": ""
-        },
-        {
-          "label": "Gửi trạng thái vận chuyển",
-          "desc": "Theo dõi vị trí theo thời gian thực",
-          "detail": "Công ty vận chuyển gửi cập nhật tiến trình vận chuyển 'Lấy xong', 'Đang vận chuyển', 'Đã giao' theo thời gian thực cho FULGO.",
-          "actor": "Công ty vận chuyển",
-          "term": ""
+          "label": "[10] Xuất hàng hoàn tất & Đồng bộ hóa OMS",
+          "desc": "Xác nhận cuối cùng và đồng bộ hóa dữ liệu",
+          "detail": "FULGO hoàn thành quy trình xuất hàng: ① Xác nhận trạng thái giao hàng cuối cùng từ nhà cung cấp ② Giảm vĩnh viễn hàng tồn kho dự trữ ③ Cập nhật số liệu hiệu suất bán hàng ④ Đồng bộ hóa trạng thái đơn hàng đã hoàn tất với OMS ⑤ Tạo báo cáo KPI (thời gian giao hàng, tỷ lệ chính xác). Trạng thái: ORDER_DELIVERED / ORDER_COMPLETED",
+          "actor": "FULGO WMS",
+          "term": "Đồng bộ hoàn tất"
         }
       ]
     },
     "return": {
       "title": "Quy trình trả hàng (Return)",
-      "description": "Quy trình hoàn chỉnh trong đó khách hàng yêu cầu trả lại do sản phẩm có vấn đề, công ty hậu cần nhận và kiểm tra sản phẩm, sau đó hoặc trả lại hàng tồn kho hoặc loại bỏ.",
+      "description": "Quy trình hoàn chỉnh trong đó khách hàng yêu cầu trả lại do sản phẩm có vấn đề, công ty hậu cần nhận và kiểm tra sản phẩm, sau đó hoặc trả lại hàng tồn kho hoặc loại bỏ. Bao gồm xác thực chính sách trả hàng, phân loại kiểm tra (A/B/C), ba đường xử lý (tái đăng ký/khiếm khuyết/thanh lý) và quản lý tài liệu.",
       "hierarchy": "Fulgo(Nền tảng) → Công ty hậu cần(Người quản lý kho) → Nhà cung cấp(Khách hàng)",
       "layers": {
         "layer1": "Lớp 1: Tiếp nhận",
@@ -242,88 +214,60 @@
       },
       "steps": [
         {
-          "label": "Yêu cầu trả hàng",
-          "desc": "Khách hàng yêu cầu trả hàng",
-          "detail": "Khách hàng liên hệ dịch vụ khách hàng của nhà cung cấp 'Sản phẩm có vấn đề và tôi muốn trả lại.'",
+          "label": "[1] Yêu cầu trả hàng",
+          "desc": "Khách hàng bắt đầu yêu cầu trả hàng",
+          "detail": "Khách hàng yêu cầu trả hàng thông qua dịch vụ khách hàng của nhà cung cấp: ① Liên hệ dịch vụ khách hàng ② Báo cáo vấn đề sản phẩm (hư hỏng, khiếm khuyết, sản phẩm sai) ③ Yêu cầu ủy quyền trả hàng ④ Cung cấp số đơn hàng và lý do trả hàng. Trạng thái: RETURN_REQUESTED",
           "actor": "Khách hàng",
-          "term": ""
+          "term": "Yêu cầu nhận"
         },
         {
-          "label": "Phê duyệt trả hàng",
-          "desc": "Xem xét lý do và phê duyệt",
-          "detail": "Nhà cung cấp xem xét lý do trả hàng, phê duyệt 'Chúng tôi sẽ nhận lại trả hàng,' và đăng ký nó trong FULGO bằng số trả hàng.",
-          "actor": "Nhà cung cấp",
-          "term": "Số phê duyệt trả hàng"
+          "label": "[2] OMS Tiếp nhận & Xác thực chính sách trả hàng",
+          "desc": "OMS nhận và xác thực yêu cầu trả hàng",
+          "detail": "FULGO OMS nhận yêu cầu trả hàng: ① Xác thực yêu cầu trả hàng với thông tin đơn hàng ② Kiểm tra chính sách trả hàng (tính cấp bách, cửa sổ trả hàng, điều kiện) ③ Xác minh trạng thái sản phẩm và bảo hành ④ Tạo mã ủy quyền trả hàng ⑤ Đăng ký yêu cầu trả hàng trong hệ thống. Trạng thái: RETURN_AUTHORIZED",
+          "actor": "FULGO OMS",
+          "term": "Cấp ủy quyền"
         },
         {
-          "label": "Phân bổ nhập hàng trả lại",
-          "desc": "Thông báo cho công ty hậu cần về trả lại dự kiến",
-          "detail": "FULGO thông báo cho công ty hậu cần trước 'Sản phẩm này sẽ sớm được trả lại' và phối hợp lịch trình.",
-          "actor": "FULGO",
-          "term": ""
+          "label": "[3] WMS Hướng dẫn nhập hàng trả lại",
+          "desc": "WMS phát hành hướng dẫn nhập hàng trả lại",
+          "detail": "FULGO WMS nhận yêu cầu trả hàng từ OMS: ① Gán vị trí nhập trả hàng trong kho ② Lên lịch thời gian/ngày nhập hàng ③ Tạo nhãn trả hàng với mã ủy quyền trả hàng ④ Tạo hướng dẫn tiếp nhận ⑤ Thông báo cho nhóm kho về trả hàng dự kiến. Trạng thái: RETURN_LOCATION_ASSIGNED",
+          "actor": "FULGO OMS",
+          "term": "Phát hành hướng dẫn"
         },
         {
-          "label": "Phê duyệt tiếp nhận trả hàng",
-          "desc": "Xác nhận kho sẵn sàng nhận",
-          "detail": "Công ty hậu cần xác nhận 'Chúng tôi có thể nhận trả hàng vào ngày này' và chỉ định nhân viên chịu trách nhiệm.",
-          "actor": "Công ty hậu cần",
-          "term": ""
-        },
-        {
-          "label": "Gửi sản phẩm trả hàng",
-          "desc": "Khách hàng gửi lại qua công ty vận chuyển",
-          "detail": "Khách hàng đóng gói lại sản phẩm và gửi đến địa chỉ kho qua công ty vận chuyển.",
-          "actor": "Khách hàng",
-          "term": ""
-        },
-        {
-          "label": "Xác nhận sự đến của trả hàng",
-          "desc": "Công ty vận chuyển đến kho",
-          "detail": "Công nhân xác nhận sản phẩm trả hàng đã đến và đăng ký 'Sản phẩm trả lại đã nhận.'",
+          "label": "[4] Tiếp nhận sản phẩm trả hàng",
+          "desc": "Kho nhận sản phẩm trả hàng",
+          "detail": "Công nhân nhận vận chuyển trả hàng: ① Nhận gói hàng từ nhà cung cấp tại kho ② Quét mã vạch ủy quyền trả hàng ③ Xác minh chi tiết sản phẩm phù hợp với ủy quyền ④ Xác nhận tình trạng gói hàng ⑤ Đăng ký tiếp nhận trong WMS. Trạng thái: RETURN_RECEIVED",
           "actor": "Công nhân",
-          "term": ""
+          "term": "Tiếp nhận hoàn tất"
         },
         {
-          "label": "Kiểm tra sản phẩm trả hàng",
-          "desc": "Kiểm tra kỹ lưỡng tình trạng",
-          "detail": "Công nhân mở sản phẩm trả hàng và xác định 'Có thể bán lại được không? Có cần sửa chữa không? Có nên loại bỏ không?'",
+          "label": "[5] Kiểm tra trả hàng",
+          "desc": "Kiểm tra tình trạng sản phẩm trả lại",
+          "detail": "Công nhân kiểm tra sản phẩm trả lại: ① Mở và kiểm tra tình trạng sản phẩm ② Kiểm tra hư hỏng, khiếm khuyết, bộ phận bị thiếu ③ Xác minh sản phẩm là mặt hàng gốc ④ Ghi lại tình trạng bằng ảnh nếu cần ⑤ Phân loại sản phẩm thành các cấp (A/B/C). Trạng thái: INSPECTION_COMPLETE",
           "actor": "Công nhân",
-          "term": "Kiểm tra trả hàng"
+          "term": "Kiểm tra hoàn tất"
         },
         {
-          "label": "Báo cáo kết quả kiểm tra",
-          "desc": "Gửi phân loại tình trạng sản phẩm",
-          "detail": "Công ty hậu cần báo cáo kết quả kiểm tra cho FULGO. Phân loại: '10 đơn vị có thể bán lại, 2 cần sửa chữa, 1 sẽ bị loại bỏ.'",
-          "actor": "Công ty hậu cần",
-          "term": ""
-        },
-        {
-          "label": "Xử lý hàng tồn kho",
-          "desc": "Thêm lại hoặc giảm hàng tồn kho",
-          "detail": "FULGO thêm sản phẩm có thể bán lại vào hàng tồn kho và loại bỏ các mặt hàng sẽ bị loại bỏ.",
-          "actor": "FULGO",
-          "term": ""
-        },
-        {
-          "label": "Sắp xếp lại sản phẩm",
-          "desc": "Sắp xếp lại trên kệ hoặc loại bỏ",
-          "detail": "Sản phẩm có thể bán lại được sắp xếp lại trên các kệ kho, và các mặt hàng sẽ bị loại bỏ được xử lý riêng.",
+          "label": "[6] Thực hiện đường xử lý",
+          "desc": "Thực hiện xử lý dựa trên cấp sản phẩm",
+          "detail": "Công nhân thực hiện xử lý dựa trên cấp: Cấp A (Có thể bán lại) - ① Làm sạch nếu cần ② Đóng gói lại ③ Áp dụng nhãn mới; Cấp B (Cần sửa chữa) - ① Gửi đến trạm sửa chữa ② Xử lý sửa chữa; Cấp C (Thanh lý) - ① Tách các mặt hàng bị hỏng ② Gửi đến khu vực thanh lý. Trạng thái: PROCESSING_COMPLETE",
           "actor": "Công nhân",
-          "term": ""
+          "term": "Xử lý hoàn tất"
         },
         {
-          "label": "Gửi thông báo hoàn tất trả hàng",
-          "desc": "Thông báo kết quả xử lý",
-          "detail": "FULGO thông báo cho nhà cung cấp 'Xử lý trả hàng hoàn tất và hàng tồn kho đã thay đổi như sau.'",
-          "actor": "FULGO",
-          "term": ""
+          "label": "[7] Phê duyệt tái đăng ký/Thanh lý cuối cùng",
+          "desc": "WMS phê duyệt định hướng hàng tồn kho cuối cùng",
+          "detail": "FULGO WMS hoàn tất xử lý hàng tồn kho: ① Xem xét kết quả xử lý từ kho ② Cấp A: Phê duyệt tái đăng ký vào hàng tồn kho ③ Cấp B: Định tuyến đến sửa chữa hoặc thanh lý ④ Cấp C: Phê duyệt thanh lý ⑤ Cập nhật bản ghi hàng tồn kho WMS cho phù hợp. Trạng thái: APPROVAL_COMPLETE",
+          "actor": "FULGO WMS",
+          "term": "Phê duyệt hoàn tất"
         },
         {
-          "label": "Xử lý hoàn tiền",
-          "desc": "Trả tiền cho khách hàng",
-          "detail": "Nhà cung cấp xử lý hoàn tiền cho khách hàng.",
-          "actor": "Nhà cung cấp",
-          "term": ""
+          "label": "[8] Quyết toán trả hàng cuối cùng & Hoàn tất",
+          "desc": "Hoàn tất quy trình trả hàng và quyết toán",
+          "detail": "FULGO hoàn tất trả hàng: ① Đồng bộ hóa trạng thái hàng tồn kho cuối cùng với OMS ② Tính toán số tiền hoàn lại dựa trên tình trạng sản phẩm ③ Xử lý hoàn lại cho khách hàng ④ Gửi thông báo hoàn tất trả hàng cho nhà cung cấp ⑤ Tạo báo cáo KPI trả hàng (độ chính xác kiểm tra, thời gian xử lý). Trạng thái: RETURN_COMPLETED",
+          "actor": "FULGO WMS",
+          "term": "Quyết toán hoàn tất"
         }
       ]
     },

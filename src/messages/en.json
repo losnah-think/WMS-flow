@@ -29,101 +29,80 @@
       },
       "steps": [
         {
-          "label": "Register Inbound Schedule",
-          "desc": "Register what products will arrive and when",
-          "detail": "The shipper pre-registers product information (product name, quantity, expected arrival date) in the FULGO system.",
+          "label": "[1] OMS Inbound Request",
+          "desc": "Shipper submits inbound request via OMS",
+          "detail": "Shipper submits inbound request through FULGO OMS: ① Input required items (product code, quantity, expected delivery date, tracking number) ② Specify inbound type (regular/urgent inbound) ③ Submit request. OMS generates inbound request data. Status: REQUEST_PENDING",
           "actor": "Shipper",
-          "term": ""
+          "term": "Request Received"
         },
         {
-          "label": "Send Inbound Information",
-          "desc": "Notify logistics company of inbound plan",
-          "detail": "FULGO notifies the logistics company in advance: 'These products will arrive soon' and requests approval.",
-          "actor": "FULGO",
-          "term": "ASN (Advance Shipment Notification)"
+          "label": "[2] OMS to WMS Data Transmission",
+          "desc": "OMS sends inbound data to WMS",
+          "detail": "FULGO OMS transmits inbound request data to FULGO WMS: ① Send inbound request details ② SKU-based mapping ③ Send validation data together. WMS receives and validates data. Status: DATA_RECEIVED",
+          "actor": "OMS System",
+          "term": "Data Transmission"
         },
         {
-          "label": "Approve Inbound Schedule",
-          "desc": "Confirm warehouse space and schedule",
-          "detail": "The logistics company reviews warehouse conditions and confirms 'We can receive on this date.' Dock location is also assigned.",
-          "actor": "Logistics",
-          "term": "Dock Assignment"
+          "label": "[3] WMS Inbound Validation & Approval Decision",
+          "desc": "Auto-validate inbound data and determine if approval needed",
+          "detail": "FULGO WMS internal engine validates inbound data: ① Auto-classify inbound type ② Verify warehouse capacity ③ Determine approval conditions (new shipper/bulk inbound/special products). If approval needed: request warehouse manager. If not needed: proceed. Status: APPROVAL_PENDING or READY",
+          "actor": "FULGO WMS",
+          "term": "Validation Complete"
         },
         {
-          "label": "Assign Inbound Task",
-          "desc": "Assign task to responsible staff",
-          "detail": "The logistics manager assigns to warehouse workers: 'Please process this product inbound today.'",
-          "actor": "Logistics",
-          "term": ""
+          "label": "[4] Request Warehouse Manager Approval",
+          "desc": "Direct approval request to warehouse manager",
+          "detail": "FULGO WMS requests approval from warehouse manager: ① Present inbound request details ② Specify approval reasons (new shipper/bulk inbound/special products, etc.) ③ Request review. Status: Awaiting Approval",
+          "actor": "FULGO WMS",
+          "term": "Request Issued"
         },
         {
-          "label": "Confirm Product Arrival",
-          "desc": "Truck arrives, unloading begins",
-          "detail": "When the truck arrives with the products, the worker registers in the system 'Products have arrived.'",
+          "label": "[5] Process Inbound Approval",
+          "desc": "Review inbound suitability and make approval decision",
+          "detail": "Warehouse manager reviews by: ① Warehouse capacity (zone availability/quantity) ② Product appropriateness (condition/storage area) ③ Restricted items. If approved: APPROVED, if rejected: REJECTED + reason and report to FULGO WMS. Status: APPROVED or REJECTED",
+          "actor": "Warehouse Manager",
+          "term": "Approval Complete"
+        },
+        {
+          "label": "[6] Assign Zone and Issue Inbound Instruction",
+          "desc": "Auto-assign location and issue inbound work instruction",
+          "detail": "FULGO WMS auto-assigns locations by product policy: Select appropriate zone by size/color/category. Assign location code. Issue inbound instruction to workers: ① Assigned location info ② Product info (code/quantity/shipment info) ③ Deliver to workers. Status: Awaiting Inbound",
+          "actor": "FULGO WMS",
+          "term": "Instruction Issued"
+        },
+        {
+          "label": "[7] Complete Inbound Execution Report",
+          "desc": "Confirm receipt and placement to assigned location",
+          "detail": "Workers perform inbound work: ① Receive products and scan barcode ② Verify quantity/damage/condition ③ Move products to assigned zone ④ Conduct inspection (verify quantity/damage/condition) ⑤ Report inbound completion to FULGO. Status: INBOUND_CONFIRMED",
           "actor": "Worker",
-          "term": ""
+          "term": "Inbound Complete"
         },
         {
-          "label": "Process Temporary Inbound",
-          "desc": "Temporary storage before inspection",
-          "detail": "Products are temporarily placed in the warehouse without inspection yet and marked as 'Awaiting Inspection.'",
-          "actor": "Worker",
-          "term": "Temporary Inbound"
+          "label": "[8] Update Inventory Status & OMS Synchronization",
+          "desc": "Change inventory status upon inbound completion and sync with OMS",
+          "detail": "FULGO WMS internal inventory engine processes inbound completion: ① Change inventory status (inbound→available) ② Increase inventory quantity ③ Send inbound confirmed data to OMS ④ Register tracking info ⑤ Check inventory consistency. Final OMS synchronization. Status: COMPLETED",
+          "actor": "FULGO WMS",
+          "term": "Sync Complete"
         },
         {
-          "label": "Complete Product Inspection",
-          "desc": "Barcode scanning and quality check",
-          "detail": "The worker carefully scans barcodes and checks 'Is the quantity correct? Is the product intact? Any damage?'",
-          "actor": "Worker",
-          "term": "Inspection"
+          "label": "[9] Exception Handling & Real-time Monitoring",
+          "desc": "Detect and respond to abnormal situations (delayed approval/zone saturation/inspection failure)",
+          "detail": "FULGO WMS dashboard auto-detects and alerts on exceptions: ① Approval delay (exceeds 2-hour target)→auto-notify ② Zone saturation (capacity 90%+)→register in ZONE_WAITING queue, auto-reallocation proposal ③ Inspection failure→HOLD status, request re-inspection ④ Info mismatch→confirm and adjust products. Real-time visualization by request/validation/approval/inbound/completion.",
+          "actor": "Warehouse Manager",
+          "term": "Monitoring"
         },
         {
-          "label": "Report Inspection Results",
-          "desc": "Report normal/defective status",
-          "detail": "The logistics company reports inspection results to FULGO. If there are defective items or quantity discrepancies, the shipper is automatically notified.",
-          "actor": "Logistics",
-          "term": ""
-        },
-        {
-          "label": "Issue Product Labels",
-          "desc": "Print barcode stickers",
-          "detail": "FULGO system automatically generates barcode labels for each product, and the worker prints and attaches them.",
-          "actor": "FULGO",
-          "term": ""
-        },
-        {
-          "label": "Arrange Storage Location",
-          "desc": "Organize products on designated shelves",
-          "detail": "The worker goes to the storage location (e.g., Area A-Shelf 3-Bin 5) that the system specifies and arranges the products.",
-          "actor": "Worker",
-          "term": "Placement"
-        },
-        {
-          "label": "Report Inbound Completion",
-          "desc": "All work completed",
-          "detail": "The logistics company reports to FULGO 'All products are now in the warehouse and ready for sale.'",
-          "actor": "Logistics",
-          "term": ""
-        },
-        {
-          "label": "Increase Inventory Quantity",
-          "desc": "Add inventory available for sale",
-          "detail": "FULGO inventory system increases the inventory count for the product. Now it's ready for sale.",
-          "actor": "FULGO",
-          "term": ""
-        },
-        {
-          "label": "Send Inbound Completion Notice",
-          "desc": "Notify shipper of completion",
-          "detail": "FULGO notifies the shipper 'Inbound is complete. You can now check inventory.'",
-          "actor": "FULGO",
-          "term": ""
+          "label": "[10] KPI Reporting & Analysis",
+          "desc": "Generate and analyze inbound efficiency and performance report",
+          "detail": "FULGO WMS auto-generates daily/weekly/monthly reports. KPI: average approval time, rejection rate (%), inbound delay rate, zone saturation rate, inventory consistency rate (%). Includes trend analysis and improvement recommendations.",
+          "actor": "FULGO WMS",
+          "term": "Reporting"
         }
       ]
     },
     "outbound": {
       "title": "Outbound Process (Outbound)",
-      "description": "The complete process where external sales channels (Coupang, Naver Shopping, etc.) receive orders, FULGO collects them and forwards to the logistics company, which packages and ships products to customers.",
+      "description": "The complete process where orders are received from external channels, OMS processes them, WMS issues outbound instructions, workers pick/inspect/pack/ship products, and real-time tracking information is provided. Includes inventory allocation prioritization, picking optimization, mandatory inspection, automatic barcode generation, and real-time OMS synchronization.",
       "hierarchy": "Fulgo(Platform) → Logistics Company(Warehouse Operator) → Shipper(Customer)",
       "layers": {
         "layer1": "Layer 1: Picking",
@@ -132,108 +111,80 @@
       },
       "steps": [
         {
-          "label": "Customer Orders Product",
-          "desc": "Customer clicks purchase button",
-          "detail": "Customer orders a product from external sales channels like Coupang or Naver Smart Store.",
-          "actor": "Customer",
-          "term": ""
-        },
-        {
-          "label": "Receive Order",
-          "desc": "Sales channel creates order information",
-          "detail": "The sales channel system creates order information (order number, product, quantity, delivery address) and notifies the shipper.",
+          "label": "[1] Order Reception",
+          "desc": "Sales channel receives and creates order",
+          "detail": "Sales channel creates order information: ① Generate order number, order contents (product list, quantity), delivery address ② Register order information in channel system ③ Send order to shipper system. Channel system creates order data. Status: ORDER_RECEIVED",
           "actor": "Channel",
-          "term": ""
+          "term": "Order Received"
         },
         {
-          "label": "Send Outbound Request",
-          "desc": "Shipper instructs FULGO to ship",
-          "detail": "The shipper sends an outbound request to FULGO system 'Please ship this order.'",
-          "actor": "Shipper",
-          "term": ""
+          "label": "[2] OMS Order Reception & Processing",
+          "desc": "OMS receives and processes order",
+          "detail": "FULGO OMS receives order from channel: ① Receive order information from channel ② Verify order content (product existence, quantity check) ③ Confirm payment status ④ Assign shipper. OMS registers order data and creates outbound task. Status: ORDER_CONFIRMED",
+          "actor": "FULGO OMS",
+          "term": "Order Confirmed"
         },
         {
-          "label": "Verify Inventory",
-          "desc": "Verify product is in warehouse",
-          "detail": "FULGO inventory system checks 'Is the requested product in the warehouse? How many?' and reserves the order quantity.",
-          "actor": "FULGO",
-          "term": "Inventory Reserve"
+          "label": "[3] Outbound Request Transmission & Inventory Allocation",
+          "desc": "WMS receives outbound request and allocates inventory",
+          "detail": "FULGO WMS receives outbound request: ① Receive order details from OMS ② Verify inventory availability by SKU ③ Allocate inventory quantity needed ④ Reserve inventory for this order ⑤ Generate outbound task. Status: INVENTORY_ALLOCATED",
+          "actor": "FULGO WMS",
+          "term": "Allocation Complete"
         },
         {
-          "label": "Send Outbound Instruction",
-          "desc": "Request task from logistics company",
-          "detail": "FULGO instructs the logistics company 'Please pick this product, pack it, and ship it.'",
-          "actor": "FULGO",
-          "term": ""
+          "label": "[4] Outbound Instruction Issuance",
+          "desc": "WMS issues picking and packing instructions",
+          "detail": "FULGO WMS issues detailed outbound instructions: ① Assign picking location (zone-location) ② Group orders for efficient picking (wave assignment) ③ Create picking list with barcode ④ Create packing slip with tracking info ⑤ Send instructions to warehouse workers. Status: INSTRUCTION_ISSUED",
+          "actor": "FULGO WMS",
+          "term": "Instruction Issued"
         },
         {
-          "label": "Assign Task",
-          "desc": "Group multiple orders for assignment",
-          "detail": "The logistics company efficiently bundles orders that arrived around the same time and assigns them to workers at once.",
-          "actor": "Logistics",
-          "term": "Wave Picking"
-        },
-        {
-          "label": "Complete Product Search",
-          "desc": "Pick product from shelf",
-          "detail": "The worker goes through warehouse shelves, finds ordered products one by one, scans barcodes, and collects them.",
+          "label": "[5] Picking",
+          "desc": "Worker picks products from shelves",
+          "detail": "Warehouse worker executes picking: ① Receive picking instructions from WMS ② Navigate to assigned locations ③ Scan product barcodes ④ Verify quantity matches order ⑤ Collect products to designated collection area. Status: PICKING_COMPLETE",
           "actor": "Worker",
-          "term": "Picking"
+          "term": "Picking Complete"
         },
         {
-          "label": "Complete Packaging",
-          "desc": "Pack in box and attach shipping label",
-          "detail": "The worker packs the products in a box and prints and attaches the courier tracking number.",
+          "label": "[6] Inspection",
+          "desc": "Quality check before packing",
+          "detail": "Worker performs quality inspection: ① Verify picked products match order list ② Check for damage or defects ③ Verify product condition and expiry dates ④ Confirm quantity accuracy. If issues found, report exceptions to supervisor. Status: INSPECTION_COMPLETE",
           "actor": "Worker",
-          "term": "Packing"
+          "term": "Inspection Complete"
         },
         {
-          "label": "Report Outbound Completion",
-          "desc": "Send with tracking number",
-          "detail": "The logistics company reports to FULGO 'Packing complete and tracking number is 123456.'",
-          "actor": "Logistics",
-          "term": ""
+          "label": "[7] Packing",
+          "desc": "Pack products and attach shipping label",
+          "detail": "Worker prepares shipment: ① Receive packing instructions with tracking number ② Pack products into box using packing list ③ Add packing materials for protection ④ Print and attach shipping label with tracking number ⑤ Weigh package and verify dimensions. Status: PACKING_COMPLETE",
+          "actor": "Worker",
+          "term": "Packing Complete"
         },
         {
-          "label": "Reduce Inventory",
-          "desc": "Decrease available inventory",
-          "detail": "FULGO inventory system reduces inventory quantity by the shipped amount.",
-          "actor": "FULGO",
-          "term": ""
+          "label": "[8] Shipping Completion Report",
+          "desc": "Report shipment ready for pickup",
+          "detail": "Warehouse team reports to WMS: ① Confirm all orders packed and ready ② Report tracking numbers for each shipment ③ Move packages to shipping dock ④ Update shipment status in WMS ⑤ Notify carrier that shipment is ready. Status: READY_FOR_PICKUP",
+          "actor": "Worker",
+          "term": "Outbound Complete"
         },
         {
-          "label": "Send Outbound Completion Notice",
-          "desc": "Reply with tracking number",
-          "detail": "FULGO notifies the shipper 'Outbound complete and tracking number is here.'",
-          "actor": "FULGO",
-          "term": ""
+          "label": "[9] Shipping Tracking API Integration",
+          "desc": "Real-time shipment tracking",
+          "detail": "FULGO WMS integrates with shipping providers: ① Carrier picks up packages from warehouse ② Carrier updates tracking status in real-time ③ WMS receives tracking updates (picked up, in transit, out for delivery, delivered) ④ Synchronize tracking data with OMS ⑤ Provide real-time tracking to customers. Status: IN_TRANSIT / DELIVERED",
+          "actor": "FULGO WMS",
+          "term": "Tracking Active"
         },
         {
-          "label": "Update Shipping Information",
-          "desc": "Send tracking to sales channel",
-          "detail": "The shipper sends the tracking number to the sales channel system so customers can track delivery.",
-          "actor": "Shipper",
-          "term": ""
-        },
-        {
-          "label": "Request Pickup",
-          "desc": "Request pickup from courier",
-          "detail": "The logistics company requests pickup from the courier 'Please pick up the packed items.'",
-          "actor": "Logistics",
-          "term": ""
-        },
-        {
-          "label": "Send Shipping Status",
-          "desc": "Real-time location tracking",
-          "detail": "The courier sends shipping progress updates 'Pickup complete', 'In transit', 'Delivered' in real-time to FULGO.",
-          "actor": "Carrier",
-          "term": ""
+          "label": "[10] Outbound Completion & OMS Synchronization",
+          "desc": "Final confirmation and data sync",
+          "detail": "FULGO completes outbound process: ① Confirm final delivery status from carrier ② Reduce reserved inventory permanently ③ Update sales performance metrics ④ Synchronize completed order status to OMS ⑤ Generate KPI report (delivery time, accuracy rate). Status: ORDER_DELIVERED / ORDER_COMPLETED",
+          "actor": "FULGO WMS",
+          "term": "Sync Complete"
         }
       ]
     },
     "return": {
       "title": "Return Process (Return)",
-      "description": "The complete process where a customer requests a return due to a product issue, the logistics company receives and inspects the product, and either returns it to inventory or disposes of it.",
+      "description": "The complete process where a customer requests a return due to a product issue, the logistics company receives and inspects the product, and either returns it to inventory or disposes of it. Includes return policy validation, inspection grading (A/B/C), three processing paths (re-stocking/defect/disposal), and documentation management.",
       "hierarchy": "Fulgo(Platform) → Logistics Company(Warehouse Operator) → Shipper(Customer)",
       "layers": {
         "layer1": "Layer 1: Receipt",
@@ -242,88 +193,60 @@
       },
       "steps": [
         {
-          "label": "Request Return",
-          "desc": "Customer requests return",
-          "detail": "The customer contacts the shipper's customer service 'There's a problem with the product and I want to return it.'",
+          "label": "[1] Return Request",
+          "desc": "Customer initiates return request",
+          "detail": "Customer requests return through shipper's customer service: ① Contact shipper customer service ② Report product issue (damaged, defective, wrong item) ③ Request return authorization ④ Provide order number and reason for return. Status: RETURN_REQUESTED",
           "actor": "Customer",
-          "term": ""
+          "term": "Request Received"
         },
         {
-          "label": "Approve Return",
-          "desc": "Review reason and approve",
-          "detail": "The shipper reviews the return reason, approves 'We'll accept the return,' and registers it in FULGO with a return number.",
-          "actor": "Shipper",
-          "term": "Return Approval Number"
+          "label": "[2] OMS Return Reception & Policy Validation",
+          "desc": "OMS receives and validates return request",
+          "detail": "FULGO OMS receives return request: ① Validate return request with order information ② Check return policy (eligibility, return window, condition) ③ Verify product status and warranty ④ Generate return authorization number ⑤ Register return request in system. Status: RETURN_AUTHORIZED",
+          "actor": "FULGO OMS",
+          "term": "Authorization Issued"
         },
         {
-          "label": "Assign Inbound Return",
-          "desc": "Notify logistics of expected return",
-          "detail": "FULGO notifies the logistics company in advance 'This product will be returned soon' and coordinates the schedule.",
-          "actor": "FULGO",
-          "term": ""
+          "label": "[3] WMS Return Inbound Instruction",
+          "desc": "WMS issues return inbound instruction",
+          "detail": "FULGO WMS receives return request from OMS: ① Assign return receiving location in warehouse ② Schedule receiving time/date ③ Generate return label with return authorization code ④ Create receiving instruction ⑤ Notify warehouse team of expected return. Status: RETURN_LOCATION_ASSIGNED",
+          "actor": "FULGO OMS",
+          "term": "Instruction Issued"
         },
         {
-          "label": "Approve Return Receipt",
-          "desc": "Confirm warehouse ready to receive",
-          "detail": "The logistics company confirms 'We can receive the return on this date' and assigns responsible staff.",
-          "actor": "Logistics",
-          "term": ""
-        },
-        {
-          "label": "Send Return Product",
-          "desc": "Customer ships back via courier",
-          "detail": "The customer repackages the product and sends it to the warehouse address via courier.",
-          "actor": "Customer",
-          "term": ""
-        },
-        {
-          "label": "Confirm Return Arrival",
-          "desc": "Courier arrives at warehouse",
-          "detail": "The worker confirms the return product has arrived and registers 'Return product received.'",
+          "label": "[4] Return Product Reception",
+          "desc": "Warehouse receives returned product",
+          "detail": "Worker receives return shipment: ① Receive package from carrier at warehouse ② Scan return authorization barcode ③ Verify product details match authorization ④ Confirm package condition ⑤ Register receipt in WMS. Status: RETURN_RECEIVED",
           "actor": "Worker",
-          "term": ""
+          "term": "Reception Complete"
         },
         {
-          "label": "Inspect Returned Product",
-          "desc": "Carefully check condition",
-          "detail": "The worker opens the returned product and determines 'Can it be resold? Does it need repair? Should it be discarded?'",
+          "label": "[5] Return Inspection",
+          "desc": "Inspect returned product condition",
+          "detail": "Worker inspects returned product: ① Open and examine product condition ② Check for damage, defects, missing parts ③ Verify product is the original item ④ Document condition with photos if needed ⑤ Classify product into grades (A/B/C). Status: INSPECTION_COMPLETE",
           "actor": "Worker",
-          "term": "Return Inspection"
+          "term": "Inspection Complete"
         },
         {
-          "label": "Report Inspection Results",
-          "desc": "Send product condition classification",
-          "detail": "The logistics company reports inspection results to FULGO. Classification: '10 units resaleable, 2 need repair, 1 to be discarded.'",
-          "actor": "Logistics",
-          "term": ""
-        },
-        {
-          "label": "Process Inventory",
-          "desc": "Add back or reduce inventory",
-          "detail": "FULGO adds resaleable products to inventory and removes items to be discarded.",
-          "actor": "FULGO",
-          "term": ""
-        },
-        {
-          "label": "Reposition Products",
-          "desc": "Reorganize on shelf or dispose",
-          "detail": "Resaleable products are reorganized on warehouse shelves, and discardable items are separately processed.",
+          "label": "[6] Processing Path Execution",
+          "desc": "Execute processing based on product grade",
+          "detail": "Worker executes processing based on grade: Grade A (Resaleable) - ① Clean if needed ② Repackage ③ Apply fresh label; Grade B (Needs Repair) - ① Send to repair station ② Process repair; Grade C (Dispose) - ① Segregate defective items ② Send to disposal area. Status: PROCESSING_COMPLETE",
           "actor": "Worker",
-          "term": ""
+          "term": "Processing Complete"
         },
         {
-          "label": "Send Return Completion Notice",
-          "desc": "Notify of processing results",
-          "detail": "FULGO notifies the shipper 'Return processing complete and inventory has changed as follows.'",
-          "actor": "FULGO",
-          "term": ""
+          "label": "[7] Final Re-stocking/Disposal Approval",
+          "desc": "WMS approves final inventory disposition",
+          "detail": "FULGO WMS finalizes inventory treatment: ① Review processing results from warehouse ② Grade A: Approve for re-stocking to inventory ③ Grade B: Route to repair or clearance ④ Grade C: Approve for disposal ⑤ Update WMS inventory records accordingly. Status: APPROVAL_COMPLETE",
+          "actor": "FULGO WMS",
+          "term": "Approval Complete"
         },
         {
-          "label": "Process Refund",
-          "desc": "Return money to customer",
-          "detail": "The shipper processes refund to the customer.",
-          "actor": "Shipper",
-          "term": ""
+          "label": "[8] Final Return Settlement & Completion",
+          "desc": "Complete return process and settlement",
+          "detail": "FULGO finalizes return: ① Sync final inventory status to OMS ② Calculate refund amount based on product condition ③ Process refund to customer ④ Send return completion notice to shipper ⑤ Generate return KPI report (inspection accuracy, processing time). Status: RETURN_COMPLETED",
+          "actor": "FULGO WMS",
+          "term": "Settlement Complete"
         }
       ]
     },
