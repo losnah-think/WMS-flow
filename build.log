@@ -1,0 +1,40 @@
+
+> fulgo-wms-nextjs@1.0.0 build
+> next build
+
+   ▲ Next.js 14.1.0
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/10) ...
+   Generating static pages (2/10) 
+   Generating static pages (4/10) 
+   Generating static pages (7/10) 
+ ✓ Generating static pages (10/10) 
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    141 B          84.3 kB
+├ ○ /_not-found                          882 B          85.1 kB
+├ ● /[locale]                            61.9 kB         167 kB
+├   ├ /ko
+├   ├ /en
+├   └ /vi
+└ ● /[locale]/features                   2.87 kB         108 kB
+    ├ /ko/features
+    ├ /en/features
+    └ /vi/features
++ First Load JS shared by all            84.2 kB
+  ├ chunks/69-33f2a2b273ab988a.js        28.9 kB
+  ├ chunks/fd9d1056-7eb57f64fca832f6.js  53.4 kB
+  └ other shared chunks (total)          1.9 kB
+
+
+ƒ Middleware                             61.8 kB
+
+○  (Static)  prerendered as static content
+●  (SSG)     prerendered as static HTML (uses getStaticProps)
+

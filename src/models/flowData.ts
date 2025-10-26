@@ -42,58 +42,50 @@ export const flowData: Record<string, Flow> = {
       { from: 'fulgo', to: 'warehouse_manager', label: '[9] 예외 처리 및 실시간 모니터링', desc: '승인 지연/존 포화/검수 실패 등 비정상 상황 감지 및 대응', detail: 'FULGO WMS 대시보드에서 예외 시나리오 자동 감지 및 관리자 알림: ① 승인 지연(목표 2시간 초과)→자동 알림 ② 존 포화(용량 90% 이상)→ZONE_WAITING 대기열 등록, 자동 재할당 제안 ③ 검수 실패→HOLD 상태, 재검수 요청 ④ 정보 불일치→상품 확인 후 조정. 요청/검증대기/승인대기/입고중/완료별 현황 시각화.', actor: '창고장', term: '모니터링', features: ['STK-006', 'RPT-001'] },
       
       // 10단계: KPI 리포팅
-      { from: 'warehouse_manager', to: 'fulgo', label: '[10] KPI 리포팅 및 분석', desc: '입고 효율성 및 성과 분석 리포트 생성', detail: 'FULGO WMS 자동 생성: 일간/주간/월간 리포트. KPI: 승인 평균 소요시간, 반려율(%), 입고 지연율, 존 포화율, 재고 정합성율(%). 추세 분석 및 개선 권고안 포함.', actor: 'FULGO WMS', term: '리포팅', features: ['RPT-001', 'RPT-005'] },
+      { from: 'worker', to: 'fulgo', label: '[10] KPI 리포팅 및 분석', desc: '입고 효율성 및 성과 분석 리포트 생성', detail: 'FULGO WMS 자동 생성: 일간/주간/월간 리포트. KPI: 승인 평균 소요시간, 반려율(%), 입고 지연율, 존 포화율, 재고 정합성율(%). 추세 분석 및 개선 권고안 포함.', actor: 'FULGO WMS', term: '리포팅', features: ['RPT-001', 'RPT-005'] },
     ]
   },
   outbound: {
     title: '출고 프로세스 (Outbound)',
-    description: '주문 접수부터 상품 피킹, 검수, 포장, 출고 확정까지의 전 과정을 관리. 재고 할당 우선화, 피킹 최적화(단일/배치/존 피킹), 검수 필수화, 송장 자동 생성, OMS 실시간 동기화를 포함합니다.',
+    description: '외부 채널 주문부터 OMS 접수, WMS 출고 지시, 작업자의 피킹/검수/포장/출하까지의 전 과정을 관리. 재고 할당 우선화, 피킹 최적화, 검수 필수화, 송장 자동 생성, OMS 실시간 동기화를 포함합니다.',
     hierarchy: 'Fulgo(플랫폼) → 물류사(창고 운영자) → 화주사(고객사)',
     actors: [
-      { id: 'oms_shipper', name: 'OMS / 화주사', color: '#1976d2', desc: '출고 요청 주체', layer: '3계층' },
+      { id: 'channel', name: '주문 채널', color: '#424242', desc: '고객 주문 수신', layer: '외부' },
+      { id: 'oms_system', name: 'FULGO OMS', color: '#2196f3', desc: '주문 접수 및 처리', layer: '1계층' },
       { id: 'fulgo', name: 'FULGO WMS', color: '#d32f2f', desc: '출고 조율 및 재고 할당', layer: '1계층' },
-      { id: 'worker', name: '현장 작업자', color: '#7b1fa2', desc: '피킹 및 작업 수행', layer: '2계층' },
-      { id: 'quality_inspector', name: '검수 담당자', color: '#ff6f00', desc: '출고 검수 담당', layer: '2계층' },
-      { id: 'packing_staff', name: '포장 담당자', color: '#f57c00', desc: '포장 및 송장 부착', layer: '2계층' },
-      { id: 'shipping_staff', name: '출하 담당자', color: '#388e3c', desc: '차량 적재 및 인계', layer: '2계층' },
+      { id: 'worker', name: '현장 작업자', color: '#7b1fa2', desc: '피킹/검수/포장/출하 수행', layer: '2계층' },
       { id: 'carrier', name: '배송사', color: '#00897b', desc: '택배 운송', layer: '외부' },
     ],
     steps: [
-      // 1단계: 출고 요청
-      { from: 'oms_shipper', to: 'fulgo', label: '[1] 출고 요청', desc: '주문 접수 및 출고 지시 생성', detail: 'OMS/화주사가 출고 요청서 생성: 필수항목(주문번호, 상품코드, 수량, 배송지, 배송 요청일) 입력. 출고 유형 지정(일반출고/긴급출고/합배송). FULGO에 데이터 전송 및 SKU 기반 매핑. 상태: 출고 요청', actor: 'OMS/화주사', term: '요청 접수', features: ['OUT-001', 'STK-004'] },
+      // 1단계: 주문 수신
+      { from: 'channel', to: 'oms_system', label: '[1] 주문 수신', desc: '외부 채널에서 고객 주문 수신', detail: '고객이 쿠팡, 네이버, 스마트스토어 등 외부 판매채널에서 주문: ① 주문 정보(상품코드/수량/배송지/연락처) 생성 ② 판매채널 시스템에서 화주사로 주문 전달. 상태: 주문 수신', actor: '채널', term: '주문 수신', features: ['OUT-001'] },
       
-      // 2단계: 재고 할당
-      { from: 'fulgo', to: 'fulgo', label: '[2] 재고 할당', desc: '가용 재고 확인 및 예약 처리', detail: 'FULGO WMS의 재고 할당 엔진이 내부 프로세스 수행: ① 가용 재고 확인(FIFO 정책: 먼저 입고된 상품 우선) ② 로케이션별 재고 분포 확인 ③ 재고 부족 시 처리(부족 수량 계산, 부분출고 가능 여부 판단) ④ 재고 할당 완료(상태 변경: 가용→예약). FIFO 정책으로 공정한 배분 보증', actor: 'FULGO WMS', term: '재고 예약', features: ['STK-002', 'STK-012', 'OUT-001'] },
+      // 2단계: OMS 주문 접수
+      { from: 'oms_system', to: 'oms_system', label: '[2] OMS 주문 접수 및 처리', desc: 'OMS에서 주문 검증 및 출고 요청 생성', detail: 'FULGO OMS가 외부 채널 주문 접수: ① 주문 정보 수신 및 검증 ② 화주사 계정 확인 ③ 상품 정보 매핑(SKU 기반) ④ 출고 요청서 생성 ⑤ 배송 유형 결정(일반/긴급/합배송). OMS에서 WMS로 출고 요청 전달. 상태: 출고 요청', actor: 'FULGO OMS', term: '요청 생성', features: ['OUT-001', 'STK-004'] },
       
-      // 3단계: 피킹 지시
-      { from: 'fulgo', to: 'worker', label: '[3] 피킹 지시', desc: '작업자에게 집품 지시 배정', detail: 'FULGO가 피킹 작업 생성 및 배정: ① 피킹 방식 결정(단일 피킹/배치 피킹/존 피킹) ② 작업 우선순위(긴급주문/배송 마감 임박) ③ 작업자별 피킹 리스트 생성 및 배정 ④ 모바일 디바이스로 실시간 전달. 상태: 피킹 대기', actor: 'FULGO', term: '지시 배정', features: ['PIC-001', 'PIC-002', 'PIC-009'] },
+      // 3단계: 재고 할당
+      { from: 'oms_system', to: 'fulgo', label: '[3] 출고 요청 전달 및 재고 할당', desc: 'OMS가 WMS로 출고 요청 전달, WMS가 재고 확인 및 할당', detail: 'FULGO OMS가 출고 요청을 FULGO WMS로 전달: ① 주문 상세 정보 송신 ② WMS의 재고 할당 엔진이 내부 처리: - 가용 재고 확인(FIFO 정책: 먼저 입고된 상품 우선) - 로케이션별 재고 분포 확인 - 재고 부족 시 처리 또는 부분출고 판단 ③ 재고 할당 완료(상태 변경: 가용→예약). 상태: 재고 예약', actor: 'FULGO WMS', term: '할당 완료', features: ['STK-002', 'STK-012', 'OUT-001'] },
       
-      // 4단계: 피킹 실행
-      { from: 'worker', to: 'fulgo', label: '[4] 피킹 완료 보고', desc: '상품 수집 및 바코드 스캔 검증', detail: '작업자가 피킹 작업 수행: ① 모바일 디바이스로 피킹 리스트 확인 ② 지정된 로케이션으로 이동 ③ 상품 수집(상태: 피킹 중) ④ 바코드 스캔으로 검증(스캔 횟수=주문 수량 확인) ⑤ 불일치 시 오류 알림 및 즉시 재확인 ⑥ 전체 상품 수집 완료 후 검수 구역으로 이동. FULGO에 완료 보고. 상태: 피킹 완료', actor: '작업자', term: '완료 보고', features: ['PIC-003', 'PIC-004', 'STK-005'] },
+      // 4단계: 출고 지시 발행
+      { from: 'fulgo', to: 'worker', label: '[4] 출고 지시 발행', desc: '작업자에게 피킹/검수/포장/출하 종합 지시', detail: 'FULGO WMS가 작업자에게 출고 작업 지시: ① 피킹 방식 결정(단일/배치/존 피킹) ② 배송 우선순위 설정(긴급주문/마감임박) ③ 작업 리스트 생성(피킹 위치, 상품정보, 수량) ④ 송장 사전 생성 ⑤ 작업자 모바일 디바이스로 실시간 전달. 상태: 작업 준비', actor: 'FULGO WMS', term: '지시 발행', features: ['PIC-001', 'PIC-002', 'OUT-002'] },
       
-      // 5단계: 검수 지시
-      { from: 'fulgo', to: 'quality_inspector', label: '[5] 검수 지시', desc: '검수 담당자에게 검수 작업 지시', detail: 'FULGO가 피킹 완료된 상품에 대해 검수 지시 발행: ① 검수 대상 주문 리스트 생성 ② 검수 기준 제시(상품코드/수량/상태 확인 항목) ③ 검수 담당자에게 지시 전달. 상태: 검수 대기', actor: 'FULGO', term: '지시 발행', features: ['PIC-010', 'STK-005'] },
+      // 5단계: 피킹
+      { from: 'worker', to: 'worker', label: '[5] 피킹', desc: '지정된 로케이션에서 상품 수집', detail: '현장 작업자가 피킹 작업 수행: ① 모바일 디바이스로 피킹 리스트 확인 ② 지정된 로케이션으로 이동 ③ 바코드 스캔으로 상품 확인(스캔 횟수=주문 수량 매칭) ④ 불일치 시 오류 알림 및 즉시 재확인 ⑤ 상품 수집 완료. 상태: 피킹 완료', actor: '작업자', term: '피킹 완료', features: ['PIC-001', 'PIC-003', 'STK-005'] },
       
-      // 6단계: 검수 완료
-      { from: 'quality_inspector', to: 'fulgo', label: '[6] 검수 완료 보고', desc: '피킹된 상품 정확성 확인 및 결과 보고', detail: '검수 담당자가 피킹 상품 검증: ① 상품코드 일치 확인 ② 수량 재확인 ③ 상품 상태 확인(파손/유효기한/온전성). 결과 보고: [검수 통과] FULGO에 통과 보고(상태: 검수 완료) / [검수 실패] FULGO에 불합격 보고 + 오류 유형 분류(상품 불일치/수량 부족/상품 파손)→FULGO가 재피킹 또는 주문 취소 결정', actor: '검수 담당자', term: '완료 보고', features: ['PIC-010', 'STK-005'] },
+      // 6단계: 검수
+      { from: 'worker', to: 'worker', label: '[6] 검수', desc: '피킹된 상품 정확성 및 상태 검증', detail: '현장 작업자가 검수 작업 수행: ① 피킹된 상품코드 재확인 ② 수량 재점검 ③ 상품 상태 확인(파손/변형/오염/유효기한). 결과: [검수 통과]→다음 단계로 진행 / [검수 실패]→FULGO에 보고, 재피킹 또는 취소 지시 대기. 상태: 검수 완료 또는 HOLD', actor: '작업자', term: '검수 완료', features: ['PIC-004', 'PIC-010', 'STK-005'] },
       
-      // 7단계: 포장 지시
-      { from: 'fulgo', to: 'packing_staff', label: '[7] 포장 지시', desc: '포장 담당자에게 포장 작업 지시', detail: 'FULGO가 검수 통과 상품에 대해 포장 지시 발행: ① 포장 대상 상품 리스트 생성 ② 송장 자동 생성(배송사 API 연동) ③ 포장 자재 권장사항 제시(박스 크기/완충재) ④ 포장 담당자에게 지시 및 송장 데이터 전달. 상태: 포장 대기', actor: 'FULGO', term: '지시 발행', features: ['PIC-005', 'PIC-006', 'OUT-002'] },
+      // 7단계: 포장
+      { from: 'worker', to: 'worker', label: '[7] 포장', desc: '상품 포장 및 송장 부착', detail: '현장 작업자가 포장 작업 수행: ① 포장 자재 선택(박스 크기/완충재/충전제) ② 상품을 박스에 포장 ③ 송장 바코드/QR 출력 및 박스에 부착 ④ 포장 완료 스캔 ⑤ 검수 구역에서 출하 구역으로 이동. 상태: 포장 완료', actor: '작업자', term: '포장 완료', features: ['PIC-005', 'PIC-006', 'OUT-002'] },
       
-      // 8단계: 포장 완료
-      { from: 'packing_staff', to: 'fulgo', label: '[8] 포장 완료 보고', desc: '상품 포장 및 송장 부착 완료', detail: '포장 담당자가 포장 작업 수행 및 완료 보고: ① 포장 자재 선택(박스 크기/완충재) ② 상품 포장(상태: 포장 중) ③ 바코드/QR 송장 출력 및 박스에 부착 ④ 포장 완료 스캔 ⑤ FULGO에 완료 보고. 상태: 포장 완료', actor: '포장 담당자', term: '완료 보고', features: ['PIC-005', 'PIC-006'] },
+      // 8단계: 출하
+      { from: 'worker', to: 'fulgo', label: '[8] 출하 완료 보고', desc: '배송사별 그룹핑 및 차량 적재 완료', detail: '현장 작업자가 출하 작업 수행: ① 포장 완료된 상품을 배송사별로 그룹핑 ② 바코드 스캔으로 차량 적재 확인 ③ 배송사 인수증 서명 ④ FULGO에 출고 확정 보고. FULGO가 수신하여: ⑤ WMS 재고 차감(예약→출고 완료) ⑥ OMS로 출고 완료 데이터 및 송장번호 전송. 상태: 출고 확정', actor: '작업자', term: '출하 완료', features: ['OUT-002', 'OUT-003', 'STK-011'] },
       
-      // 9단계: 출하 지시
-      { from: 'fulgo', to: 'shipping_staff', label: '[9] 출하 지시', desc: '출하 담당자에게 적재 및 인계 지시', detail: 'FULGO가 포장 완료 상품에 대해 출하 지시 발행: ① 배송사별 그룹핑(배송사별로 상품 분류) ② 차량 할당 ③ 적재 우선순위 제시 ④ 출하 담당자에게 지시 및 송장 정보 전달. 상태: 출하 준비', actor: 'FULGO', term: '지시 발행', features: ['OUT-002', 'OUT-003'] },
+      // 9단계: 배송 추적
+      { from: 'fulgo', to: 'carrier', label: '[9] 배송 추적 API 연동', desc: '배송사 API로 배송 상태 실시간 추적', detail: 'FULGO WMS가 출고 후속 처리: ① 배송사 API 연동하여 배송 상태 실시간 업데이트(집하→수송중→배송완료) ② 배송 상태 변경 시 자동 알림 ③ 고객 조회 페이지 제공. 상태: 배송 추적 중 → 배송 완료', actor: 'FULGO WMS', term: '추적 중', features: ['OUT-003', 'STK-002'] },
       
-      // 10단계: 출고 확정
-      { from: 'shipping_staff', to: 'fulgo', label: '[10] 출고 확정 보고', desc: '차량 적재 및 배송사 인수 완료', detail: '출하 담당자가 출고 확정 프로세스 수행: ① 출하 스테이징(배송사별 그룹핑, 차량 배정) ② 차량 적재(송장 스캔으로 적재 확인) ③ 배송사 인수증 발행 ④ FULGO에 출고 확정 보고. FULGO가 수신하여 ⑤ WMS 재고 차감(예약→출고 완료) ⑥ OMS로 출고 완료 데이터 전송 및 송장번호 전달. 상태: 출고 확정', actor: '출하 담당자', term: '출고 확정', features: ['OUT-002', 'STK-011'] },
-      
-      // 11단계: 배송 추적
-      { from: 'fulgo', to: 'carrier', label: '[11] 배송 추적 API 연동', desc: '배송사 API로 배송 상태 실시간 추적', detail: 'FULGO 시스템이 출고 후속 처리: ① 배송사 API 연동하여 배송 상태 실시간 업데이트(집하→수송중→배송완료) ② 배송 상태 변경 시 자동 알림. 상태: 배송 추적 중 → 배송 완료', actor: 'FULGO', term: '추적 중', features: ['OUT-003', 'STK-002'] },
-      
-      // 12단계: 최종 완료
-      { from: 'fulgo', to: 'oms_shipper', label: '[12] 출고 완료 및 동기화', desc: '배송 완료 후 최종 처리 및 OMS 동기화', detail: 'FULGO가 배송 완료 수신 후 최종 처리: ① 출고 로그 기록(출고일시/작업자/송장번호/배송사) ② 출고 완료(상태: 완료) ③ OMS와 최종 동기화 ④ 고객 배송 추적 정보 제공. 예외상황 자동 알림(배송 지연/반품 요청 등)', actor: 'FULGO', term: '완료', features: ['OUT-003', 'STK-011', 'RPT-001'] },
+      // 10단계: 최종 완료
+      { from: 'fulgo', to: 'oms_system', label: '[10] 출고 완료 및 OMS 동기화', desc: '배송 완료 후 최종 처리 및 OMS 동기화', detail: 'FULGO WMS가 배송 완료 수신 후 최종 처리: ① 출고 로그 기록(출고일시/작업자/송장번호/배송사/배송완료시각) ② 출고 상태 최종 완료 ③ OMS로 최종 동기화 전송 ④ 고객 배송 완료 알림. 예외상황 자동 알림(배송 지연/배송 불가/반품 요청 등)', actor: 'FULGO WMS', term: '완료', features: ['OUT-003', 'STK-011', 'RPT-001'] },
     ]
   },
   return: {
