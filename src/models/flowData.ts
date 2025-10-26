@@ -3,7 +3,7 @@ import { Flow } from './types';
 
 export const flowData: Record<string, Flow> = {
   inbound: {
-    title: '입고 프로세스 (Inbound) - 6단계 기본 + 6가지 확장',
+    title: '입고 프로세스 (Inbound)',
     description: '화주사의 입고 요청부터 최종 회계 처리까지 완전한 입고 워크플로우. 승인 절차, 존 할당, 검수, 예외 처리, 모니터링, 리포팅, 정책 관리를 포함합니다.',
     hierarchy: 'Fulgo(플랫폼) → 물류사(창고 운영자) → 화주사(고객사)',
     actors: [
@@ -25,7 +25,7 @@ export const flowData: Record<string, Flow> = {
       { from: 'warehouse_manager', to: 'fulgo', label: '[3] 승인 처리 (또는 반려)', desc: '입고 적합성 검토 및 결정', detail: '창고장이 다음 기준으로 검토: ① 재고 수용 가능 여부(존 여유/수량) ② 입고 상품 품목 적합성(상태/보관구역) ③ 반입 제한 품목 여부. 승인 시 APPROVED, 반려 시 REJECTED + 사유 기입. 상태: APPROVED 또는 REJECTED', actor: '창고장', term: '승인 완료', features: ['CFG-001', 'STK-006'] },
       
       // 4단계: 존 할당 및 입고 실행
-      { from: 'fulgo', to: 'worker', label: '[4] 존 할당 및 입고 실행', desc: '상품 속성 기반 로케이션 할당 및 물리적 입고', detail: 'FULGO가 상품 정책 기반으로 자동 할당: 온도/크기/상태별 적합 존 선택. 로케이션 코드 부여. 작업자에게 할당 지시. 현장 작업자가 할당된 존으로 상품 이동 및 검수 수행(수량/파손/유효기한 확인). 상태: INBOUND_CONFIRMED', actor: '작업자', term: '입고 완료', features: ['STK-005', 'STK-010', 'STK-006'] },
+      { from: 'fulgo', to: 'worker', label: '[4] 존 할당 및 입고 실행', desc: '상품 속성 기반 로케이션 할당 및 물리적 입고', detail: 'FULGO가 상품 정책 기반으로 자동 할당: 크기/컬러/카테고리별 적합 존 선택. 로케이션 코드 부여. 작업자에게 할당 지시. 현장 작업자가 할당된 존으로 상품 이동 및 검수 수행(수량/파손/상태 확인). 상태: INBOUND_CONFIRMED', actor: '작업자', term: '입고 완료', features: ['STK-005', 'STK-010', 'STK-006'] },
       
       // 5단계: 송장 생성 및 동기화
       { from: 'fulgo', to: 'inventory_system', label: '[5] 송장 자동 생성 및 재고 동기화', desc: '입고 완료 시 송장 생성 및 OMS 연동', detail: 'FULGO가 입고 완료 시 자동으로 송장 생성: 상품코드, 수량, 존코드, 입고일자 포함. OMS로 입고확정 송장 전송. 재고 엔진이 재고 상태 업데이트(가용재고 증가). 재고 정합성 체크. 상태: COMPLETED', actor: 'FULGO', term: '동기화 완료', features: ['STK-007', 'STK-002', 'STK-011'] },
@@ -49,11 +49,11 @@ export const flowData: Record<string, Flow> = {
       { from: 'warehouse_manager', to: 'fulgo', label: '[11] 승인 정책 관리', desc: '승인 기준 동적 조정 및 정책 버전 관리', detail: '창고 관리자가 정책 설정: ① 승인 필요 조건(입고유형/화주등급/카테고리별로 승인 여부 결정) ② 승인 권한자(창고장/본부장 등 승인자 지정) ③ 목표 처리 시간(예: 승인 목표 2시간 이내). 정책 버전별 관리(v1.0→v1.1 업데이트 시 이전 버전 이력 보관) 및 시행일자 표시. 상품 정책과 자동 연동.', actor: '시스템 관리자', term: '정책 설정', features: ['CFG-001', 'USER-001'] },
       
       // 12단계: 통합 관리 및 모니터링
-      { from: 'fulgo', to: 'system_dashboard', label: '[12] 프로세스 통합 관리', desc: '6+6단계 통합 모니터링 및 성과 분석', detail: '시스템이 6개의 기본 단계(요청→승인→할당→입고→송장→회계) + 6개의 확장 단계(이력→예외→모니터링→리포팅→정책→통합)를 통합 모니터링. 주요 KPI: ① 승인 누적 시간(기준: 2시간 이내) ② 입고 정확도(WMS vs 실물 일치율) ③ 존 활용율(%). 실시간 대시보드에서 병목 구간 표시, 이상 상황 자동 알림.', actor: 'FULGO', term: '통합 모니터링', features: ['STK-011', 'RPT-005'] },
+      { from: 'fulgo', to: 'system_dashboard', label: '[12] 프로세스 통합 관리', desc: '통합 모니터링 및 성과 분석', detail: '시스템 통합 모니터링. 주요 KPI: ① 승인 누적 시간(기준: 2시간 이내) ② 입고 정확도(WMS vs 실물 일치율) ③ 존 활용율(%). 실시간 대시보드에서 병목 구간 표시, 이상 상황 자동 알림.', actor: 'FULGO', term: '통합 모니터링', features: ['STK-011', 'RPT-005'] },
     ]
   },
   outbound: {
-    title: '출고 프로세스 (Outbound) - 8단계 통합 워크플로우',
+    title: '출고 프로세스 (Outbound)',
     description: '주문 접수부터 상품 피킹, 검수, 포장, 출고 확정까지의 전 과정을 관리. 재고 할당 우선화, 피킹 최적화(단일/배치/존 피킹), 검수 필수화, 송장 자동 생성, OMS 실시간 동기화를 포함합니다.',
     hierarchy: 'Fulgo(플랫폼) → 물류사(창고 운영자) → 화주사(고객사)',
     actors: [
@@ -92,7 +92,7 @@ export const flowData: Record<string, Flow> = {
     ]
   },
   return: {
-    title: '반품 프로세스 (Return) - 8단계 통합 관리',
+    title: '반품 프로세스 (Return)',
     description: '반품 접수부터 검수, 재입고 또는 폐기까지의 전 과정을 관리. 반품 승인/거부 자동화, 검수 등급 분류(A/B/C), 3가지 처리 경로(재입고/불량/폐기), 증빙 관리, 반품 사유별 차별화 처리를 포함합니다.',
     hierarchy: 'Fulgo(플랫폼) → 물류사(창고 운영자) → 화주사(고객사)',
     actors: [
@@ -115,7 +115,7 @@ export const flowData: Record<string, Flow> = {
       { from: 'inbound_staff', to: 'quality_inspector', label: '[3] 반품 상품 입고', desc: '택배로 도착한 반품 상품 수령', detail: '입고 담당자가 반품 입고 프로세스: ① 택배사로부터 반품 상품 수령 ② 송장 바코드 스캔 ③ 상태: 입고 완료 ④ 반품 전용 존으로 상품 이동 ⑤ 검수 대기 상태로 적치', actor: '입고 담당자', term: '입고 완료', features: ['PIC-010', 'STK-008'] },
       
       // 4단계: 반품 검수
-      { from: 'quality_inspector', to: 'return_manager', label: '[4] 반품 검수 및 등급 판정', desc: '반품 상품 상태 확인 및 등급 분류', detail: '검수 담당자가 반품 검수 수행: ① 외관 검수(포장상태/손상여부/라벨태그 상태) ② 기능 검수(작동 여부/부속품 완전성) ③ 유효기한 확인(식품/화장품 등) ④ 상태: 검수 중. 검수 등급 판정 및 사진 촬영(증빙용): [A등급-정상]재판매 가능, [B등급-경미한 하자]재고조정 후 재판매 가능, [C등급-불량]재판매 불가/폐기 대상', actor: '검수 담당자', term: '등급 판정', features: ['RET-002', 'RET-003'] },
+      { from: 'quality_inspector', to: 'return_manager', label: '[4] 반품 검수 및 등급 판정', desc: '반품 상품 상태 확인 및 등급 분류', detail: '검수 담당자가 반품 검수 수행: ① 외관 검수(포장상태/손상여부/라벨태그 상태) ② 기능 검수(작동 여부/부속품 완전성) ③ 상품 상태 확인(색상 변화/변형/오염 여부) ④ 상태: 검수 중. 검수 등급 판정 및 사진 촬영(증빙용): [A등급-정상]재판매 가능, [B등급-경미한 하자]재고조정 후 재판매 가능, [C등급-불량]재판매 불가/폐기 대상', actor: '검수 담당자', term: '등급 판정', features: ['RET-002', 'RET-003'] },
       
       // 5단계: 처리 방법 결정
       { from: 'return_manager', to: 'fulgo', label: '[5] 반품 처리 결정', desc: '검수 결과 기반 후속 조치 결정', detail: '반품 담당자가 처리 방법 결정: [A등급] 상태: 재입고 결정 → 일반 존으로 이동 지시 [B등급] 상태: 불량 재고 전환 → 불량품 존으로 이동, 화주에게 처리 방안 문의(할인판매/폐기) [C등급] 상태: 폐기 대상 → 폐기 승인 요청. 반품 사유별 처리: ①고객 변심-검수통과→재입고, 실패→거부/차감 ②상품하자-하자확인→폐기/제조사반품, 미확인→재입고 ③배송문제-파손확인→배상청구/폐기, 정상→재입고', actor: '반품 담당자', term: '처리 결정', features: ['RET-002', 'RET-006'] },
@@ -131,7 +131,7 @@ export const flowData: Record<string, Flow> = {
     ]
   },
   storage: {
-    title: '재고 관리 프로세스 (Inventory Management) - 11단계 완전 체계',
+    title: '재고 관리 프로세스 (Inventory Management)',
     description: '입고부터 출고까지 재고의 상태, 수량, 위치를 실시간으로 추적하고 관리. 가용/예약/보류/불량 상태 관리, FIFO/FEFO 최적화, OMS 동기화, 실시간 모니터링을 포함합니다.',
     hierarchy: 'Fulgo(플랫폼) → 물류사(창고 운영자) → 화주사(고객사)',
     actors: [
@@ -149,16 +149,16 @@ export const flowData: Record<string, Flow> = {
       { from: 'fulgo', to: 'system_inventory_engine', label: '[2] 재고 수량 관리', desc: '물리/가용/예약/안전 재고 수량 구분 관리', detail: 'FULGO가 4가지 재고 수량을 실시간 관리: ① 물리 재고(Physical) - 창고 실제 적치된 수량 ② 가용 재고(Available) - 출고 가능한 수량(=물리-예약-보류) ③ 예약 재고(Reserved) - 출고 지시로 할당된 수량 ④ 안전 재고(Safety Stock) - 화주 정책에 따라 최소로 유지할 수량. 입고/출고/조정/반품 시점에 자동 갱신', actor: 'FULGO', term: '수량 갱신', features: ['STK-002', 'STK-004', 'STK-012'] },
       
       // 3단계: 로케이션 관리
-      { from: 'warehouse_manager', to: 'fulgo', label: '[3] 로케이션 구조 설정', desc: '존-로케이션 체계 정의 (구역-열-단)', detail: '창고 관리자가 로케이션 구조 설정: 존(Zone) - 대분류 구역(일반존/냉장존/냉동존/보류존/불량존), 로케이션 - 세부 위치코드(A-01-01 형식). 각 로케이션에 크기, 적재 중량, 속성 정보 입력. FIFO/FEFO 정책 설정', actor: '창고 관리자', term: '로케이션 체계', features: ['CFG-001', 'STK-006', 'STK-013'] },
+      { from: 'warehouse_manager', to: 'fulgo', label: '[3] 로케이션 구조 설정', desc: '존-로케이션 체계 정의 (구역-열-단)', detail: '창고 관리자가 로케이션 구조 설정: 존(Zone) - 대분류 구역(의류존/악세서리존/신발존/보류존/불량존), 로케이션 - 세부 위치코드(A-01-01 형식). 각 로케이션에 크기, 적재 중량, 속성 정보 입력. FIFO/FEFO 정책 설정', actor: '창고 관리자', term: '로케이션 체계', features: ['CFG-001', 'STK-006', 'STK-013'] },
       
       // 4단계: 자동 할당
-      { from: 'fulgo', to: 'worker', label: '[4] 로케이션 자동 할당', desc: '상품 속성/상태 기반 존 할당', detail: 'FULGO가 입고 상품을 자동 할당: ① 상품 속성(온도/크기/보관기준) 확인 → ② 적합한 존 선택(상온→일반존, 냉장→냉장존 등) → ③ 빈 로케이션 검색 → ④ 자동 할당. 존 포화 시 자동 알림 및 재배치 요청', actor: 'FULGO', term: '자동 할당', features: ['STK-006', 'STK-013'] },
+      { from: 'fulgo', to: 'worker', label: '[4] 로케이션 자동 할당', desc: '상품 속성/상태 기반 존 할당', detail: 'FULGO가 입고 상품을 자동 할당: ① 상품 속성(카테고리/크기/수량) 확인 → ② 적합한 존 선택(의류→의류존, 신발→신발존, 악세서리→악세서리존 등) → ③ 빈 로케이션 검색 → ④ 자동 할당. 존 포화 시 자동 알림 및 재배치 요청', actor: 'FULGO', term: '자동 할당', features: ['STK-006', 'STK-013'] },
       
       // 5단계: 재고 이동 추적
       { from: 'worker', to: 'fulgo', label: '[5] 재고 이동 이력 기록', desc: '입고/이동/피킹/출고 전체 추적', detail: '모든 재고 이동을 추적 기록: 입고(OMS → WMS 입고 → 로케이션 A) → 이동(로케이션 A → B) → 피킹(로케이션 A → 피킹 존) → 출고(피킹 존 → 출하) → 반품(반품 존 → 로케이션 A). 로트/시리얼 번호 기반 추적. 전체 이력 조회 가능', actor: '작업자', term: '이동 추적', features: ['STK-005', 'STK-013'] },
       
       // 6단계: 재고 가시성
-      { from: 'fulgo', to: 'shipper', label: '[6] 실시간 모니터링', desc: '재고 현황 대시보드 및 알림', detail: 'FULGO 대시보드에서 실시간 재고 현황 모니터링: ① 전체 재고 현황(가용/예약/보류/불량 비율) ② 존별 재고 분포 및 가동률 ③ 화주별 재고 현황 ④ 재고 회전율. 자동 알림: 재고 부족(안전 재고 이하) → 화주에게 자동 알림, 유효기한 임박(30일 이내) → 알림, 장기 재고(90일 이상 미출고) → 알림', actor: '화주사', term: '가시성', features: ['RPT-001', 'RPT-005'] },
+      { from: 'fulgo', to: 'shipper', label: '[6] 실시간 모니터링', desc: '재고 현황 대시보드 및 알림', detail: 'FULGO 대시보드에서 실시간 재고 현황 모니터링: ① 전체 재고 현황(가용/예약/보류/불량 비율) ② 존별 재고 분포 및 가동률 ③ 화주별 재고 현황 ④ 재고 회전율. 자동 알림: 재고 부족(안전 재고 이하) → 화주에게 자동 알림, 계절 상품 잔여(시즌 종료 30일 전) → 알림, 장기 재고(90일 이상 미출고) → 알림', actor: '화주사', term: '가시성', features: ['RPT-001', 'RPT-005'] },
       
       // 7단계: OMS 동기화
       { from: 'fulgo', to: 'oms_system', label: '[7] 재고 실시간 동기화', desc: '입출고 즉시 OMS와 동기화', detail: 'FULGO와 OMS 간 실시간 재고 동기화: ① 입고 완료 → WMS → OMS (재고 증가) ② 출고 확정 → WMS → OMS (재고 감소) ③ 재고 조정 → WMS → OMS (수량 변경) ④ 반품 재입고 → WMS → OMS (재고 증가). 동기화 실패 시 자동 재시도(최대 3회), 실패 시 관리자 알림', actor: 'FULGO', term: '동기화', features: ['STK-002', 'STK-011'] },
