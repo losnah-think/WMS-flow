@@ -5,8 +5,193 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
+
+// 애니메이션 스타일
+const animationStyles = `
+  @keyframes flowAnimation {
+    0% {
+      offset-distance: 0%;
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      offset-distance: 100%;
+      opacity: 0;
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      r: 6px;
+      opacity: 1;
+    }
+    50% {
+      r: 8px;
+      opacity: 0.7;
+    }
+  }
+
+  .flow-dot {
+    animation: flowAnimation 3s infinite linear;
+    will-change: offset-distance;
+  }
+
+  .state-pulse {
+    animation: pulse 2s infinite;
+  }
+
+  .arrow-line {
+    stroke-dasharray: 4, 4;
+    stroke-dashoffset: 0;
+    animation: dash 0.5s linear infinite;
+  }
+
+  @keyframes dash {
+    to {
+      stroke-dashoffset: 8;
+    }
+  }
+`;
+
+// SVG를 이용한 애니메이션 플로우 컴포넌트
+interface AnimatedFlowProps {
+  states: string[];
+  processColor: string;
+  flowColor: string;
+}
+
+const AnimatedFlow: React.FC<AnimatedFlowProps> = ({ states, processColor, flowColor }) => {
+  const stateCount = states.length;
+  const spacing = 100;
+  const svgWidth = (stateCount - 1) * spacing + 200;
+  
+  return (
+    <div className="relative w-full overflow-x-auto py-4">
+      <style dangerouslySetInnerHTML={{ __html: animationStyles }} />
+      <svg width={svgWidth} height="120" className="min-w-max mx-auto">
+        {/* 연결 라인 및 애니메이션 점 */}
+        {states.map((_, idx) => {
+          if (idx === states.length - 1) return null;
+          const x1 = 100 + idx * spacing;
+          const y = 60;
+          const x2 = 100 + (idx + 1) * spacing;
+          
+          return (
+            <g key={`connection-${idx}`}>
+              {/* 화살표 라인 */}
+              <defs>
+                <marker
+                  id={`arrowhead-${idx}`}
+                  markerWidth="10"
+                  markerHeight="10"
+                  refX="9"
+                  refY="3"
+                  orient="auto"
+                >
+                  <polygon points="0 0, 10 3, 0 6" fill={flowColor} />
+                </marker>
+                <path
+                  id={`flowPath-${idx}`}
+                  d={`M ${x1} ${y} L ${x2} ${y}`}
+                  fill="none"
+                />
+              </defs>
+              
+              {/* 애니메이션 라인 */}
+              <line
+                x1={x1}
+                y1={y}
+                x2={x2}
+                y2={y}
+                stroke={flowColor}
+                strokeWidth="2"
+                opacity="0.3"
+                markerEnd={`url(#arrowhead-${idx})`}
+              />
+              <line
+                x1={x1}
+                y1={y}
+                x2={x2}
+                y2={y}
+                stroke={flowColor}
+                strokeWidth="2"
+                className="arrow-line"
+                markerEnd={`url(#arrowhead-${idx})`}
+              />
+              
+              {/* 움직이는 점 */}
+              <circle
+                cx={x1}
+                cy={y}
+                r="5"
+                fill={flowColor}
+                className="flow-dot"
+                style={{
+                  offsetPath: `path('M ${x1} ${y} L ${x2} ${y}')`,
+                  offsetDistance: '0%',
+                } as any}
+                opacity="0.8"
+              />
+            </g>
+          );
+        })}
+
+        {/* 상태 박스들 */}
+        {states.map((state, idx) => {
+          const x = 100 + idx * spacing;
+          const y = 60;
+          
+          return (
+            <g key={`state-${idx}`}>
+              {/* 배경 박스 */}
+              <rect
+                x={x - 40}
+                y={y - 20}
+                width="80"
+                height="40"
+                rx="8"
+                fill="white"
+                stroke={processColor}
+                strokeWidth="2"
+              />
+              
+              {/* 상태 이름 텍스트 */}
+              <text
+                x={x}
+                y={y + 5}
+                textAnchor="middle"
+                fontSize="11"
+                fontWeight="bold"
+                fill={processColor}
+              >
+                {state}
+              </text>
+              
+              {/* 펄싱 원 */}
+              <circle
+                cx={x}
+                cy={y}
+                r="6"
+                fill="none"
+                stroke={processColor}
+                strokeWidth="2"
+                className="state-pulse"
+                opacity="0.6"
+              />
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+  );
+};
 
 interface ProcessMetrics {
   name: string;
@@ -357,103 +542,46 @@ export const ProcessDashboard: React.FC = () => {
               </div>
             </div>
 
-            {/* 상태 흐름도 */}
+            {/* 상태 흐름도 - 애니메이션 */}
             <div className="border-t pt-4">
-              <h4 className="text-lg font-bold text-gray-800 mb-3">🔄 상태 흐름도</h4>
+              <h4 className="text-lg font-bold text-gray-800 mb-3">🔄 상태 흐름도 (실시간 애니메이션)</h4>
               
               {getSelectedMetrics()?.name === 'inbound' && (
-                <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg overflow-x-auto">
-                  <div className="flex items-center gap-2 justify-start min-w-max">
-                    <div className="bg-blue-500 text-white px-3 py-2 rounded font-bold text-sm">시작</div>
-                    <div className="text-2xl text-gray-400">→</div>
-                    <div className="bg-purple-400 text-white px-3 py-2 rounded font-bold text-sm">REQUEST_WAITING</div>
-                    <div className="text-2xl text-gray-400">→</div>
-                    <div className="bg-purple-400 text-white px-3 py-2 rounded font-bold text-sm">CLASSIFICATION_PENDING</div>
-                    <div className="text-2xl text-gray-400">→</div>
-                    <div className="bg-purple-400 text-white px-3 py-2 rounded font-bold text-sm">CLASSIFIED</div>
-                    <div className="text-2xl text-gray-400">→</div>
-                    <div className="bg-purple-400 text-white px-3 py-2 rounded font-bold text-sm">INSPECTION_PENDING</div>
-                    <div className="text-2xl text-gray-400">→</div>
-                    <div className="bg-purple-400 text-white px-3 py-2 rounded font-bold text-sm">INSPECTED</div>
-                    <div className="text-2xl text-gray-400">→</div>
-                    <div className="bg-purple-400 text-white px-3 py-2 rounded font-bold text-sm">APPROVAL_PENDING</div>
-                    <div className="text-2xl text-gray-400">→</div>
-                    <div className="bg-purple-400 text-white px-3 py-2 rounded font-bold text-sm">APPROVED</div>
-                    <div className="text-2xl text-gray-400">→</div>
-                    <div className="bg-green-500 text-white px-3 py-2 rounded font-bold text-sm">DONE</div>
-                  </div>
-                  <div className="text-xs text-gray-600 mt-3">9개 상태: 요청 수령 → 분류 → 검사 → 승인 → 완료</div>
-                </div>
+                <AnimatedFlow 
+                  states={['시작', 'REQUEST_WAITING', 'CLASSIFICATION', 'CLASSIFIED', 'INSPECTION', 'INSPECTED', 'APPROVAL', 'APPROVED', 'DONE']}
+                  processColor="#a855f7"
+                  flowColor="#3b82f6"
+                />
               )}
 
               {getSelectedMetrics()?.name === 'inventory' && (
-                <div className="p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg overflow-x-auto">
-                  <div className="flex items-center gap-2 justify-start min-w-max">
-                    <div className="bg-green-500 text-white px-3 py-2 rounded font-bold text-sm">AVAILABLE</div>
-                    <div className="text-2xl text-gray-400">↔</div>
-                    <div className="bg-yellow-500 text-white px-3 py-2 rounded font-bold text-sm">RESERVED</div>
-                    <div className="text-2xl text-gray-400">↔</div>
-                    <div className="bg-orange-500 text-white px-3 py-2 rounded font-bold text-sm">HOLD</div>
-                    <div className="text-2xl text-gray-400">→</div>
-                    <div className="bg-red-500 text-white px-3 py-2 rounded font-bold text-sm">DAMAGED</div>
-                    <div className="text-2xl text-gray-400">→</div>
-                    <div className="bg-gray-600 text-white px-3 py-2 rounded font-bold text-sm">DISPOSED</div>
-                  </div>
-                  <div className="text-xs text-gray-600 mt-3">5개 상태: 가용 ↔ 예약 ↔ 보류 → 손상 → 폐기</div>
-                </div>
+                <AnimatedFlow 
+                  states={['AVAILABLE', 'RESERVED', 'HOLD', 'DAMAGED', 'DISPOSED']}
+                  processColor="#10b981"
+                  flowColor="#22c55e"
+                />
               )}
 
               {getSelectedMetrics()?.name === 'outbound_request' && (
-                <div className="p-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-lg overflow-x-auto">
-                  <div className="flex items-center gap-1 justify-start min-w-max text-xs">
-                    <div className="bg-blue-500 text-white px-2 py-1 rounded font-bold">시작</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-orange-400 text-white px-2 py-1 rounded font-bold">REQUEST</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-orange-400 text-white px-2 py-1 rounded font-bold">ALLOCATION</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-orange-400 text-white px-2 py-1 rounded font-bold">PICKING</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-orange-400 text-white px-2 py-1 rounded font-bold">PICKED</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-orange-400 text-white px-2 py-1 rounded font-bold">INSPECTION</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-orange-400 text-white px-2 py-1 rounded font-bold">PACKING</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-orange-400 text-white px-2 py-1 rounded font-bold">WAYBILL</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-orange-400 text-white px-2 py-1 rounded font-bold">SHIPMENT</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-green-500 text-white px-2 py-1 rounded font-bold">COMPLETED</div>
-                  </div>
-                  <div className="text-xs text-gray-600 mt-3">14개 상태: 주문 → 할당 → 피킹 → 검수 → 포장 → 송장 → 출고 → 완료</div>
-                </div>
+                <AnimatedFlow 
+                  states={['시작', 'REQUEST', 'ALLOCATION', 'PICKING', 'PICKED', 'INSPECTION', 'PACKING', 'WAYBILL', 'SHIPMENT', 'COMPLETED']}
+                  processColor="#f97316"
+                  flowColor="#fb923c"
+                />
               )}
 
               {getSelectedMetrics()?.name === 'return_request' && (
-                <div className="p-4 bg-gradient-to-r from-red-50 to-pink-50 rounded-lg overflow-x-auto">
-                  <div className="flex items-center gap-1 justify-start min-w-max text-xs">
-                    <div className="bg-blue-500 text-white px-2 py-1 rounded font-bold">시작</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-red-400 text-white px-2 py-1 rounded font-bold">RECEIVED</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-red-400 text-white px-2 py-1 rounded font-bold">VALIDATION</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-red-400 text-white px-2 py-1 rounded font-bold">APPROVED</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-red-400 text-white px-2 py-1 rounded font-bold">INBOUND</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-red-400 text-white px-2 py-1 rounded font-bold">INSPECTION</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-red-400 text-white px-2 py-1 rounded font-bold">DECISION</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-red-400 text-white px-2 py-1 rounded font-bold">PROCESSING</div>
-                    <div className="text-xl text-gray-400">→</div>
-                    <div className="bg-green-500 text-white px-2 py-1 rounded font-bold">COMPLETED</div>
-                  </div>
-                  <div className="text-xs text-gray-600 mt-3">14개 상태: 접수 → 검증 → 승인 → 입고 → 검수 → 판정 → 처리 → 완료</div>
-                </div>
+                <AnimatedFlow 
+                  states={['시작', 'RECEIVED', 'VALIDATION', 'APPROVED', 'INBOUND', 'INSPECTION', 'DECISION', 'PROCESSING', 'COMPLETED']}
+                  processColor="#dc2626"
+                  flowColor="#ef4444"
+                />
               )}
+              
+              <div className="text-xs text-gray-500 mt-3 flex items-center gap-2">
+                <span className="inline-block w-3 h-3 rounded-full bg-blue-500 animate-pulse"></span>
+                실시간 상태 전이 애니메이션 - 점이 화살표를 따라 이동합니다
+              </div>
             </div>
 
             {/* 배포 정보 */}
