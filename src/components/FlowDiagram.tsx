@@ -51,7 +51,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
 
   return (
     <div className="w-full overflow-x-auto border-2 border-gray-200 rounded-lg bg-white flex justify-center">
-      <div className="w-[90%] py-2 md:py-3">
+      <div className="w-full py-2 md:py-3">
         <style>{`
         @keyframes dashFlow {
           0% {
