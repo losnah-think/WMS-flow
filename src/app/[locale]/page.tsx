@@ -14,12 +14,10 @@ import { StepDetails } from '@/components/StepDetails';
 import { StepDetailsModal } from '@/components/StepDetailsModal';
 import { MiniTimeline } from '@/components/MiniTimeline';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
-import { ProcessDashboard } from '@/components/ProcessDashboard';
 
 export default function Home() {
   const params = useParams();
   const locale = (params?.locale as string) || 'ko';
-  const [showDashboard, setShowDashboard] = useState(false);
   
   let t;
   try {
@@ -57,33 +55,6 @@ export default function Home() {
     downloadDiagramAsSVG(`wms-flow-${flowType}`);
   };
 
-  if (showDashboard) {
-    return (
-      <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-        <header className="sticky top-0 bg-white shadow-md z-50">
-          <div className="w-full px-6 py-3">
-            <div className="flex items-center justify-between gap-6">
-              <div className="flex items-center gap-8">
-                <button 
-                  onClick={() => setShowDashboard(false)}
-                  className="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors whitespace-nowrap"
-                >
-                  ← FULGO WMS
-                </button>
-              </div>
-              <div className="flex items-center gap-4">
-                <LanguageSwitcher />
-              </div>
-            </div>
-          </div>
-        </header>
-        <div className="w-full">
-          <ProcessDashboard />
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <header className="sticky top-0 bg-white shadow-md z-50">
@@ -102,12 +73,6 @@ export default function Home() {
                 >
                   {t('nav.flow')}
                 </Link>
-                <button
-                  onClick={() => setShowDashboard(true)}
-                  className="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors whitespace-nowrap font-semibold"
-                >
-                  📊 프로세스 대시보드 (NEW)
-                </button>
                 <Link 
                   href={`/${locale}/features`}
                   className="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors whitespace-nowrap"
