@@ -338,102 +338,102 @@
       },
       "steps": [
         {
-          "label": "Classify & Track Inventory Status",
+          "label": "[1] Classify & Track Inventory Status",
           "desc": "Distinguish and auto-track available/reserved/hold/defective status",
-          "detail": "FULGO WMS internal inventory engine automatically tracks inventory status in real-time.",
+          "detail": "FULGO WMS internal inventory engine automatically tracks inventory status in real-time by lifecycle: ① Available - sellable normal inventory ② Reserved - inventory allocated by outbound orders before picking ③ Picking - inventory under picking operation ④ Hold - inventory awaiting inspection or unsellable due to issues ⑤ Defective - unsellable defective products ⑥ To be Disposed - inventory pending disposal approval. All status changes are auto-recorded.",
           "actor": "FULGO WMS",
-          "term": ""
+          "term": "Status Tracking"
         },
         {
-          "label": "Real-time Inventory Quantity Management",
+          "label": "[2] Real-time Inventory Quantity Management",
           "desc": "Manage 4-level inventory: physical/available/reserved/safety stock",
-          "detail": "FULGO WMS internally manages 4 types of inventory quantities in real-time.",
+          "detail": "FULGO WMS internally manages 4 types of inventory quantities in real-time: ① Physical Inventory - actual products in warehouse ② Available Inventory - sellable quantity (=physical-reserved-hold) ③ Reserved Inventory - quantity allocated by outbound orders ④ Safety Stock - minimum quantity to maintain per shipper policy. Auto-updated at inbound/outbound/adjustment/return.",
           "actor": "FULGO WMS",
-          "term": ""
+          "term": "Quantity Management"
         },
         {
-          "label": "Set Warehouse Structure",
+          "label": "[3] Set Warehouse Structure",
           "desc": "Define zone-location system and register in FULGO",
-          "detail": "Warehouse manager registers warehouse basic structure in FULGO: zone definition, FIFO/FEFO policy settings.",
+          "detail": "Warehouse manager registers warehouse basic structure in FULGO: Zone - define major areas (clothing zone/accessories zone/shoes zone/hold zone/defective zone/disposal zone). Set capacity, characteristics, and management policies per zone. Location - set detailed location code system (A-01-01 format: zone-row-column). Set and apply FIFO/FEFO policies in FULGO.",
           "actor": "Warehouse Manager",
-          "term": ""
+          "term": "Setup Complete"
         },
         {
-          "label": "Register Storage Locations",
+          "label": "[4] Register Storage Locations",
           "desc": "Register detailed information for physical locations",
-          "detail": "Warehouse manager registers detailed storage location information in FULGO: location mapping, characteristics, storage fees.",
+          "detail": "Warehouse manager registers detailed storage location information in FULGO: ① Zone-location mapping (register physical locations A-01-01~A-05-10 in zone A) ② Input location characteristics (size/height/weight limit/humidity control requirement/product category) ③ Set product-location affinity (clothing→humidity control, electronics→ESD protection zone, etc.) ④ Set storage rate (size-based daily/monthly rate). Complete registration of all warehouse locations in FULGO.",
           "actor": "Warehouse Manager",
-          "term": ""
+          "term": "Registration Complete"
         },
         {
-          "label": "Assign Location & Issue Placement Instructions",
+          "label": "[5] Assign Location & Issue Placement Instructions",
           "desc": "Auto-assign locations based on product attributes and instruct workers",
-          "detail": "FULGO automatically assigns locations for inbound products and instructs workers.",
+          "detail": "FULGO auto-assigns locations for inbound products and instructs workers: ① Verify product attributes (category/size/quantity) ② Select appropriate zone ③ Auto-search for vacant location ④ Complete location assignment ⑤ Send placement instruction to workers (with QR code/location map). Auto-notify and suggest reallocation if zone reaches capacity.",
           "actor": "FULGO WMS",
-          "term": ""
+          "term": "Issue Instruction"
         },
         {
-          "label": "Report Placement & Movement Completion",
+          "label": "[6] Report Placement & Movement Completion",
           "desc": "Report completion of placement/movement work and record history",
-          "detail": "Workers report placement/movement completion to FULGO after work completion.",
+          "detail": "Workers report placement/movement completion to FULGO: ① Verify work completion (barcode scan confirmation) ② FULGO auto-records all inventory movements: Inbound (OMS→WMS→Location A)→Movement (Location A→B)→Picking (Location A→Pick zone)→Outbound (Pick zone→Shipping)→Return (Return zone→Location A) ③ Track by lot/serial number ④ Full history available for query.",
           "actor": "Worker",
-          "term": ""
+          "term": "Completion Report"
         },
         {
-          "label": "Set Inventory Operation Policy",
+          "label": "[7] Set Inventory Operation Policy",
           "desc": "Manage inventory operation policy by shipper/product",
-          "detail": "Warehouse manager sets inventory operation policies in FULGO: safety stock, FIFO/FEFO policy, holding cost settings.",
+          "detail": "Warehouse manager sets inventory operation policies in FULGO: ① Shipper policy - safety stock (by product), FIFO/FEFO rotation policy, lot/expiration management ② Inventory classification - ABC analysis (A: high frequency 20%, B: medium frequency 30%, C: low frequency 50%) ③ Holding cost - storage fees (daily/monthly basis), long-term storage premium, zone-specific rates. FULGO applies policies for auto-operation.",
           "actor": "Warehouse Manager",
-          "term": ""
+          "term": "Policy Set"
         },
         {
-          "label": "Direct Physical Inventory",
+          "label": "[8] Direct Physical Inventory",
           "desc": "Warehouse manager instructs workers to conduct physical inventory",
-          "detail": "Warehouse manager issues physical inventory instructions periodically or as needed: target range, period, assigned staff.",
+          "detail": "Warehouse manager issues physical inventory instructions periodically (weekly/monthly) or as needed: ① Decide physical inventory scope (all/by zone/by product) ② Set physical inventory period ③ Assign physical inventory staff ④ Deliver physical inventory instructions to workers (generate physical inventory sheet). Status: Awaiting Physical Inventory",
           "actor": "Warehouse Manager",
-          "term": ""
+          "term": "Issue Instruction"
         },
         {
-          "label": "Perform Physical Inventory",
+          "label": "[9] Perform Physical Inventory",
           "desc": "Workers conduct physical inventory in the field",
-          "detail": "Workers perform physical inventory: barcode scanning, quantity verification, damage inspection.",
+          "detail": "Workers perform physical inventory: ① Move to target area ② Barcode scan and verify quantity by product ③ Inspect for damage/deformation/wear ④ Real-time input of physical inventory status (mobile device) ⑤ Submit to FULGO upon completion. Status: Physical Inventory Complete",
           "actor": "Worker",
-          "term": ""
+          "term": "Physical Inventory Complete"
         },
         {
-          "label": "Report Physical Inventory Results & Analysis",
+          "label": "[10] Report Physical Inventory Results & Analysis",
           "desc": "Compare results with WMS inventory and report to shipper",
-          "detail": "FULGO WMS automatically analyzes physical inventory results and reports to shipper: discrepancy rate analysis, anomalies list.",
+          "detail": "FULGO WMS auto-analyzes physical inventory results: ① Compare physical quantity vs WMS quantity ② Analyze discrepancy patterns (increase/decrease/loss) ③ Generate anomalies list (suspected theft/errors/damage) ④ Create physical inventory report ⑤ Report results to shipper (discrepancy rate %, problem items, recommendations). Status: Awaiting Validation",
           "actor": "FULGO WMS",
-          "term": ""
+          "term": "Report Complete"
         },
         {
-          "label": "Adjust Inventory Quantity",
+          "label": "[11] Adjust Inventory Quantity",
           "desc": "Execute quantity adjustment based on physical inventory results",
-          "detail": "Workers execute quantity adjustments based on results: process increases, decreases, and relocations.",
+          "detail": "Workers execute quantity adjustments per warehouse manager approval based on results: ① Increase (from omitted inbound, etc.)→input in system (process as inbound) ② Decrease (from theft/damage, etc.)→input in system (process as disposal/deduction) ③ Relocate if needed→reposition locations ④ Verify completion by barcode scan ⑤ Report adjustment completion to FULGO. Status: Adjustment Complete",
           "actor": "Worker",
-          "term": ""
+          "term": "Adjustment Complete"
         },
         {
-          "label": "Confirm Adjustment & Synchronize with OMS",
+          "label": "[12] Confirm Adjustment & Synchronize with OMS",
           "desc": "Finalize adjustment results and synchronize with OMS",
-          "detail": "FULGO WMS finalizes quantity adjustment processing and synchronizes with OMS.",
+          "detail": "FULGO WMS finalizes quantity adjustment: ① Validate adjustment contents (verify increase/decrease amounts) ② Final inventory state change (=confirm as physical inventory quantity) ③ Record adjustment log (datetime/handler/reason/quantity change) ④ Send final sync to OMS (WMS inventory = OMS inventory) ⑤ Re-validate consistency. Status: Adjustment Confirmed",
           "actor": "FULGO WMS",
-          "term": ""
+          "term": "Sync Complete"
         },
         {
-          "label": "Real-time Inventory Monitoring Dashboard",
+          "label": "[13] Real-time Inventory Monitoring Dashboard",
           "desc": "Provide real-time inventory status to shipper",
-          "detail": "FULGO dashboard provides real-time inventory status to shippers.",
+          "detail": "FULGO dashboard provides real-time inventory status to shippers: ① Overall inventory status (available/reserved/hold/defective ratios) ② Inventory distribution by zone and utilization rate ③ Inventory status and trends by shipper ④ Inventory turnover rate ⑤ Latest physical inventory results (consistency %). Auto-alerts: Below safety stock→alert, Seasonal products near end of season (30 days before)→alert, Long-term inventory (90+ days unsold)→alert",
           "actor": "Shipper",
-          "term": ""
+          "term": "Monitoring"
         },
         {
-          "label": "Inventory KPI Reporting",
+          "label": "[14] Inventory KPI Reporting",
           "desc": "Auto-generate and provide daily/weekly/monthly KPIs",
-          "detail": "FULGO auto-generates: inventory accuracy, turnover rate, average holding period, zone utilization rate, loss analysis.",
+          "detail": "FULGO auto-generates reports: ① Inventory Accuracy (%) - consistency rate from physical inventory ② Inventory Turnover Rate - outbound vs inbound ratio ③ Average Holding Period - days from inbound to outbound ④ Zone Utilization Rate (%) - usage vs capacity ⑤ Inventory Value Change - quantity × unit cost ⑥ Loss Analysis - scale of damage/theft/loss. Includes shipper-specific reports, trend analysis, and improvement recommendations.",
           "actor": "FULGO WMS",
-          "term": ""
+          "term": "Reporting Complete"
         }
       ]
     }
