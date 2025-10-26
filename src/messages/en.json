@@ -420,9 +420,11 @@
   "actors": {
     "shipper": "Shipper",
     "fulgo": "FULGO",
+    "warehouse_manager": "Warehouse Manager",
     "logistics": "Logistics",
     "worker": "Worker",
-    "inventory": "Inventory System",
+    "inventory_system": "Inventory System",
+    "oms_erp": "OMS/ERP",
     "customer": "Customer",
     "channel": "Channel",
     "carrier": "Carrier"
@@ -430,9 +432,11 @@
   "actorDescriptions": {
     "shipper": "Product Owner",
     "fulgo": "Platform System",
+    "warehouse_manager": "Warehouse Manager/Approver",
     "logistics": "Warehouse Operating Company",
     "worker": "Warehouse Staff",
-    "inventory": "Inventory Management Engine",
+    "inventory_system": "Inventory Management Engine",
+    "oms_erp": "Order/Accounting Integration System",
     "customer": "Product Buyer",
     "channel": "Coupang, Naver, etc.",
     "carrier": "CJ Logistics, etc."

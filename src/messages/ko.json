@@ -120,9 +120,11 @@
   "actors": {
     "shipper": "화주사",
     "fulgo": "FULGO",
+    "warehouse_manager": "창고장",
     "logistics": "물류사",
     "worker": "작업자",
-    "inventory": "재고시스템",
+    "inventory_system": "재고시스템",
+    "oms_erp": "OMS/ERP",
     "customer": "고객",
     "channel": "판매처",
     "carrier": "택배사"
@@ -130,9 +132,11 @@
   "actorDescriptions": {
     "shipper": "상품 주인",
     "fulgo": "플랫폼 시스템",
+    "warehouse_manager": "창고장/승인권자",
     "logistics": "창고 운영 회사",
     "worker": "창고 현장 직원",
-    "inventory": "재고 관리 엔진",
+    "inventory_system": "재고 관리 엔진",
+    "oms_erp": "주문/회계 연동 시스템",
     "customer": "상품 구매자",
     "channel": "쿠팡, 네이버 등",
     "carrier": "CJ대한통운 등"

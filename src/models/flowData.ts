@@ -3,30 +3,53 @@ import { Flow } from './types';
 
 export const flowData: Record<string, Flow> = {
   inbound: {
-    title: '입고 프로세스 (Inbound)',
-    description: '화주사가 FULGO WMS에 입고 계획을 등록하면, 물류사가 이를 승인하고 실제 상품을 받아서 창고에 보관하는 전체 과정입니다. FULGO 플랫폼은 모든 진행 상황을 실시간으로 추적하고 관리합니다.',
+    title: '입고 프로세스 (Inbound Request) - 12단계 확장',
+    description: '화주사의 입고 요청부터 OMS/ERP 동기화까지 완전한 입고 워크플로우. 승인 절차, 존 할당, 검수, 예외 처리, 모니터링, 리포팅을 포함한 엔터프라이즈급 프로세스입니다.',
     hierarchy: 'Fulgo(플랫폼) → 물류사(창고 운영자) → 화주사(고객사)',
     actors: [
-      { id: 'shipper', name: '화주사', color: '#1976d2', desc: '상품 주인 (입고 요청)', layer: '3계층' },
-      { id: 'fulgo', name: 'FULGO', color: '#d32f2f', desc: '플랫폼 시스템', layer: '1계층' },
-      { id: 'logistics', name: '물류사', color: '#f57c00', desc: '창고 운영 회사', layer: '2계층' },
-      { id: 'worker', name: '작업자', color: '#7b1fa2', desc: '창고 현장 직원', layer: '2계층' },
-      { id: 'inventory', name: '재고시스템', color: '#c2185b', desc: '재고 관리 엔진', layer: '1계층' }
+      { id: 'shipper', name: '화주사', color: '#1976d2', desc: '입고 요청 주체', layer: '3계층' },
+      { id: 'fulgo', name: 'FULGO 시스템', color: '#d32f2f', desc: '플랫폼 중앙', layer: '1계층' },
+      { id: 'warehouse_manager', name: '창고장', color: '#ff6f00', desc: '입고 승인권자', layer: '2계층' },
+      { id: 'worker', name: '현장 작업자', color: '#7b1fa2', desc: '검수 및 입고 실행', layer: '2계층' },
+      { id: 'inventory_system', name: '재고 엔진', color: '#c2185b', desc: '재고 동기화', layer: '1계층' },
+      { id: 'oms_erp', name: 'OMS/ERP', color: '#0288d1', desc: '주문/회계 연동', layer: '외부' },
     ],
     steps: [
-      { from: 'shipper', to: 'fulgo', label: '입고 예정 등록', desc: '어떤 상품이 언제 들어올지 등록', detail: '화주사가 FULGO 시스템에 입고될 상품 정보(상품명, 수량, 도착 예정일)를 미리 등록합니다.', actor: '화주사', term: '', features: ['STK-008'] },
-      { from: 'fulgo', to: 'logistics', label: '입고 정보 전달', desc: '물류사에 입고 예정 알림', detail: 'FULGO가 물류사에게 "곧 이런 상품이 들어올 예정입니다"라고 사전에 알려주고 승인을 요청합니다.', actor: 'FULGO', term: 'ASN (사전 입고 알림)', features: ['STK-008'] },
-      { from: 'logistics', to: 'fulgo', label: '입고 일정 승인', desc: '창고 공간 확보 및 일정 조율', detail: '물류사가 창고 상황을 검토하고 "이 날짜에 받을 수 있습니다"라고 확정합니다. 하역장 위치도 함께 배정합니다.', actor: '물류사', term: '도크 배정', features: ['CFG-001'] },
-      { from: 'logistics', to: 'worker', label: '입고 작업 지시', desc: '담당 직원에게 작업 할당', detail: '물류사 관리자가 창고 작업자에게 "오늘 이 상품 입고 처리 부탁합니다"라고 작업을 배정합니다.', actor: '물류사', term: '', features: ['USER-001'] },
-      { from: 'worker', to: 'logistics', label: '상품 도착 확인', desc: '트럭 도착, 하역 시작', detail: '상품을 실은 트럭이 도착하면 작업자가 시스템에 "상품이 도착했습니다"라고 등록합니다.', actor: '작업자', term: '', features: ['STK-003'] },
-      { from: 'worker', to: 'logistics', label: '임시 입고 처리', desc: '검사 전 임시 보관', detail: '아직 검사하지 않은 상태로 일단 창고에 들여놓고 "검사 대기 중"으로 표시합니다.', actor: '작업자', term: '가입고', features: ['STK-003', 'STK-006'] },
-      { from: 'worker', to: 'logistics', label: '상품 검사 완료', desc: '바코드 스캔 및 품질 확인', detail: '작업자가 하나하나 바코드를 스캔하면서 "수량이 맞는지, 상품이 온전한지, 파손은 없는지" 꼼꼼하게 검사합니다.', actor: '작업자', term: '검수', features: ['STK-005', 'STK-010'] },
-      { from: 'logistics', to: 'fulgo', label: '검사 결과 보고', desc: '정상/불량 여부 전달', detail: '물류사가 검사 결과를 FULGO에 보고합니다. 만약 불량품이나 수량 차이가 있으면 화주사에게 자동으로 알림이 갑니다.', actor: '물류사', term: '', features: ['RET-003', 'STK-010'] },
-      { from: 'fulgo', to: 'worker', label: '상품 라벨 발급', desc: '바코드 스티커 출력', detail: 'FULGO 시스템이 각 상품에 붙일 바코드 라벨을 자동으로 생성하고, 작업자가 이를 출력해서 부착합니다.', actor: 'FULGO', term: '', features: ['STK-007'] },
-      { from: 'worker', to: 'logistics', label: '보관 위치 배치', desc: '지정된 선반에 상품 정리', detail: '작업자가 시스템이 알려준 보관 위치(예: A구역-3번선반-5번칸)로 가서 상품을 정리합니다.', actor: '작업자', term: '적치', features: ['CFG-001', 'STK-006'] },
-      { from: 'logistics', to: 'fulgo', label: '입고 완료 보고', desc: '모든 작업 종료', detail: '물류사가 "이제 모든 상품이 창고에 잘 들어왔고, 판매 가능합니다"라고 FULGO에 최종 보고합니다.', actor: '물류사', term: '', features: ['STK-003', 'STK-010'] },
-      { from: 'fulgo', to: 'inventory', label: '재고 수량 증가', desc: '판매 가능 재고 추가', detail: 'FULGO의 재고 시스템이 해당 상품의 재고 수를 증가시킵니다. 이제 판매할 수 있습니다.', actor: 'FULGO', term: '', features: ['STK-002', 'STK-011'] },
-      { from: 'fulgo', to: 'shipper', label: '입고 완료 알림', desc: '화주사에 완료 통보', detail: 'FULGO가 화주사에게 "입고가 완료되었습니다. 이제 재고를 확인하실 수 있습니다"라고 알립니다.', actor: 'FULGO', term: '', features: ['STK-002', 'RPT-001'] },
+      // 1단계: 입고 요청
+      { from: 'shipper', to: 'fulgo', label: '[1] 입고 요청 생성', desc: '상품코드, 수량, 납품예정일 등 입력', detail: '화주사가 FULGO OMS를 통해 입고 요청서 생성: 상품코드, 수량, 송장번호, 필수 정보 입력. 상태: REQUEST_PENDING', actor: '화주사', term: '요청 대기', features: ['STK-008'] },
+      
+      // 2단계: 승인 요청 접수
+      { from: 'fulgo', to: 'warehouse_manager', label: '[2] 승인 요청 접수', desc: '입고 유형 분류 및 승인 필요 판정', detail: 'FULGO 시스템이 입고 요청을 수신 후 자동 분류: 일반입고/반품입고/긴급입고. 승인 필요 조건 판정 (냉장·위험물·신규화주 등). 상태: APPROVAL_PENDING', actor: 'FULGO', term: '승인 대기', features: ['STK-008', 'CFG-001'] },
+      
+      // 3단계: 승인 처리
+      { from: 'warehouse_manager', to: 'fulgo', label: '[3] 승인 처리', desc: '존 여유, 상품 적합성, 반입 제한 검토', detail: '창고장이 다음 기준으로 검토: 재고 수용 가능 여부(존 여유), 입고 상품 품목 적합성(온도구역), 반입 제한 품목. 승인/반려 결정. 상태: APPROVED 또는 REJECTED', actor: '창고장', term: '승인 완료', features: ['CFG-001', 'STK-006'] },
+      
+      // 4단계: 존 할당
+      { from: 'fulgo', to: 'fulgo', label: '[4] 존 할당', desc: '상품 속성 기반 자동 할당 (냉장/일반/특수)', detail: 'FULGO가 상품 정책 기반으로 자동 할당: 냉장 식품→냉장존, 의류→일반존 등. 존 가용성 체크, 로케이션 코드 부여. 상태: ZONE_ASSIGNED', actor: 'FULGO', term: '존 할당 완료', features: ['CFG-001', 'STK-006', 'STK-013'] },
+      
+      // 5단계: 입고 실행
+      { from: 'worker', to: 'warehouse_manager', label: '[5] 입고 실행 및 검수', desc: '상품 이동, 수량/파손/유효기간 확인', detail: '현장 작업자가 할당된 존으로 상품 이동. 검수 절차: 수량확인, 파손 확인, 유효기간 확인. 상태: INBOUND_CONFIRMED', actor: '작업자', term: '입고 완료', features: ['STK-005', 'STK-010'] },
+      
+      // 6단계: 송장 생성
+      { from: 'fulgo', to: 'worker', label: '[6] 송장 자동 생성', desc: '상품코드/수량/존코드/입고일자 기록', detail: 'FULGO가 입고 완료 시 자동으로 송장 생성: 상품코드, 수량, 존코드, 입고일자 포함. OMS로 송장 데이터 전송. 상태: 송장 생성 완료', actor: 'FULGO', term: '송장 자동생성', features: ['STK-007', 'STK-003'] },
+      
+      // 7단계: 승인 이력 관리
+      { from: 'fulgo', to: 'warehouse_manager', label: '[7] 승인 이력 저장', desc: '승인자/일시/결과/사유 기록', detail: 'FULGO가 승인 로그 저장: 승인자명, 승인일시, 승인결과, 사유, 요청ID. 변경 사항 발생 시 "변경 승인 요청"으로 재기안. 상태: CHANGE_REQUESTED (필요시)', actor: 'FULGO', term: '감사 추적', features: ['STK-010', 'RPT-001'] },
+      
+      // 8단계: 예외 처리
+      { from: 'worker', to: 'warehouse_manager', label: '[8] 예외 처리', desc: 'SLA 초과/존 포화/상품 불일치 대응', detail: '예외 시나리오 처리: ① 승인 지연→자동 알림, ② 존 포화→ZONE_WAITING 대기열, ③ 검수 실패→HOLD 상태→재검수. 상태: HOLD 또는 ZONE_WAITING', actor: '창고장', term: '예외 관리', features: ['STK-006'] },
+      
+      // 9단계: 실시간 모니터링
+      { from: 'warehouse_manager', to: 'fulgo', label: '[9] 실시간 모니터링', desc: '승인 대기/완료/입고중/반려 현황 시각화', detail: 'FULGO 대시보드: 승인 대기 건수, 승인 완료 건수, 입고 중 건수, 반려 건수. 존별 입고율(%), 입고 처리 속도 KPI 시각화. 병목 구간 붉은색 표시.', actor: 'FULGO', term: '대시보드', features: ['RPT-001', 'RPT-005'] },
+      
+      // 10단계: 리포팅 및 분석
+      { from: 'fulgo', to: 'warehouse_manager', label: '[10] KPI 리포팅', desc: '승인 평균시간/반려율/지연율/존 포화율', detail: 'FULGO 자동 생성: 일간/주간/월간 리포트. KPI: 승인 평균 소요시간, 반려율(%), 입고 지연율, 존 포화율. 승인자별 성과 측정. BI Tool 연계 가능.', actor: 'FULGO', term: '리포팅', features: ['RPT-001', 'RPT-005'] },
+      
+      // 11단계: 승인 정책 관리
+      { from: 'warehouse_manager', to: 'fulgo', label: '[11] 정책 기반 관리', desc: '승인 기준/권한/SLA 동적 조정', detail: 'FULGO 관리자가 정책 설정: 승인 필요 조건(입고유형/화주등급/카테고리), 승인 권한자(창고장/본부장), SLA 기준시간. 정책 버전별 관리 및 시행일자 표시.', actor: '시스템 관리자', term: '정책 버전화', features: ['CFG-001', 'USER-001'] },
+      
+      // 12단계: 종료 및 회계 연동
+      { from: 'fulgo', to: 'oms_erp', label: '[12] OMS/ERP 동기화', desc: '입고 완료 후 정산 및 회계 처리', detail: '입고 완료 시점에 OMS로 "입고확정 송장" 전송. ERP와 입고 수불 내역 동기화. 월 단위 마감 보고서 생성. 반려/미입고 건 자동 이월. 상태: COMPLETED', actor: 'FULGO', term: '마감 처리', features: ['STK-002', 'STK-011'] },
     ]
   },
   outbound: {

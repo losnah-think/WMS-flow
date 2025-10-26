@@ -420,9 +420,11 @@
   "actors": {
     "shipper": "Nhà cung cấp",
     "fulgo": "FULGO",
+    "warehouse_manager": "Quản lý kho",
     "logistics": "Công ty hậu cần",
     "worker": "Công nhân",
-    "inventory": "Hệ thống hàng tồn kho",
+    "inventory_system": "Hệ thống hàng tồn kho",
+    "oms_erp": "OMS/ERP",
     "customer": "Khách hàng",
     "channel": "Kênh bán",
     "carrier": "Công ty vận chuyển"
@@ -430,9 +432,11 @@
   "actorDescriptions": {
     "shipper": "Chủ sản phẩm",
     "fulgo": "Hệ thống nền tảng",
+    "warehouse_manager": "Quản lý kho/Người phê duyệt",
     "logistics": "Công ty quản lý kho",
     "worker": "Nhân viên kho",
-    "inventory": "Công cụ quản lý hàng tồn kho",
+    "inventory_system": "Công cụ quản lý hàng tồn kho",
+    "oms_erp": "Hệ thống tích hợp đơn hàng/kế toán",
     "customer": "Người mua sản phẩm",
     "channel": "Shopee, Lazada, v.v.",
     "carrier": "Viettel Post, GHN, v.v."
