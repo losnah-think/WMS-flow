@@ -107,8 +107,8 @@ export default function Home() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-4">
-            <div className="col-span-1 md:col-span-3 bg-white rounded-lg shadow-lg p-3 md:p-4">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 md:gap-4">
+            <div className="col-span-1 lg:col-span-3 bg-white rounded-lg shadow-lg p-2 md:p-4 overflow-x-auto">
               <div className="mb-3 md:mb-4">
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-800 line-clamp-2">
                   {t(`flows.${flowType}.title`)}
@@ -131,8 +131,8 @@ export default function Home() {
               />
             </div>
 
-            <div className="col-span-1 md:col-span-1">
-              <div className="bg-white rounded-lg shadow-lg p-4 md:p-5 h-full sticky md:top-20 overflow-y-auto max-h-[calc(100vh-180px)]">
+            <div className="hidden lg:block col-span-1 lg:col-span-2">
+              <div className="bg-white rounded-lg shadow-lg p-3 md:p-4 h-full sticky lg:top-20 overflow-y-auto max-h-[calc(100vh-180px)]">
                 <StepDetails 
                   flow={currentFlow} 
                   activeStep={activeStep}
@@ -143,12 +143,14 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="md:hidden">
-            <div className="bg-white rounded-lg shadow-lg p-4">
-              <MiniTimeline
-                flow={currentFlow}
+          <div className="lg:hidden">
+            <div className="bg-white rounded-lg shadow-lg p-3 md:p-4">
+              <h3 className="text-lg font-bold text-gray-800 mb-4">{t('stepDetails.title')}</h3>
+              <StepDetails 
+                flow={currentFlow} 
                 activeStep={activeStep}
                 onStepClick={handleStepSelect}
+                flowType={flowType}
               />
             </div>
           </div>

@@ -50,8 +50,8 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
   };
 
   return (
-    <div className="w-full overflow-x-auto border-2 border-gray-200 rounded-lg bg-white flex justify-center">
-      <div className="w-full py-2 md:py-3">
+    <div className="w-full overflow-x-auto border-2 border-gray-200 rounded-lg bg-white flex justify-center -mx-2 md:-mx-4">
+      <div className="w-full py-2 md:py-3 px-2 md:px-4">
         <style>{`
         @keyframes dashFlow {
           0% {
@@ -89,7 +89,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
       <svg
         width="100%"
         height={flow.steps.length * 80 + 200}
-        viewBox={`0 0 ${flow.actors.length * 150 + 100} ${flow.steps.length * 80 + 200}`}
+        viewBox={`0 0 ${flow.actors.length * 150 + 200} ${flow.steps.length * 80 + 200}`}
         className="w-full h-auto"
       >
         {/* OMS 배경 영역 - 강조 */}
@@ -184,7 +184,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
 
         {/* 액터 헤더 */}
         {flow.actors.map((actor, idx) => {
-          const x = idx * 150 + 100;
+          const x = idx * 150 + 150;
           return (
             <g key={actor.id}>
               {/* 배경 세로선 */}
