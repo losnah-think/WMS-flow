@@ -111,28 +111,49 @@ export const flowData: Record<string, Flow> = {
     ]
   },
   storage: {
-    title: '보관 및 재고 관리 (Storage)',
-    description: '물류사가 창고 공간을 효율적으로 관리하고, FULGO가 화주사별로 재고 현황을 정확하게 추적하는 일상 운영 과정입니다.',
+    title: '재고 관리 프로세스 (Inventory Management) - 11단계 완전 체계',
+    description: '입고부터 출고까지 재고의 상태, 수량, 위치를 실시간으로 추적하고 관리. 가용/예약/보류/불량 상태 관리, FIFO/FEFO 최적화, OMS 동기화, 실시간 모니터링을 포함한 엔터프라이즈급 재고 관리 시스템.',
     hierarchy: 'Fulgo(플랫폼) → 물류사(창고 운영자) → 화주사(고객사)',
     actors: [
-      { id: 'fulgo', name: 'FULGO', color: '#d32f2f', desc: '플랫폼 시스템', layer: '1계층' },
-      { id: 'logistics', name: '물류사', color: '#f57c00', desc: '창고 운영 회사', layer: '2계층' },
-      { id: 'worker', name: '작업자', color: '#7b1fa2', desc: '창고 현장 직원', layer: '2계층' },
-      { id: 'inventory', name: '재고시스템', color: '#c2185b', desc: '재고 관리 엔진', layer: '1계층' },
-      { id: 'shipper', name: '화주사', color: '#1976d2', desc: '상품 주인', layer: '3계층' },
+      { id: 'fulgo', name: 'FULGO 시스템', color: '#d32f2f', desc: '재고 엔진 중앙', layer: '1계층' },
+      { id: 'warehouse_manager', name: '창고 관리자', color: '#ff6f00', desc: '재고 정책 설정', layer: '2계층' },
+      { id: 'worker', name: '현장 작업자', color: '#7b1fa2', desc: '재고 적치/이동', layer: '2계층' },
+      { id: 'shipper', name: '화주사', color: '#1976d2', desc: '재고 모니터링', layer: '3계층' },
+      { id: 'oms_system', name: 'OMS 시스템', color: '#0288d1', desc: '재고 동기화', layer: '외부' },
     ],
     steps: [
-      { from: 'fulgo', to: 'logistics', label: '창고 구조 설정', desc: '구역-선반-칸 구조 정의', detail: 'FULGO 시스템에서 물류사별 창고를 구역(Zone), 선반(Rack), 칸(Bin)으로 나누어 체계적으로 등록합니다.', actor: 'FULGO', term: '로케이션 체계', features: ['CFG-001'] },
-      { from: 'logistics', to: 'fulgo', label: '보관 위치 등록', desc: '각 위치에 바코드 부여', detail: '물류사가 실제 창고 선반 하나하나에 위치 정보를 입력하고 바코드 스티커를 붙입니다. 예: "A구역-3번선반-5번칸"', actor: '물류사', term: '', features: ['STK-007', 'CFG-001'] },
-      { from: 'worker', to: 'logistics', label: '상품 위치 이동', desc: '다른 선반으로 옮기기', detail: '작업자가 "이 상품을 더 꺼내기 쉬운 곳으로 옮기자"라며 상품을 다른 선반으로 이동하고 바코드로 스캔합니다.', actor: '작업자', term: '', features: ['STK-005', 'STK-013'] },
-      { from: 'logistics', to: 'fulgo', label: '이동 내역 전송', desc: '위치 변경 기록', detail: '물류사가 "A-3-5번 칸에 있던 상품을 B-2-1번 칸으로 옮겼습니다"라고 FULGO에 보고합니다.', actor: '물류사', term: '', features: ['STK-013'] },
-      { from: 'fulgo', to: 'inventory', label: '재고 위치 업데이트', desc: '실시간 위치 정보 반영', detail: 'FULGO 재고 시스템이 상품의 새로운 위치를 즉시 업데이트합니다.', actor: 'FULGO', term: '', features: ['STK-002', 'STK-006'] },
-      { from: 'logistics', to: 'worker', label: '재고 실사 지시', desc: '실제 수량 확인 작업', detail: '물류사가 정기적으로 또는 필요할 때 작업자에게 "선반에 실제로 몇 개가 있는지 세어보세요"라고 지시합니다.', actor: '물류사', term: '정기 실사', features: ['STK-010'] },
-      { from: 'worker', to: 'logistics', label: '실사 수행', desc: '직접 세어서 기록', detail: '작업자가 창고를 돌며 선반마다 상품을 직접 세고 바코드를 스캔하며 실제 수량을 기록합니다.', actor: '작업자', term: '', features: ['STK-010', 'STK-005'] },
-      { from: 'logistics', to: 'fulgo', label: '실사 결과 전송', desc: '실제 수량과 차이 보고', detail: '물류사가 "시스템에는 100개라고 되어 있는데 실제로는 98개만 있습니다"라고 차이를 FULGO에 보고합니다.', actor: '물류사', term: '', features: ['STK-010'] },
-      { from: 'fulgo', to: 'inventory', label: '재고 수량 조정', desc: '시스템 수량 보정', detail: 'FULGO가 실제 수량에 맞춰 시스템 재고를 100개에서 98개로 수정합니다.', actor: 'FULGO', term: '', features: ['STK-002', 'STK-011'] },
-      { from: 'fulgo', to: 'shipper', label: '재고 현황 제공', desc: '실시간 재고 조회 가능', detail: 'FULGO가 화주사에게 "현재 창고에 이 상품이 몇 개 있고, 어디에 보관되어 있습니다"라는 정보를 제공합니다.', actor: 'FULGO', term: '', features: ['STK-002', 'STK-006'] },
-      { from: 'shipper', to: 'fulgo', label: '재고 분석 확인', desc: '상품 회전율 등 리포트', detail: '화주사가 FULGO 대시보드에서 "어떤 상품이 잘 팔리는지, 재고가 얼마나 오래 머물렀는지" 등을 확인합니다.', actor: '화주사', term: '', features: ['RPT-001', 'RPT-005'] },
+      // 1단계: 재고 상태 관리
+      { from: 'fulgo', to: 'fulgo', label: '[1] 재고 상태 분류', desc: '가용/예약/보류/불량 상태 구분', detail: 'FULGO가 재고 생명주기별 상태를 자동 추적: ① 가용(Available) - 출고 가능 정상 재고, ② 예약(Reserved) - 출고 지시 생성되었으나 피킹 전, ③ 피킹 중(Picking) - 피킹 작업 진행 중, ④ 보류(Hold) - 출고 불가 상태, ⑤ 불량(Defective) - 판매 불가 불량품, ⑥ 폐기 예정(To be Disposed) - 폐기 승인 대기', actor: 'FULGO', term: '상태 추적', features: ['STK-002', 'STK-011'] },
+      
+      // 2단계: 재고 수량 관리
+      { from: 'fulgo', to: 'fulgo', label: '[2] 재고 수량 관리', desc: '물리/가용/예약/안전 재고 구분', detail: 'FULGO가 4가지 재고 수량을 실시간 관리: ① 물리 재고 - 창고 실제 존재 수량, ② 가용 재고 - 출고 가능 수량, ③ 예약 재고 - 출고 지시로 할당된 수량, ④ 안전 재고 - 재고 부족 방지 최소 유지 수량. 입고/출고/조정 시 자동 갱신', actor: 'FULGO', term: '수량 갱신', features: ['STK-002', 'STK-004', 'STK-012'] },
+      
+      // 3단계: 로케이션 관리
+      { from: 'warehouse_manager', to: 'fulgo', label: '[3] 로케이션 구조 설정', desc: '존-로케이션 체계 정의 (구역-열-단)', detail: '창고 관리자가 로케이션 구조 설정: 존(Zone) - 대분류 구역(일반존/냉장존/냉동존/보류존/불량존), 로케이션 - 세부 위치코드(A-01-01 형식). 각 로케이션에 크기, 적재 중량, 속성 정보 입력. FIFO/FEFO 정책 설정', actor: '창고 관리자', term: '로케이션 체계', features: ['CFG-001', 'STK-006', 'STK-013'] },
+      
+      // 4단계: 자동 할당
+      { from: 'fulgo', to: 'worker', label: '[4] 로케이션 자동 할당', desc: '상품 속성/상태 기반 존 할당', detail: 'FULGO가 입고 상품을 자동 할당: ① 상품 속성(온도/크기/보관기준) 확인 → ② 적합한 존 선택(상온→일반존, 냉장→냉장존 등) → ③ 빈 로케이션 검색 → ④ 자동 할당. 존 포화 시 자동 알림 및 재배치 요청', actor: 'FULGO', term: '자동 할당', features: ['STK-006', 'STK-013'] },
+      
+      // 5단계: 재고 이동 추적
+      { from: 'worker', to: 'fulgo', label: '[5] 재고 이동 이력 기록', desc: '입고/이동/피킹/출고 전체 추적', detail: '모든 재고 이동을 추적 기록: 입고(OMS → WMS 입고 → 로케이션 A) → 이동(로케이션 A → B) → 피킹(로케이션 A → 피킹 존) → 출고(피킹 존 → 출하) → 반품(반품 존 → 로케이션 A). 로트/시리얼 번호 기반 추적. 전체 이력 조회 가능', actor: '작업자', term: '이동 추적', features: ['STK-005', 'STK-013'] },
+      
+      // 6단계: 재고 가시성
+      { from: 'shipper', to: 'fulgo', label: '[6] 실시간 모니터링', desc: '재고 현황 대시보드 및 알림', detail: 'FULGO 대시보드에서 실시간 재고 현황 모니터링: ① 전체 재고 현황(가용/예약/보류/불량 비율) ② 존별 재고 분포 및 가동률 ③ 화주별 재고 현황 ④ 재고 회전율. 자동 알림: 재고 부족(안전 재고 이하) → 화주에게 자동 알림, 유효기한 임박(30일 이내) → 알림, 장기 재고(90일 이상 미출고) → 알림', actor: '화주사', term: '가시성', features: ['RPT-001', 'RPT-005'] },
+      
+      // 7단계: OMS 동기화
+      { from: 'fulgo', to: 'oms_system', label: '[7] 재고 실시간 동기화', desc: '입출고 즉시 OMS와 동기화', detail: 'FULGO와 OMS 간 실시간 재고 동기화: ① 입고 완료 → WMS → OMS (재고 증가) ② 출고 확정 → WMS → OMS (재고 감소) ③ 재고 조정 → WMS → OMS (수량 변경) ④ 반품 재입고 → WMS → OMS (재고 증가). 동기화 실패 시 자동 재시도(최대 3회), 실패 시 관리자 알림', actor: 'FULGO', term: '동기화', features: ['STK-002', 'STK-011'] },
+      
+      // 8단계: 정합성 체크
+      { from: 'warehouse_manager', to: 'fulgo', label: '[8] 재고 정합성 검증', desc: 'WMS vs 실물 vs OMS 재고 일치 확인', detail: '자동 정합성 체크 (일 1회 실행): ① WMS 재고 vs 실물 재고 비교 → 불일치 시 "재고 조정 필요" 알림 ② WMS 재고 vs OMS 재고 비교 → 차이 분석 ③ 불일치 원인 파악 및 기록. 작업자 실사 결과와 시스템 재고 자동 조정. 정합성 리포트 생성', actor: '창고 관리자', term: '정합성 검증', features: ['STK-010', 'RPT-001'] },
+      
+      // 9단계: 재고 정책 관리
+      { from: 'warehouse_manager', to: 'fulgo', label: '[9] 재고 정책 설정', desc: '화주별/상품별 정책 관리', detail: '창고 관리자가 재고 운영 정책 설정: ① 화주별 정책 - 안전 재고(상품별), FIFO/FEFO 회전 정책, 로트/유효기한 관리 여부 ② 재고 분류 - ABC 분석(A등급:고빈도 상위20%, B등급:중빈도 중위30%, C등급:저빈도 하위50%) ③ 보유 비용 - 보관료(일/월 단위), 장기 보관 추가 비용, 존별 단가 설정', actor: '창고 관리자', term: '정책 설정', features: ['CFG-001', 'USER-001'] },
+      
+      // 10단계: 재고 예측 및 최적화
+      { from: 'fulgo', to: 'warehouse_manager', label: '[10] 재고 예측 및 최적화', desc: '수요 예측, 공간 최적화 제안', detail: 'FULGO의 AI 엔진이 자동 분석 및 제안: ① 수요 예측 - 계절성 분석, 트렌드 파악, 발주량 제안 ② 공간 최적화 - 고빈도/저빈도 상품 배치 제안, 피킹 동선 최적화 ③ 재고 최적화 - 과재고 상품 할인 제안, 저회전 재고 반출 요청 ④ 비용 절감 - 보관료 절감 방안 제시', actor: 'FULGO', term: 'AI 최적화', features: ['RPT-005', 'STK-011'] },
+      
+      // 11단계: KPI 리포팅
+      { from: 'fulgo', to: 'shipper', label: '[11] KPI 리포팅 및 분석', desc: '일간/주간/월간 KPI 자동 생성', detail: 'FULGO 자동 생성 리포트: ① 재고 정확도(%) - WMS vs 실물 비교 ② 재고 회전율 - 입고 대비 출고 비율 ③ 평균 체류 기간 - 입고부터 출고까지 소요 일수 ④ 존별 가동률(%) - 용량 대비 사용률 ⑤ 재고 가치 변동 - 수량×단가. 화주별 리포트, 추세 분석, 권장사항 포함', actor: 'FULGO', term: '리포팅', features: ['RPT-001', 'RPT-005'] },
     ]
   }
 };
