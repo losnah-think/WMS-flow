@@ -89,7 +89,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
       <svg
         width="100%"
         height={flow.steps.length * 80 + 200}
-        viewBox={`0 0 ${flow.actors.length * 150 + 200} ${flow.steps.length * 80 + 200}`}
+        viewBox={`-50 0 ${flow.actors.length * 150 + 200} ${flow.steps.length * 80 + 200}`}
         className="w-full h-auto"
       >
         {/* OMS 배경 영역 - 강조 */}
@@ -184,7 +184,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
 
         {/* 액터 헤더 */}
         {flow.actors.map((actor, idx) => {
-          const x = idx * 150 + 150;
+          const x = idx * 150 + 100;
           return (
             <g key={actor.id}>
               {/* 배경 세로선 */}
