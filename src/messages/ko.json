@@ -136,7 +136,11 @@
     "disposal_staff": "폐기 담당자",
     "customer": "고객",
     "channel": "판매처",
-    "carrier": "택배사"
+    "carrier": "택배사",
+    "system_dashboard": "대시보드 시스템",
+    "system_allocation": "할당 엔진",
+    "system_inventory_engine": "재고 엔진",
+    "system_return_prep": "반품 준비 시스템"
   },
   "actorDescriptions": {
     "shipper": "상품 주인",

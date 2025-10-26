@@ -436,7 +436,11 @@
     "disposal_staff": "Nhân viên xử lý hàng",
     "customer": "Khách hàng",
     "channel": "Kênh bán",
-    "carrier": "Công ty vận chuyển"
+    "carrier": "Công ty vận chuyển",
+    "system_dashboard": "Hệ thống bảng điều khiển",
+    "system_allocation": "Công cụ phân bổ",
+    "system_inventory_engine": "Công cụ hàng tồn kho",
+    "system_return_prep": "Hệ thống chuẩn bị hoàn hàng"
   },
   "actorDescriptions": {
     "shipper": "Chủ sản phẩm",

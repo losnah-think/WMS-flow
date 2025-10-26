@@ -436,7 +436,11 @@
     "disposal_staff": "Disposal Staff",
     "customer": "Customer",
     "channel": "Channel",
-    "carrier": "Carrier"
+    "carrier": "Carrier",
+    "system_dashboard": "Dashboard System",
+    "system_allocation": "Allocation Engine",
+    "system_inventory_engine": "Inventory Engine",
+    "system_return_prep": "Return Prep System"
   },
   "actorDescriptions": {
     "shipper": "Product Owner",
