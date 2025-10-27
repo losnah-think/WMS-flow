@@ -273,9 +273,9 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                   width="160"
                   height="80"
                   rx="8"
-                  fill="#fef3c7"
+                  fill={isActive ? '#fef3c7' : '#f3f4f6'}
                   opacity="0.4"
-                  stroke={isActive ? '#f59e0b' : '#fcd34d'}
+                  stroke={isActive ? '#f59e0b' : '#d1d5db'}
                   strokeWidth={isActive ? "2" : "1"}
                   strokeDasharray={isActive ? "none" : "4 4"}
                   style={{
@@ -289,10 +289,10 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 // 재귀 단계: 곡선 표시 (상단 호를 그림)
                 <path
                   d={`M ${fromX} ${y} Q ${fromX} ${y - 50} ${toX} ${y}`}
-                  stroke={isActive ? '#f59e0b' : '#fbbf24'}
-                  strokeWidth={isActive ? 3 : 2}
+                  stroke={isActive ? '#f59e0b' : '#d1d5db'}
+                  strokeWidth={isActive ? 3 : 1.5}
                   fill="none"
-                  markerEnd={`url(#arrow-${isActive ? 'recursive-active' : 'recursive'})`}
+                  markerEnd={`url(#arrow-${isActive ? 'recursive-active' : 'default'})`}
                   strokeDasharray="12 12"
                   className="flow-line-active"
                   style={{
@@ -306,7 +306,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                   y1={y}
                   x2={toX}
                   y2={y}
-                  stroke={isActive ? '#60a5fa' : isPassed ? '#cbd5e1' : '#e5e7eb'}
+                  stroke={isActive ? '#60a5fa' : isPassed ? '#cbd5e1' : '#d1d5db'}
                   strokeWidth={isActive ? 3 : 1.5}
                   markerEnd={`url(#arrow-${isActive ? 'active' : isPassed ? 'passed' : 'default'})`}
                   strokeDasharray="12 12"
@@ -322,8 +322,8 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 cx={fromX}
                 cy={y}
                 r="14"
-                fill={isRecursive ? (isActive ? '#f59e0b' : '#fcd34d') : (isActive ? '#3b82f6' : isPassed ? '#d1d5db' : '#f3f4f6')}
-                stroke={isRecursive ? (isActive ? '#d97706' : '#f59e0b') : (isActive ? '#1e40af' : '#d1d5db')}
+                fill={isActive ? (isRecursive ? '#f59e0b' : '#3b82f6') : (isPassed ? '#d1d5db' : '#e5e7eb')}
+                stroke={isActive ? (isRecursive ? '#d97706' : '#1e40af') : '#d1d5db'}
                 strokeWidth="1.5"
                 className={isActive ? 'step-circle-active' : ''}
                 style={{
@@ -335,7 +335,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 y={y + 4}
                 textAnchor="middle"
                 className="text-xs font-semibold"
-                fill={isRecursive ? (isActive ? '#92400e' : '#78350f') : (isActive || isPassed ? '#fff' : '#78716c')}
+                fill={isActive ? '#fff' : (isPassed ? '#fff' : '#9ca3af')}
               >
                 {isRecursive ? '↻' : idx + 1}
               </text>
@@ -349,7 +349,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                     width="20"
                     height="16"
                     rx="3"
-                    fill="#f59e0b"
+                    fill={isActive ? '#f59e0b' : '#d1d5db'}
                   />
                   <text
                     x={fromX + 22}
@@ -370,8 +370,8 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 width="130"
                 height="20"
                 rx="3"
-                fill={isRecursive ? (isActive ? '#fed7aa' : '#fef3c7') : (isActive ? '#dbeafe' : isPassed ? '#f3f4f6' : '#fafafa')}
-                stroke={isRecursive ? (isActive ? '#f59e0b' : '#fcd34d') : (isActive ? '#93c5fd' : '#e5e7eb')}
+                fill={isActive ? (isRecursive ? '#fed7aa' : '#dbeafe') : (isPassed ? '#f3f4f6' : '#fafafa')}
+                stroke={isActive ? (isRecursive ? '#f59e0b' : '#93c5fd') : '#e5e7eb'}
                 strokeWidth="0.5"
                 style={{
                   transition: 'fill 0.3s, stroke 0.3s',
@@ -382,7 +382,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 y={y - 19}
                 textAnchor="middle"
                 className="text-xs font-semibold"
-                fill={isRecursive ? (isActive ? '#92400e' : '#78350f') : (isActive ? '#0c4a6e' : '#374151')}
+                fill={isActive ? (isRecursive ? '#92400e' : '#0c4a6e') : '#9ca3af'}
               >
                 {getStepLabel(idx)}
               </text>
@@ -393,7 +393,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 y={y + 18}
                 textAnchor="middle"
                 className="text-xs"
-                fill={isRecursive ? (isActive ? '#92400e' : '#78350f') : (isActive ? '#0c4a6e' : '#6b7280')}
+                fill={isActive ? (isRecursive ? '#92400e' : '#0c4a6e') : '#9ca3af'}
                 fontWeight={isActive ? '600' : '400'}
               >
                 {getStepDesc(idx)}
@@ -402,19 +402,16 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
           );
         })}
 
-        {/* 화살표 마커 정의 - 약화됨 */}
+        {/* 화살표 마커 정의 */}
         <defs>
           <marker id="arrow-default" markerWidth="8" markerHeight="8" refX="8" refY="3" orient="auto">
-            <polygon points="0 0, 8 3, 0 6" fill="#e5e7eb" />
+            <polygon points="0 0, 8 3, 0 6" fill="#d1d5db" />
           </marker>
           <marker id="arrow-passed" markerWidth="8" markerHeight="8" refX="8" refY="3" orient="auto">
             <polygon points="0 0, 8 3, 0 6" fill="#cbd5e1" />
           </marker>
           <marker id="arrow-active" markerWidth="8" markerHeight="8" refX="8" refY="3" orient="auto">
             <polygon points="0 0, 8 3, 0 6" fill="#60a5fa" />
-          </marker>
-          <marker id="arrow-recursive" markerWidth="8" markerHeight="8" refX="8" refY="3" orient="auto">
-            <polygon points="0 0, 8 3, 0 6" fill="#fbbf24" />
           </marker>
           <marker id="arrow-recursive-active" markerWidth="8" markerHeight="8" refX="8" refY="3" orient="auto">
             <polygon points="0 0, 8 3, 0 6" fill="#f59e0b" />
