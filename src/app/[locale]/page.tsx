@@ -11,6 +11,7 @@ import { HierarchyInfo } from '@/components/HierarchyInfo';
 import { ActorLegend } from '@/components/ActorLegend';
 import { FlowDiagram } from '@/components/FlowDiagram';
 import { FlowDiagramEnhanced } from '@/components/FlowDiagramEnhanced';
+import { RecursiveVisualizer } from '@/components/RecursiveVisualizer';
 import { StepDetails } from '@/components/StepDetails';
 import { StepDetailsModal } from '@/components/StepDetailsModal';
 import { MiniTimeline } from '@/components/MiniTimeline';
@@ -21,6 +22,7 @@ export default function Home() {
   const params = useParams();
   const locale = (params?.locale as string) || 'ko';
   const [diagramMode, setDiagramMode] = useState<'default' | 'enhanced'>('default');
+  const [showRecursive, setShowRecursive] = useState(false);
   
   let t;
   try {
@@ -194,6 +196,29 @@ export default function Home() {
 
           <div className="bg-white rounded-lg shadow-lg p-3">
             <ActorLegend flow={currentFlow} />
+          </div>
+
+          <div className="bg-white rounded-lg shadow-lg p-3">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-gray-800">재귀 단계 분석</h3>
+              <button
+                onClick={() => setShowRecursive(!showRecursive)}
+                className={`px-3 py-1 text-sm rounded transition-colors ${
+                  showRecursive
+                    ? 'bg-orange-600 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
+              >
+                {showRecursive ? '접기' : '표시'}
+              </button>
+            </div>
+            {showRecursive && (
+              <RecursiveVisualizer
+                flow={currentFlow}
+                activeStep={activeStep}
+                flowType={flowType}
+              />
+            )}
           </div>
 
           <div className="bg-white rounded-lg shadow-lg p-3">
