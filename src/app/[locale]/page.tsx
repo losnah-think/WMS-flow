@@ -10,7 +10,6 @@ import { FlowControls } from '@/components/FlowControls';
 import { HierarchyInfo } from '@/components/HierarchyInfo';
 import { ActorLegend } from '@/components/ActorLegend';
 import { FlowDiagram } from '@/components/FlowDiagram';
-import { FlowDiagramEnhanced } from '@/components/FlowDiagramEnhanced';
 import { RecursiveVisualizer } from '@/components/RecursiveVisualizer';
 import { StepDetails } from '@/components/StepDetails';
 import { StepDetailsModal } from '@/components/StepDetailsModal';
@@ -21,7 +20,6 @@ import { ProcessIconLegend } from '@/components/ProcessIconLegend';
 export default function Home() {
   const params = useParams();
   const locale = (params?.locale as string) || 'ko';
-  const [diagramMode, setDiagramMode] = useState<'default' | 'enhanced'>('default');
   const [showRecursive, setShowRecursive] = useState(false);
   
   let t;
@@ -128,46 +126,14 @@ export default function Home() {
                     </button>
                   )}
                 </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setDiagramMode('default')}
-                    className={`px-2 py-1 text-xs rounded whitespace-nowrap transition-colors ${
-                      diagramMode === 'default'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                    }`}
-                  >
-                    기본
-                  </button>
-                  <button
-                    onClick={() => setDiagramMode('enhanced')}
-                    className={`px-2 py-1 text-xs rounded whitespace-nowrap transition-colors ${
-                      diagramMode === 'enhanced'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                    }`}
-                  >
-                    고급 시각화
-                  </button>
-                </div>
               </div>
 
-              {diagramMode === 'default' ? (
-                <FlowDiagram
-                  flow={currentFlow}
-                  activeStep={activeStep}
-                  getActorPosition={getActorPosition}
-                  flowType={flowType}
-                />
-              ) : (
-                <FlowDiagramEnhanced
-                  flow={currentFlow}
-                  activeStep={activeStep}
-                  getActorPosition={getActorPosition}
-                  flowType={flowType}
-                  visualMode="nested"
-                />
-              )}
+              <FlowDiagram
+                flow={currentFlow}
+                activeStep={activeStep}
+                getActorPosition={getActorPosition}
+                flowType={flowType}
+              />
             </div>
 
             <div className="hidden lg:block col-span-1 lg:col-span-2">
