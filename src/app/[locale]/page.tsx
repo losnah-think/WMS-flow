@@ -14,6 +14,7 @@ import { StepDetails } from '@/components/StepDetails';
 import { StepDetailsModal } from '@/components/StepDetailsModal';
 import { MiniTimeline } from '@/components/MiniTimeline';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { ProcessIconLegend } from '@/components/ProcessIconLegend';
 
 export default function Home() {
   const params = useParams();
@@ -157,6 +158,10 @@ export default function Home() {
 
           <div className="bg-white rounded-lg shadow-lg p-3">
             <ActorLegend flow={currentFlow} />
+          </div>
+
+          <div className="bg-white rounded-lg shadow-lg p-3">
+            <ProcessIconLegend />
           </div>
         </div>
       </div>
