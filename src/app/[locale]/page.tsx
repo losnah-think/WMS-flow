@@ -10,6 +10,7 @@ import { FlowControls } from '@/components/FlowControls';
 import { HierarchyInfo } from '@/components/HierarchyInfo';
 import { ActorLegend } from '@/components/ActorLegend';
 import { FlowDiagram } from '@/components/FlowDiagram';
+import { FlowDiagramEnhanced } from '@/components/FlowDiagramEnhanced';
 import { StepDetails } from '@/components/StepDetails';
 import { StepDetailsModal } from '@/components/StepDetailsModal';
 import { MiniTimeline } from '@/components/MiniTimeline';
@@ -19,6 +20,7 @@ import { ProcessIconLegend } from '@/components/ProcessIconLegend';
 export default function Home() {
   const params = useParams();
   const locale = (params?.locale as string) || 'ko';
+  const [diagramMode, setDiagramMode] = useState<'default' | 'enhanced'>('default');
   
   let t;
   try {
@@ -110,26 +112,60 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 md:gap-4">
             <div className="col-span-1 lg:col-span-3 bg-white rounded-lg shadow-lg p-2 md:p-4 overflow-x-auto">
-              <div className="mb-3 md:mb-4">
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-800 line-clamp-2">
-                  {t(`flows.${flowType}.title`)}
-                </h1>
-                {!showInfo && (
+              <div className="mb-3 md:mb-4 flex items-center justify-between">
+                <div>
+                  <h1 className="text-2xl md:text-3xl font-bold text-gray-800 line-clamp-2">
+                    {t(`flows.${flowType}.title`)}
+                  </h1>
+                  {!showInfo && (
+                    <button
+                      onClick={toggleInfo}
+                      className="text-xs md:text-sm text-red-600 hover:text-red-700 mt-1 font-medium"
+                    >
+                      {t('hierarchyInfo.title')}
+                    </button>
+                  )}
+                </div>
+                <div className="flex gap-2">
                   <button
-                    onClick={toggleInfo}
-                    className="text-xs md:text-sm text-red-600 hover:text-red-700 mt-1 font-medium"
+                    onClick={() => setDiagramMode('default')}
+                    className={`px-2 py-1 text-xs rounded whitespace-nowrap transition-colors ${
+                      diagramMode === 'default'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
                   >
-                    {t('hierarchyInfo.title')}
+                    기본
                   </button>
-                )}
+                  <button
+                    onClick={() => setDiagramMode('enhanced')}
+                    className={`px-2 py-1 text-xs rounded whitespace-nowrap transition-colors ${
+                      diagramMode === 'enhanced'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
+                    고급 시각화
+                  </button>
+                </div>
               </div>
 
-              <FlowDiagram
-                flow={currentFlow}
-                activeStep={activeStep}
-                getActorPosition={getActorPosition}
-                flowType={flowType}
-              />
+              {diagramMode === 'default' ? (
+                <FlowDiagram
+                  flow={currentFlow}
+                  activeStep={activeStep}
+                  getActorPosition={getActorPosition}
+                  flowType={flowType}
+                />
+              ) : (
+                <FlowDiagramEnhanced
+                  flow={currentFlow}
+                  activeStep={activeStep}
+                  getActorPosition={getActorPosition}
+                  flowType={flowType}
+                  visualMode="nested"
+                />
+              )}
             </div>
 
             <div className="hidden lg:block col-span-1 lg:col-span-2">
