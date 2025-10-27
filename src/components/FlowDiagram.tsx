@@ -49,6 +49,11 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
     }
   };
 
+  // 재귀 단계 감지
+  const isRecursiveStep = (step: typeof flow.steps[number]) => {
+    return step.from === step.to;
+  };
+
   return (
     <div className="w-full overflow-x-auto border-2 border-gray-200 rounded-lg bg-white flex justify-center -mx-2 md:-mx-4">
       <div className="w-full py-2 md:py-3 px-2 md:px-4">
@@ -254,34 +259,71 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
           const y = idx * 80 + 110;
           const isActive = activeStep === idx;
           const isPassed = activeStep > idx;
+          const isRecursive = isRecursiveStep(step);
           
           const labelX = (fromX + toX) / 2;
           
           return (
             <g key={idx}>
-              {/* 화살표 선 - 항상 애니메이션 */}
-              <line
-                x1={fromX}
-                y1={y}
-                x2={toX}
-                y2={y}
-                stroke={isActive ? '#60a5fa' : isPassed ? '#cbd5e1' : '#e5e7eb'}
-                strokeWidth={isActive ? 3 : 1.5}
-                markerEnd={`url(#arrow-${isActive ? 'active' : isPassed ? 'passed' : 'default'})`}
-                strokeDasharray="12 12"
-                className="flow-line-active"
-                style={{
-                  transition: 'stroke 0.3s, stroke-width 0.3s',
-                }}
-              />
+              {/* 재귀 배경 - 강조 표시 */}
+              {isRecursive && (
+                <rect
+                  x={fromX - 80}
+                  y={y - 40}
+                  width="160"
+                  height="80"
+                  rx="8"
+                  fill="#fef3c7"
+                  opacity="0.4"
+                  stroke={isActive ? '#f59e0b' : '#fcd34d'}
+                  strokeWidth={isActive ? "2" : "1"}
+                  strokeDasharray={isActive ? "none" : "4 4"}
+                  style={{
+                    transition: 'stroke 0.3s, fill 0.3s',
+                  }}
+                />
+              )}
+              
+              {/* 화살표 선 - 재귀는 곡선, 일반은 직선 */}
+              {isRecursive ? (
+                // 재귀 단계: 곡선 표시 (상단 호를 그림)
+                <path
+                  d={`M ${fromX} ${y} Q ${fromX} ${y - 50} ${toX} ${y}`}
+                  stroke={isActive ? '#f59e0b' : '#fbbf24'}
+                  strokeWidth={isActive ? 3 : 2}
+                  fill="none"
+                  markerEnd={`url(#arrow-${isActive ? 'recursive-active' : 'recursive'})`}
+                  strokeDasharray="12 12"
+                  className="flow-line-active"
+                  style={{
+                    transition: 'stroke 0.3s, stroke-width 0.3s',
+                  }}
+                />
+              ) : (
+                // 일반 단계: 직선
+                <line
+                  x1={fromX}
+                  y1={y}
+                  x2={toX}
+                  y2={y}
+                  stroke={isActive ? '#60a5fa' : isPassed ? '#cbd5e1' : '#e5e7eb'}
+                  strokeWidth={isActive ? 3 : 1.5}
+                  markerEnd={`url(#arrow-${isActive ? 'active' : isPassed ? 'passed' : 'default'})`}
+                  strokeDasharray="12 12"
+                  className="flow-line-active"
+                  style={{
+                    transition: 'stroke 0.3s, stroke-width 0.3s',
+                  }}
+                />
+              )}
               
               {/* 단계 번호 */}
               <circle
                 cx={fromX}
                 cy={y}
                 r="14"
-                fill={isActive ? '#3b82f6' : isPassed ? '#d1d5db' : '#f3f4f6'}
-                stroke={isActive ? '#1e40af' : '#d1d5db'}
+                fill={isRecursive ? (isActive ? '#f59e0b' : '#fcd34d') : (isActive ? '#3b82f6' : isPassed ? '#d1d5db' : '#f3f4f6')}
+                stroke={isRecursive ? (isActive ? '#d97706' : '#f59e0b') : (isActive ? '#1e40af' : '#d1d5db')}
                 strokeWidth="1.5"
                 className={isActive ? 'step-circle-active' : ''}
                 style={{
@@ -293,10 +335,33 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 y={y + 4}
                 textAnchor="middle"
                 className="text-xs font-semibold"
-                fill={isActive || isPassed ? '#fff' : '#78716c'}
+                fill={isRecursive ? (isActive ? '#92400e' : '#78350f') : (isActive || isPassed ? '#fff' : '#78716c')}
               >
-                {idx + 1}
+                {isRecursive ? '↻' : idx + 1}
               </text>
+              
+              {/* 재귀 배지 */}
+              {isRecursive && (
+                <g>
+                  <rect
+                    x={fromX + 12}
+                    y={y - 8}
+                    width="20"
+                    height="16"
+                    rx="3"
+                    fill="#f59e0b"
+                  />
+                  <text
+                    x={fromX + 22}
+                    y={y + 2}
+                    textAnchor="middle"
+                    className="text-xs font-bold"
+                    fill="white"
+                  >
+                    {idx + 1}
+                  </text>
+                </g>
+              )}
               
               {/* 라벨 (상단) */}
               <rect
@@ -305,8 +370,8 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 width="130"
                 height="20"
                 rx="3"
-                fill={isActive ? '#dbeafe' : isPassed ? '#f3f4f6' : '#fafafa'}
-                stroke={isActive ? '#93c5fd' : '#e5e7eb'}
+                fill={isRecursive ? (isActive ? '#fed7aa' : '#fef3c7') : (isActive ? '#dbeafe' : isPassed ? '#f3f4f6' : '#fafafa')}
+                stroke={isRecursive ? (isActive ? '#f59e0b' : '#fcd34d') : (isActive ? '#93c5fd' : '#e5e7eb')}
                 strokeWidth="0.5"
                 style={{
                   transition: 'fill 0.3s, stroke 0.3s',
@@ -317,7 +382,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 y={y - 19}
                 textAnchor="middle"
                 className="text-xs font-semibold"
-                fill={isActive ? '#0c4a6e' : '#374151'}
+                fill={isRecursive ? (isActive ? '#92400e' : '#78350f') : (isActive ? '#0c4a6e' : '#374151')}
               >
                 {getStepLabel(idx)}
               </text>
@@ -328,7 +393,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
                 y={y + 18}
                 textAnchor="middle"
                 className="text-xs"
-                fill={isActive ? '#0c4a6e' : '#6b7280'}
+                fill={isRecursive ? (isActive ? '#92400e' : '#78350f') : (isActive ? '#0c4a6e' : '#6b7280')}
                 fontWeight={isActive ? '600' : '400'}
               >
                 {getStepDesc(idx)}
@@ -347,6 +412,12 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({ flow, activeStep, getA
           </marker>
           <marker id="arrow-active" markerWidth="8" markerHeight="8" refX="8" refY="3" orient="auto">
             <polygon points="0 0, 8 3, 0 6" fill="#60a5fa" />
+          </marker>
+          <marker id="arrow-recursive" markerWidth="8" markerHeight="8" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#fbbf24" />
+          </marker>
+          <marker id="arrow-recursive-active" markerWidth="8" markerHeight="8" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#f59e0b" />
           </marker>
         </defs>
       </svg>
