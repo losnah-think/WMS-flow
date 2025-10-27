@@ -385,6 +385,7 @@
   "actors": {
     "shipper": "Nhà cung cấp",
     "fulgo": "FULGO",
+    "fulgo_wms": "FULGO WMS",
     "warehouse_manager": "Quản lý kho",
     "logistics": "Công ty hậu cần",
     "worker": "Công nhân",
@@ -410,6 +411,7 @@
   "actorDescriptions": {
     "shipper": "Chủ sản phẩm",
     "fulgo": "Hệ thống nền tảng",
+    "fulgo_wms": "Công cụ quản lý hậu cần và hàng tồn kho",
     "warehouse_manager": "Quản lý kho/Người phê duyệt",
     "logistics": "Công ty quản lý kho",
     "worker": "Nhân viên kho",

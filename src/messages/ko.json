@@ -112,6 +112,7 @@
   "actors": {
     "shipper": "화주사",
     "fulgo": "FULGO",
+    "fulgo_wms": "FULGO WMS",
     "warehouse_manager": "창고장",
     "logistics": "물류사",
     "worker": "작업자",
@@ -137,6 +138,7 @@
   "actorDescriptions": {
     "shipper": "상품 주인",
     "fulgo": "플랫폼 시스템",
+    "fulgo_wms": "물류 관리 및 재고 엔진",
     "warehouse_manager": "창고장/승인권자",
     "logistics": "창고 운영 회사",
     "worker": "창고 현장 직원",

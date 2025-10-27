@@ -364,6 +364,7 @@
   "actors": {
     "shipper": "Shipper",
     "fulgo": "FULGO",
+    "fulgo_wms": "FULGO WMS",
     "warehouse_manager": "Warehouse Manager",
     "logistics": "Logistics",
     "worker": "Worker",
@@ -389,6 +390,7 @@
   "actorDescriptions": {
     "shipper": "Product Owner",
     "fulgo": "Platform System",
+    "fulgo_wms": "Logistics Management and Inventory Engine",
     "warehouse_manager": "Warehouse Manager/Approver",
     "logistics": "Warehouse Operating Company",
     "worker": "Warehouse Staff",
