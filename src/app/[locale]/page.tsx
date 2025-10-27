@@ -8,19 +8,15 @@ import { useFlowController } from '@/hooks/useFlowController';
 import { useDownloadDiagram } from '@/hooks/useDownloadDiagram';
 import { FlowControls } from '@/components/FlowControls';
 import { HierarchyInfo } from '@/components/HierarchyInfo';
-import { ActorLegend } from '@/components/ActorLegend';
 import { FlowDiagram } from '@/components/FlowDiagram';
-import { RecursiveVisualizer } from '@/components/RecursiveVisualizer';
 import { StepDetails } from '@/components/StepDetails';
 import { StepDetailsModal } from '@/components/StepDetailsModal';
 import { MiniTimeline } from '@/components/MiniTimeline';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
-import { ProcessIconLegend } from '@/components/ProcessIconLegend';
 
 export default function Home() {
   const params = useParams();
   const locale = (params?.locale as string) || 'ko';
-  const [showRecursive, setShowRecursive] = useState(false);
   
   let t;
   try {
@@ -160,48 +156,17 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg p-3">
-            <ActorLegend flow={currentFlow} />
-          </div>
-
-          <div className="bg-white rounded-lg shadow-lg p-3">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-gray-800">재귀 단계 분석</h3>
-              <button
-                onClick={() => setShowRecursive(!showRecursive)}
-                className={`px-3 py-1 text-sm rounded transition-colors ${
-                  showRecursive
-                    ? 'bg-orange-600 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-              >
-                {showRecursive ? '접기' : '표시'}
-              </button>
-            </div>
-            {showRecursive && (
-              <RecursiveVisualizer
-                flow={currentFlow}
-                activeStep={activeStep}
-                flowType={flowType}
-              />
-            )}
-          </div>
-
-          <div className="bg-white rounded-lg shadow-lg p-3">
-            <ProcessIconLegend />
-          </div>
+          {selectedStepIndex !== null && (
+            <StepDetailsModal
+              flow={currentFlow}
+              step={currentFlow.steps[selectedStepIndex]}
+              stepIndex={selectedStepIndex}
+              flowType={flowType}
+              onClose={handleCloseModal}
+            />
+          )}
         </div>
       </div>
-
-      {selectedStepIndex !== null && (
-        <StepDetailsModal
-          flow={currentFlow}
-          step={currentFlow.steps[selectedStepIndex]}
-          stepIndex={selectedStepIndex}
-          flowType={flowType}
-          onClose={handleCloseModal}
-        />
-      )}
     </div>
   );
 }
