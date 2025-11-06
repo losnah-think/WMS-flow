@@ -480,7 +480,8 @@
   },
   "nav": {
     "flow": "Quy trình",
-    "features": "Tính năng"
+    "features": "Tính năng",
+    "glossary": "Thuật ngữ"
   },
   "features": {
     "title": "Tài liệu Đặc tả Tính năng WMS",
