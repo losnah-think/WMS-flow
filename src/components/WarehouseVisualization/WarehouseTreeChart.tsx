@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts';
 import { Warehouse, TreeNode, Location } from './types';
+import { Card, Row, Col } from 'antd';
 
 interface WarehouseTreeChartProps {
   warehouse: Warehouse;
@@ -31,7 +32,8 @@ const convertToTreeNode = (warehouse: Warehouse): TreeNode => {
           name: loc.name,
           emoji: '',
           value: loc.capacity,
-          info: `${loc.current}/${loc.capacity}`
+          info: `${loc.current}/${loc.capacity}`,
+          locationData: loc
         }))
       }))
     }))
@@ -44,7 +46,8 @@ export const WarehouseTreeChart: React.FC<WarehouseTreeChartProps> = ({
   onLocationSelect
 }) => {
   const chartRef = useRef<HTMLDivElement>(null);
-  const [selectedArea, setSelectedArea] = useState<any>(null);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+  const [expandedDepth, setExpandedDepth] = useState<number>(4);
 
   useEffect(() => {
     if (!chartRef.current) return;
@@ -74,6 +77,7 @@ export const WarehouseTreeChart: React.FC<WarehouseTreeChartProps> = ({
               <div style="color: #666; margin-bottom: 4px;">Type: ${levelName}</div>
               ${data.info ? `<div style="color: #666; margin-bottom: 4px;">${data.info}</div>` : ''}
               ${data.value ? `<div style="color: #666;">Capacity: ${data.value}</div>` : ''}
+              ${params.depth === 3 ? '<div style="color: #1890ff; margin-top: 6px; font-size: 11px; font-weight: bold;">Click to view details</div>' : ''}
           `;
           
           tooltip += `</div>`;
@@ -174,9 +178,9 @@ export const WarehouseTreeChart: React.FC<WarehouseTreeChartProps> = ({
 
     // 노드 클릭 이벤트
     const handleClick = (params: any) => {
-      if (params.depth === 2 && params.data.locations) {
-        setSelectedArea(params.data);
-        onNodeSelect?.(params.data.name);
+      if (params.depth === 3 && params.data.locationData) {
+        setSelectedLocation(params.data.locationData);
+        onLocationSelect?.(params.data.locationData);
       }
     };
 
@@ -190,10 +194,10 @@ export const WarehouseTreeChart: React.FC<WarehouseTreeChartProps> = ({
       chart.off('click', handleClick);
       chart.dispose();
     };
-  }, [warehouse, onNodeSelect]);
+  }, [warehouse, onNodeSelect, onLocationSelect]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '12px' }}>
       <div
         ref={chartRef}
         style={{
@@ -205,49 +209,88 @@ export const WarehouseTreeChart: React.FC<WarehouseTreeChartProps> = ({
         }}
       />
       
-      {/* Area 상세 정보 */}
-      {selectedArea && (
-        <div style={{ 
-          marginTop: '12px', 
-          padding: '12px', 
-          background: '#f5f5f5', 
-          borderRadius: '4px',
-          maxHeight: '200px',
-          overflow: 'auto'
-        }}>
-          <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#333' }}>
-            {selectedArea.name} - Locations ({selectedArea.locations.length})
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(60px, 1fr))', gap: '6px' }}>
-            {selectedArea.locations.map((loc: any) => (
-              <div
-                key={loc.id}
-                style={{
-                  background: '#fff',
-                  padding: '6px',
-                  borderRadius: '4px',
-                  border: '1px solid #d9d9d9',
-                  textAlign: 'center',
-                  fontSize: '11px',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                }}
-                onClick={() => onLocationSelect?.(loc)}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.background = '#e6f7ff';
-                  (e.currentTarget as HTMLDivElement).style.borderColor = '#1890ff';
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.background = '#fff';
-                  (e.currentTarget as HTMLDivElement).style.borderColor = '#d9d9d9';
-                }}
-              >
-                {loc.name}
+      {/* 로케이션 상세 정보 */}
+      {selectedLocation && (
+        <Card 
+          title="Location Details" 
+          size="small"
+          style={{ 
+            background: '#f5f5f5',
+            border: '2px solid #d9534f'
+          }}
+          styles={{
+            body: {
+              padding: '16px'
+            }
+          }}
+        >
+          <Row gutter={[16, 16]}>
+            <Col xs={24} sm={12} md={6}>
+              <div style={{ fontSize: '11px', color: '#999', marginBottom: '4px' }}>
+                Location Code
               </div>
-            ))}
-          </div>
-        </div>
+              <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#d9534f' }}>
+                {selectedLocation.name}
+              </div>
+            </Col>
+            <Col xs={24} sm={12} md={6}>
+              <div style={{ fontSize: '11px', color: '#999', marginBottom: '4px' }}>
+                Location ID
+              </div>
+              <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#333' }}>
+                {selectedLocation.id}
+              </div>
+            </Col>
+            <Col xs={24} sm={12} md={6}>
+              <div style={{ fontSize: '11px', color: '#999', marginBottom: '4px' }}>
+                Current Stock
+              </div>
+              <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#1890ff' }}>
+                {selectedLocation.current.toFixed(0)} units
+              </div>
+            </Col>
+            <Col xs={24} sm={12} md={6}>
+              <div style={{ fontSize: '11px', color: '#999', marginBottom: '4px' }}>
+                Total Capacity
+              </div>
+              <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#13c2c2' }}>
+                {selectedLocation.capacity} units
+              </div>
+            </Col>
+            <Col xs={24} sm={12} md={6}>
+              <div style={{ fontSize: '11px', color: '#999', marginBottom: '4px' }}>
+                Utilization
+              </div>
+              <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#faad14' }}>
+                {Math.round((selectedLocation.current / selectedLocation.capacity) * 100)}%
+              </div>
+            </Col>
+            <Col xs={24} sm={12} md={6}>
+              <div style={{ fontSize: '11px', color: '#999', marginBottom: '4px' }}>
+                Position X
+              </div>
+              <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#333' }}>
+                {selectedLocation.x}
+              </div>
+            </Col>
+            <Col xs={24} sm={12} md={6}>
+              <div style={{ fontSize: '11px', color: '#999', marginBottom: '4px' }}>
+                Position Y
+              </div>
+              <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#333' }}>
+                {selectedLocation.y}
+              </div>
+            </Col>
+            <Col xs={24} sm={12} md={6}>
+              <div style={{ fontSize: '11px', color: '#999', marginBottom: '4px' }}>
+                Size (W×H)
+              </div>
+              <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#333' }}>
+                {selectedLocation.width}×{selectedLocation.height}
+              </div>
+            </Col>
+          </Row>
+        </Card>
       )}
     </div>
   );
