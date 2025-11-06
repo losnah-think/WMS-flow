@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { GlossaryPage } from '@/components/GlossaryPage';
+import { WarehouseDashboard, warehouseData } from '@/components/WarehouseVisualization';
 
 export default function GlossaryRoute() {
-  return <GlossaryPage />;
+  return <WarehouseDashboard warehouse={warehouseData} />;
 }
