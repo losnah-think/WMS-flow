@@ -73,12 +73,6 @@ export default function Home() {
                   {t('nav.flow')}
                 </Link>
                 <Link 
-                  href={`/${locale}/features`}
-                  className="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors whitespace-nowrap"
-                >
-                  {t('nav.features')}
-                </Link>
-                <Link 
                   href={`/${locale}/glossary`}
                   className="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors whitespace-nowrap"
                 >
