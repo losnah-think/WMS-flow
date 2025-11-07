@@ -460,7 +460,7 @@
   "nav": {
     "flow": "Process Flow",
     "features": "Features",
-    "glossary": "Glossary"
+    "glossary": "Features"
   },
   "features": {
     "title": "WMS Feature Specification",

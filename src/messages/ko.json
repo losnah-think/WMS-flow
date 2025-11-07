@@ -208,7 +208,7 @@
   "nav": {
     "flow": "프로세스 플로우",
     "features": "기능 정의서",
-    "glossary": "용어 설명"
+    "glossary": "기능 정의서"
   },
   "features": {
     "title": "WMS 기능 정의서",
