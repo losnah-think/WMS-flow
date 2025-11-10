@@ -60,28 +60,34 @@ export const StepDetailsModal: React.FC<StepDetailsModalProps> = ({
           {/* 기본 정보 */}
           <section>
             <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">기본 정보</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
                 <p className="text-xs text-gray-600 font-semibold uppercase mb-2">단계</p>
                 <p className="text-xl font-bold text-blue-600">{stepIndex + 1} / {flow.steps.length}</p>
               </div>
               <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <p className="text-xs text-gray-600 font-semibold uppercase mb-2">시간</p>
-                <p className="text-xl font-bold text-green-600">{step.duration}ms</p>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <p className="text-xs text-gray-600 font-semibold uppercase mb-2">유형</p>
-                <p className="text-xl font-bold text-purple-600">{step.type}</p>
+                <p className="text-xs text-gray-600 font-semibold uppercase mb-2">담당자</p>
+                <p className="text-xl font-bold text-purple-600">{step.actor}</p>
               </div>
             </div>
           </section>
 
           {/* 설명 */}
-          {step.description && (
+          {step.desc && (
             <section>
               <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">설명</h3>
               <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                <p className="text-gray-800 leading-relaxed">{step.description}</p>
+                <p className="text-gray-800 leading-relaxed">{step.desc}</p>
+              </div>
+            </section>
+          )}
+
+          {/* 상세 과정 */}
+          {step.detail && (
+            <section>
+              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">상세 과정</h3>
+              <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                <p className="text-gray-800 leading-relaxed">{step.detail}</p>
               </div>
             </section>
           )}
