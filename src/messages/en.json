@@ -763,5 +763,16 @@
     "USER-002-process": "Select user\nSelect permission level (Admin/Manager/Worker/Viewer)\nAuto-assign default permissions according to level\nSet additional detailed permissions per menu (optional)\nValidate permission information\nSave permission settings\nApply new permissions on user login\nRecord change history",
     "USER-003-process": "Enter ID/password on login page\nValidate input (required, format)\nQuery user information from DB\nCompare entered password with stored password (hashing)\nGenerate session token on successful authentication\nRecord login information\nLoad user permission information\nRedirect to dashboard\nTerminate session and invalidate token on logout",
     "USER-004-process": "Admin accesses log inquiry page\nSet period, user, task filters\nQuery all corresponding task logs from DB\nSearch and sort log list\nPaging processing\nAggregate statistics data\nDisplay log list screen\nEnable detailed view or download"
+  },
+  "modal": {
+    "requirements": "Related Requirements",
+    "priority": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "input": "Input",
+    "output": "Output",
+    "process": "Process"
   }
 }

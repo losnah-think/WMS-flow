@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: 'FULGO WMS의 입고, 출고, 반품, 보관 프로세스를 시각화한 플로우 차트',
 };
 
-const locales = ['ko', 'en', 'vi'];
+const locales = ['ko', 'en'];
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));

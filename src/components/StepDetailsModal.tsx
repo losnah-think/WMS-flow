@@ -49,170 +49,143 @@ export const StepDetailsModal: React.FC<StepDetailsModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="flex-shrink-0 text-white hover:bg-white hover:bg-opacity-20 rounded-lg p-2 transition"
+            className="flex-shrink-0 w-10 h-10 flex items-center justify-center hover:bg-white hover:bg-opacity-20 rounded-full transition"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
+            <span className="text-xl">✕</span>
           </button>
         </div>
 
-        {/* 컨텐츠 */}
+        {/* 콘텐츠 */}
         <div className="p-6 space-y-6">
           {/* 기본 정보 */}
           <section>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">{t('status.processInfo')}</h3>
-            <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-              <div>
-                <p className="text-xs text-gray-500 mb-1">{t('status.processFlow')}</p>
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-semibold">
-                    {fromActor?.name}
-                  </span>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                  </svg>
-                  <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full font-semibold">
-                    {toActor?.name}
-                  </span>
-                </div>
+            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">기본 정보</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <p className="text-xs text-gray-600 font-semibold uppercase mb-2">단계</p>
+                <p className="text-xl font-bold text-blue-600">{stepIndex + 1} / {flow.steps.length}</p>
               </div>
-              <div>
-                <p className="text-xs text-gray-500 mb-1">{t('components.description')}</p>
-                <p className="font-semibold text-gray-900">{step.actor}</p>
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <p className="text-xs text-gray-600 font-semibold uppercase mb-2">시간</p>
+                <p className="text-xl font-bold text-green-600">{step.duration}ms</p>
               </div>
-              {step.term && (
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">{t('components.term')}</p>
-                  <p className="font-semibold text-gray-900">{step.term}</p>
-                </div>
-              )}
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <p className="text-xs text-gray-600 font-semibold uppercase mb-2">유형</p>
+                <p className="text-xl font-bold text-purple-600">{step.type}</p>
+              </div>
             </div>
           </section>
 
           {/* 설명 */}
-          <section>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">{t('status.description')}</h3>
-            <p className="text-sm text-gray-700 leading-relaxed bg-gray-50 rounded-lg p-4">
-              {step.desc}
-            </p>
-          </section>
+          {step.description && (
+            <section>
+              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">설명</h3>
+              <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                <p className="text-gray-800 leading-relaxed">{step.description}</p>
+              </div>
+            </section>
+          )}
 
-          {/* 상세 내용 */}
+          {/* 참여자 정보 */}
           <section>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">{t('status.detail')}</h3>
-            <p className="text-sm text-gray-700 leading-relaxed bg-gray-50 rounded-lg p-4">
-              {step.detail}
-            </p>
-          </section>
-
-          {/* 액터 정보 */}
-          <section>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">참여 시스템</h3>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="border border-gray-200 rounded-lg p-3">
-                <p className="text-xs text-gray-500 mb-1">시작</p>
+            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">참여 대상</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* From */}
+              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-4 border border-blue-200">
+                <p className="text-xs text-gray-600 font-semibold uppercase mb-3">요청자</p>
                 <p className="font-semibold text-gray-900">{fromActor?.name}</p>
                 <p className="text-xs text-gray-600">{fromActor?.layer}</p>
               </div>
-              <div className="border border-gray-200 rounded-lg p-3">
-                <p className="text-xs text-gray-500 mb-1">종료</p>
+
+              {/* To */}
+              <div className="bg-gradient-to-br from-green-50 to-teal-50 rounded-lg p-4 border border-green-200">
+                <p className="text-xs text-gray-600 font-semibold uppercase mb-3">요청처</p>
                 <p className="font-semibold text-gray-900">{toActor?.name}</p>
                 <p className="text-xs text-gray-600">{toActor?.layer}</p>
               </div>
             </div>
           </section>
 
-          {/* WMS 기능 */}
+          {/* 요구사항 */}
           {step.features && step.features.length > 0 && (
             <section>
-              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">관련 WMS 기능</h3>
-              <div className="space-y-6">
+              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">
+                {t('modal.requirements')}
+              </h3>
+              <div className="space-y-4">
                 {step.features.map((featureId) => {
-                  const featureData = features.find(f => f.id === featureId);
+                  const feature = features.find(f => f.id === featureId);
                   const priorityColors = {
-                    high: 'bg-red-100 text-red-700 border-red-300',
-                    medium: 'bg-yellow-100 text-yellow-700 border-yellow-300',
-                    low: 'bg-green-100 text-green-700 border-green-300',
+                    high: 'border-red-300 bg-red-50',
+                    medium: 'border-yellow-300 bg-yellow-50',
+                    low: 'border-green-300 bg-green-50'
                   };
-                  const priorityLabels = {
-                    high: t('features.priorities.required'),
-                    medium: t('features.priorities.recommended'),
-                    low: t('features.priorities.optional'),
+                  const priorityBadgeColors = {
+                    high: 'bg-red-100 text-red-800',
+                    medium: 'bg-yellow-100 text-yellow-800',
+                    low: 'bg-green-100 text-green-800'
                   };
-                  
+
                   return (
-                    <div key={featureId} className="border-2 border-blue-200 bg-blue-50 rounded-xl p-5 space-y-4">
-                      {/* 기능 헤더 */}
-                      <div className="flex items-start justify-between gap-3 pb-3 border-b border-blue-200">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full">
-                              {featureId}
+                    <div
+                      key={featureId}
+                      className={`border-2 rounded-lg p-4 ${
+                        feature ? priorityColors[feature.priority] : 'border-gray-300 bg-gray-50'
+                      }`}
+                    >
+                      {/* 요구사항 헤더 */}
+                      <div className="flex items-start justify-between gap-3 mb-3">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-lg text-gray-900">{featureId}</span>
+                          {feature && (
+                            <span className={`px-2 py-1 rounded text-xs font-semibold ${priorityBadgeColors[feature.priority]}`}>
+                              {t(`modal.priority.${feature.priority}`)}
                             </span>
-                            {featureData && (
-                              <span className={`px-2 py-1 text-xs font-semibold rounded border ${priorityColors[featureData.priority]}`}>
-                                {priorityLabels[featureData.priority]}
-                              </span>
-                            )}
-                          </div>
-                          <h4 className="text-lg font-bold text-gray-900">
-                            {t(`features.${featureId}-name`)}
-                          </h4>
-                          <p className="text-sm text-gray-700 mt-1">
-                            {t(`features.${featureId}-desc`)}
+                          )}
+                        </div>
+                      </div>
+
+                      {/* 요구사항 이름 */}
+                      <h4 className="font-semibold text-gray-900 mb-2">
+                        {t(`features.${featureId}-name`)}
+                      </h4>
+
+                      {/* 요구사항 설명 */}
+                      <p className="text-sm text-gray-700 mb-3">
+                        {t(`features.${featureId}-desc`)}
+                      </p>
+
+                      {/* 상세 정보 그리드 */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                        {/* 입력 */}
+                        <div className="bg-white bg-opacity-60 rounded p-3">
+                          <p className="font-semibold text-gray-700 mb-1 text-xs uppercase">
+                            {t('modal.input')}
+                          </p>
+                          <p className="text-gray-800 whitespace-pre-line">
+                            {t(`features.${featureId}-input`)}
+                          </p>
+                        </div>
+
+                        {/* 출력 */}
+                        <div className="bg-white bg-opacity-60 rounded p-3">
+                          <p className="font-semibold text-gray-700 mb-1 text-xs uppercase">
+                            {t('modal.output')}
+                          </p>
+                          <p className="text-gray-800 whitespace-pre-line">
+                            {t(`features.${featureId}-output`)}
                           </p>
                         </div>
                       </div>
 
-                      {/* 입력/출력 필드 */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* 입력 필드 */}
-                        <div className="bg-white rounded-lg p-4 border border-gray-200">
-                          <h5 className="text-xs font-bold text-gray-500 uppercase mb-2 flex items-center gap-1">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                            📥 {t('features.inputFields')}
-                          </h5>
-                          <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
-                            {t(`features.${featureId}-input`)}
-                          </div>
-                        </div>
-
-                        {/* 출력 필드 */}
-                        <div className="bg-white rounded-lg p-4 border border-gray-200">
-                          <h5 className="text-xs font-bold text-gray-500 uppercase mb-2 flex items-center gap-1">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
-                            </svg>
-                            📤 {t('features.outputFields')}
-                          </h5>
-                          <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
-                            {t(`features.${featureId}-output`)}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 프로세스 흐름 */}
-                      <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-200">
-                        <h5 className="text-xs font-bold text-purple-700 uppercase mb-3 flex items-center gap-1">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
-                          🔄 {t('features.processFlow')}
-                        </h5>
-                        <div className="text-sm text-gray-800 space-y-2">
-                          {t(`features.${featureId}-process`).split('\n').filter(line => line.trim()).map((line, idx) => (
-                            <div key={idx} className="flex items-start gap-2">
-                              <span className="flex-shrink-0 w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
-                                {idx + 1}
-                              </span>
-                              <span className="flex-1 pt-0.5">{line.replace(/^\d+\.\s*/, '')}</span>
-                            </div>
-                          ))}
-                        </div>
+                      {/* 처리 과정 */}
+                      <div className="mt-3 bg-white bg-opacity-60 rounded p-3">
+                        <p className="font-semibold text-gray-700 mb-1 text-xs uppercase">
+                          {t('modal.process')}
+                        </p>
+                        <p className="text-gray-800 text-sm whitespace-pre-line">
+                          {t(`features.${featureId}-process`)}
+                        </p>
                       </div>
                     </div>
                   );
